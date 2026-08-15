@@ -15,8 +15,17 @@ final class TickerViewModel: ObservableObject {
 
         let listener = BinanceListener(viewModel: self)
         self.listener = listener
-        ticker = PriceTicker(symbols: symbols, listener: listener)
-        isStreaming = true
+
+        // PriceTicker's constructor now validates `symbols` on the Rust side
+        // and throws PriceError.InvalidInput for anything outside
+        // [a-zA-Z0-9-] — the FFI boundary doesn't trust whatever Swift sends it.
+        do {
+            ticker = try PriceTicker(symbols: symbols, listener: listener)
+            isStreaming = true
+        } catch {
+            self.listener = nil
+            errorMessage = "\(error)"
+        }
     }
 
     func stop() {
