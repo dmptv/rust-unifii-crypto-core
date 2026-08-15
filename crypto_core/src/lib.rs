@@ -21,10 +21,37 @@ pub enum PriceError {
 
     #[error("unexpected response from CoinGecko: {reason}")]
     InvalidResponse { reason: String },
+
+    #[error("invalid input: {reason}")]
+    InvalidInput { reason: String },
+}
+
+// Security note: the Swift caller is not a trusted environment — a jailbroken
+// device or a Frida-attached process can call any exported function directly
+// with arbitrary arguments, bypassing whatever validation the Swift UI layer
+// normally does. Every UniFFI-exported function must therefore validate its
+// own inputs, the same way a server validates a request body: never assume
+// the FFI caller already checked anything.
+fn validate_identifier(value: &str) -> Result<(), PriceError> {
+    let is_valid = !value.is_empty()
+        && value.len() <= 64
+        && value
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '-');
+
+    if is_valid {
+        Ok(())
+    } else {
+        Err(PriceError::InvalidInput {
+            reason: format!("'{value}' is not a valid identifier"),
+        })
+    }
 }
 
 #[uniffi::export]
 pub fn get_price(coin_id: String) -> Result<PriceInfo, PriceError> {
+    validate_identifier(&coin_id)?;
+
     let url = format!(
         "https://api.coingecko.com/api/v3/simple/price?ids={coin_id}&vs_currencies=usd"
     );
@@ -87,7 +114,14 @@ pub struct PriceTicker {
 #[uniffi::export]
 impl PriceTicker {
     #[uniffi::constructor]
-    pub fn new(symbols: Vec<String>, listener: std::sync::Arc<dyn TickerListener>) -> std::sync::Arc<Self> {
+    pub fn new(
+        symbols: Vec<String>,
+        listener: std::sync::Arc<dyn TickerListener>,
+    ) -> Result<std::sync::Arc<Self>, PriceError> {
+        for symbol in &symbols {
+            validate_identifier(symbol)?;
+        }
+
         let stop_flag = std::sync::Arc::new(std::sync::atomic::AtomicBool::new(false));
         let thread_stop_flag = stop_flag.clone();
 
@@ -130,7 +164,7 @@ impl PriceTicker {
             }
         });
 
-        std::sync::Arc::new(Self { stop_flag })
+        Ok(std::sync::Arc::new(Self { stop_flag }))
     }
 
     pub fn stop(&self) {
@@ -203,5 +237,43 @@ mod async_tests {
             Err(PriceError::RateLimited) => println!("rate limited, skipping"),
             Err(e) => panic!("unexpected error: {e}"),
         }
+    }
+}
+
+#[cfg(test)]
+mod security_tests {
+    use super::*;
+
+    #[test]
+    fn rejects_url_injection_attempt() {
+        let result = get_price("bitcoin&evil=1".to_string());
+        assert!(matches!(result, Err(PriceError::InvalidInput { .. })));
+    }
+
+    #[test]
+    fn rejects_empty_identifier() {
+        let result = get_price("".to_string());
+        assert!(matches!(result, Err(PriceError::InvalidInput { .. })));
+    }
+
+    #[test]
+    fn accepts_valid_identifier_with_hyphen() {
+        // "usd-coin" is a real CoinGecko id — hyphen must stay allowed.
+        assert!(validate_identifier("usd-coin").is_ok());
+    }
+
+    #[test]
+    fn ticker_constructor_rejects_invalid_symbol() {
+        struct NoopListener;
+        impl TickerListener for NoopListener {
+            fn on_update(&self, _ticker: PriceInfo) {}
+            fn on_error(&self, _message: String) {}
+        }
+
+        let result = PriceTicker::new(
+            vec!["btcusdt;DROP".to_string()],
+            std::sync::Arc::new(NoopListener),
+        );
+        assert!(matches!(result, Err(PriceError::InvalidInput { .. })));
     }
 }

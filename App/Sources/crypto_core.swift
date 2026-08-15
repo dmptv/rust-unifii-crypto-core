@@ -495,9 +495,9 @@ open class PriceTicker:
         return try! rustCall { uniffi_crypto_core_fn_clone_priceticker(self.pointer, $0) }
     }
 
-    public convenience init(symbols: [String], listener: TickerListener) {
+    public convenience init(symbols: [String], listener: TickerListener) throws {
         let pointer =
-            try! rustCall {
+            try rustCallWithError(FfiConverterTypePriceError.lift) {
                 uniffi_crypto_core_fn_constructor_priceticker_new(
                     FfiConverterSequenceString.lower(symbols),
                     FfiConverterTypeTickerListener.lower(listener), $0
@@ -826,6 +826,8 @@ public enum PriceError {
     )
     case InvalidResponse(reason: String
     )
+    case InvalidInput(reason: String
+    )
 }
 
 #if swift(>=5.8)
@@ -844,6 +846,9 @@ public struct FfiConverterTypePriceError: FfiConverterRustBuffer {
         case 3: return try .InvalidResponse(
                 reason: FfiConverterString.read(from: &buf)
             )
+        case 4: return try .InvalidInput(
+                reason: FfiConverterString.read(from: &buf)
+            )
         default: throw UniffiInternalError.unexpectedEnumCase
         }
     }
@@ -859,6 +864,10 @@ public struct FfiConverterTypePriceError: FfiConverterRustBuffer {
 
         case let .InvalidResponse(reason):
             writeInt(&buf, Int32(3))
+            FfiConverterString.write(reason, into: &buf)
+
+        case let .InvalidInput(reason):
+            writeInt(&buf, Int32(4))
             FfiConverterString.write(reason, into: &buf)
         }
     }
@@ -1009,7 +1018,7 @@ private var initializationResult: InitializationResult = {
     if uniffi_crypto_core_checksum_method_tickerlistener_on_error() != 39150 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_crypto_core_checksum_constructor_priceticker_new() != 46565 {
+    if uniffi_crypto_core_checksum_constructor_priceticker_new() != 4151 {
         return InitializationResult.apiChecksumMismatch
     }
 

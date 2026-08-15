@@ -104,6 +104,8 @@ struct AsyncDemoView: View {
             reason
         case .InvalidResponse:
             "Invalid coin"
+        case let .InvalidInput(reason):
+            reason
         }
     }
 
