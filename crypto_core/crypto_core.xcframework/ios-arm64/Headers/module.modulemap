@@ -1,0 +1,4 @@
+module crypto_coreFFI {
+    header "crypto_coreFFI.h"
+    export *
+}

@@ -1,0 +1,13 @@
+# Rust build cache (regenerate with cargo build)
+crypto_core/target/
+
+# Xcode / tuist generated project files (regenerate with `tuist generate`)
+App/build/
+App/Derived/
+App/CryptoCoreApp.xcodeproj/
+App/CryptoCoreApp.xcworkspace/
+App/.tuist-bin/
+App/Tuist/.build/
+
+# macOS
+.DS_Store
