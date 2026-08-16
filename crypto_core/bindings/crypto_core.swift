@@ -820,6 +820,55 @@ public func FfiConverterTypePriceInfo_lower(_ value: PriceInfo) -> RustBuffer {
     return FfiConverterTypePriceInfo.lower(value)
 }
 
+public enum ElizaError {
+    case Network(reason: String
+    )
+    case InvalidInput(reason: String
+    )
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeElizaError: FfiConverterRustBuffer {
+    typealias SwiftType = ElizaError
+
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ElizaError {
+        let variant: Int32 = try readInt(&buf)
+        switch variant {
+        case 1: return try .Network(
+                reason: FfiConverterString.read(from: &buf)
+            )
+
+        case 2: return try .InvalidInput(
+                reason: FfiConverterString.read(from: &buf)
+            )
+
+        default: throw UniffiInternalError.unexpectedEnumCase
+        }
+    }
+
+    public static func write(_ value: ElizaError, into buf: inout [UInt8]) {
+        switch value {
+        case let .Network(reason):
+            writeInt(&buf, Int32(1))
+            FfiConverterString.write(reason, into: &buf)
+
+        case let .InvalidInput(reason):
+            writeInt(&buf, Int32(2))
+            FfiConverterString.write(reason, into: &buf)
+        }
+    }
+}
+
+extension ElizaError: Equatable, Hashable {}
+
+extension ElizaError: Foundation.LocalizedError {
+    public var errorDescription: String? {
+        String(reflecting: self)
+    }
+}
+
 public enum PriceError {
     case RateLimited
     case Network(reason: String
@@ -953,6 +1002,21 @@ private func uniffiFutureContinuationCallback(handle: UInt64, pollResult: Int8) 
     }
 }
 
+public func askEliza(sentence: String) async throws -> String {
+    return
+        try await uniffiRustCallAsync(
+            rustFutureFunc: {
+                uniffi_crypto_core_fn_func_ask_eliza(FfiConverterString.lower(sentence)
+                )
+            },
+            pollFunc: ffi_crypto_core_rust_future_poll_rust_buffer,
+            completeFunc: ffi_crypto_core_rust_future_complete_rust_buffer,
+            freeFunc: ffi_crypto_core_rust_future_free_rust_buffer,
+            liftFunc: FfiConverterString.lift,
+            errorHandler: FfiConverterTypeElizaError.lift
+        )
+}
+
 public func getPrice(coinId: String) throws -> PriceInfo {
     return try FfiConverterTypePriceInfo.lift(rustCallWithError(FfiConverterTypePriceError.lift) {
         uniffi_crypto_core_fn_func_get_price(
@@ -999,6 +1063,9 @@ private var initializationResult: InitializationResult = {
     let scaffolding_contract_version = ffi_crypto_core_uniffi_contract_version()
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
+    }
+    if uniffi_crypto_core_checksum_func_ask_eliza() != 40660 {
+        return InitializationResult.apiChecksumMismatch
     }
     if uniffi_crypto_core_checksum_func_get_price() != 33392 {
         return InitializationResult.apiChecksumMismatch

@@ -184,6 +184,66 @@ fn parse_binance_trade(text: &str) -> Option<PriceInfo> {
     })
 }
 
+// --- gRPC: Rust core as a gRPC *client* to a real external gRPC service
+// (Buf's public Eliza demo, connectrpc.eliza.v1.ElizaService). Swift never
+// sees tonic/prost or the .proto-generated types — it gets a plain String
+// through the same UniFFI async-export/typed-error pattern as get_price_async.
+
+mod eliza {
+    tonic::include_proto!("connectrpc.eliza.v1");
+}
+
+use eliza::eliza_service_client::ElizaServiceClient;
+use eliza::SayRequest;
+
+#[derive(Debug, thiserror::Error, uniffi::Error)]
+pub enum ElizaError {
+    #[error("network request failed: {reason}")]
+    Network { reason: String },
+
+    #[error("invalid input: {reason}")]
+    InvalidInput { reason: String },
+}
+
+fn validate_free_text(value: &str) -> Result<(), ElizaError> {
+    let is_valid = !value.is_empty()
+        && value.chars().count() <= 500
+        && value.chars().all(|c| !c.is_control());
+
+    if is_valid {
+        Ok(())
+    } else {
+        Err(ElizaError::InvalidInput {
+            reason: "input must be 1-500 printable characters".to_string(),
+        })
+    }
+}
+
+#[uniffi::export]
+pub async fn ask_eliza(sentence: String) -> Result<String, ElizaError> {
+    validate_free_text(&sentence)?;
+
+    ASYNC_RUNTIME
+        .spawn(async move {
+            let mut client = ElizaServiceClient::connect("https://demo.connectrpc.com")
+                .await
+                .map_err(|err| ElizaError::Network {
+                    reason: err.to_string(),
+                })?;
+
+            let response = client
+                .say(tonic::Request::new(SayRequest { sentence }))
+                .await
+                .map_err(|err| ElizaError::Network {
+                    reason: err.to_string(),
+                })?;
+
+            Ok(response.into_inner().sentence)
+        })
+        .await
+        .expect("eliza task panicked")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -275,5 +335,19 @@ mod security_tests {
             std::sync::Arc::new(NoopListener),
         );
         assert!(matches!(result, Err(PriceError::InvalidInput { .. })));
+    }
+}
+
+#[cfg(test)]
+mod eliza_tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn talks_to_real_eliza_service() {
+        let result = ask_eliza("Hello, are you a real gRPC service?".to_string()).await;
+        match result {
+            Ok(reply) => println!("Eliza says: {reply}"),
+            Err(e) => panic!("unexpected error: {e}"),
+        }
     }
 }

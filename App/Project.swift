@@ -34,6 +34,19 @@ let asyncFeature = Target.target(
     ]
 )
 
+let grpcFeature = Target.target(
+    name: "GrpcFeature",
+    destinations: .iOS,
+    product: .staticFramework,
+    bundleId: "com.example.cryptocoreapp.grpcfeature",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/GrpcFeature/Sources/**"],
+    dependencies: [
+        .external(name: "CryptoCoreKit")
+    ]
+)
+
 let app = Target.target(
     name: "CryptoCoreApp",
     destinations: .iOS,
@@ -50,10 +63,11 @@ let app = Target.target(
     dependencies: [
         .target(name: "MarketsFeature"),
         .target(name: "AsyncFeature"),
+        .target(name: "GrpcFeature"),
     ]
 )
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, marketsFeature, asyncFeature]
+    targets: [app, marketsFeature, asyncFeature, grpcFeature]
 )
