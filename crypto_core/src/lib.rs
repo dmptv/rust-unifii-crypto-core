@@ -81,6 +81,279 @@ pub fn get_price(coin_id: String) -> Result<PriceInfo, PriceError> {
     Ok(PriceInfo { coin_id, usd_price })
 }
 
+// --- Coin details / search / news: three more Node-mediated calls to public
+// APIs, backing the Markets/Watchlist/News flows on the Swift side. Same
+// principle throughout the project — the Node is the only thing that ever
+// calls a public API; Swift only ever sees typed Records.
+
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct CoinDetails {
+    pub coin_id: String,
+    pub name: String,
+    pub symbol: String,
+    pub description: String,
+    pub homepage_url: String,
+    pub current_price_usd: f64,
+    pub market_cap_usd: f64,
+}
+
+#[uniffi::export]
+pub fn get_coin_details(coin_id: String) -> Result<CoinDetails, PriceError> {
+    validate_identifier(&coin_id)?;
+
+    let url = format!(
+        "https://api.coingecko.com/api/v3/coins/{coin_id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false"
+    );
+
+    let response = ureq::get(&url).call().map_err(|err| match err {
+        ureq::Error::Status(429, _) => PriceError::RateLimited,
+        ureq::Error::Status(code, _) => PriceError::Network {
+            reason: format!("HTTP {code}"),
+        },
+        ureq::Error::Transport(transport) => PriceError::Network {
+            reason: transport.to_string(),
+        },
+    })?;
+
+    let body: serde_json::Value = response
+        .into_json()
+        .map_err(|err| PriceError::InvalidResponse {
+            reason: err.to_string(),
+        })?;
+
+    let name = body["name"]
+        .as_str()
+        .ok_or_else(|| PriceError::InvalidResponse {
+            reason: format!("no name found for '{coin_id}'"),
+        })?
+        .to_string();
+    let symbol = body["symbol"].as_str().unwrap_or_default().to_string();
+    let description = body["description"]["en"]
+        .as_str()
+        .unwrap_or_default()
+        .to_string();
+    let homepage_url = body["links"]["homepage"][0]
+        .as_str()
+        .unwrap_or_default()
+        .to_string();
+    let current_price_usd = body["market_data"]["current_price"]["usd"]
+        .as_f64()
+        .unwrap_or(0.0);
+    let market_cap_usd = body["market_data"]["market_cap"]["usd"]
+        .as_f64()
+        .unwrap_or(0.0);
+
+    Ok(CoinDetails {
+        coin_id,
+        name,
+        symbol,
+        description,
+        homepage_url,
+        current_price_usd,
+        market_cap_usd,
+    })
+}
+
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct CoinSearchResult {
+    pub coin_id: String,
+    pub name: String,
+    pub symbol: String,
+    pub market_cap_rank: Option<i64>,
+}
+
+fn validate_search_query(value: &str) -> Result<(), PriceError> {
+    let is_valid = !value.is_empty()
+        && value.chars().count() <= 100
+        && value.chars().all(|c| !c.is_control());
+
+    if is_valid {
+        Ok(())
+    } else {
+        Err(PriceError::InvalidInput {
+            reason: "search query must be 1-100 printable characters".to_string(),
+        })
+    }
+}
+
+#[uniffi::export]
+pub fn search_coins(query: String) -> Result<Vec<CoinSearchResult>, PriceError> {
+    validate_search_query(&query)?;
+
+    let encoded_query = urlencoding::encode(&query);
+    let url = format!("https://api.coingecko.com/api/v3/search?query={encoded_query}");
+
+    let response = ureq::get(&url).call().map_err(|err| match err {
+        ureq::Error::Status(429, _) => PriceError::RateLimited,
+        ureq::Error::Status(code, _) => PriceError::Network {
+            reason: format!("HTTP {code}"),
+        },
+        ureq::Error::Transport(transport) => PriceError::Network {
+            reason: transport.to_string(),
+        },
+    })?;
+
+    let body: serde_json::Value = response
+        .into_json()
+        .map_err(|err| PriceError::InvalidResponse {
+            reason: err.to_string(),
+        })?;
+
+    let coins = body["coins"]
+        .as_array()
+        .ok_or_else(|| PriceError::InvalidResponse {
+            reason: "no 'coins' field in search response".to_string(),
+        })?;
+
+    let results = coins
+        .iter()
+        .filter_map(|c| {
+            Some(CoinSearchResult {
+                coin_id: c["id"].as_str()?.to_string(),
+                name: c["name"].as_str()?.to_string(),
+                symbol: c["symbol"].as_str()?.to_string(),
+                market_cap_rank: c["market_cap_rank"].as_i64(),
+            })
+        })
+        .collect();
+
+    Ok(results)
+}
+
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct NewsArticle {
+    pub id: String,
+    pub title: String,
+    pub summary: String,
+    pub url: String,
+    pub published_at: String,
+}
+
+#[uniffi::export]
+pub fn get_news() -> Result<Vec<NewsArticle>, PriceError> {
+    let response = ureq::get("https://www.coindesk.com/arc/outboundfeeds/rss/")
+        .call()
+        .map_err(|err| match err {
+            ureq::Error::Status(429, _) => PriceError::RateLimited,
+            ureq::Error::Status(code, _) => PriceError::Network {
+                reason: format!("HTTP {code}"),
+            },
+            ureq::Error::Transport(transport) => PriceError::Network {
+                reason: transport.to_string(),
+            },
+        })?;
+
+    let xml = response
+        .into_string()
+        .map_err(|err| PriceError::InvalidResponse {
+            reason: err.to_string(),
+        })?;
+
+    parse_rss_items(&xml)
+}
+
+fn parse_rss_items(xml: &str) -> Result<Vec<NewsArticle>, PriceError> {
+    use quick_xml::events::Event;
+    use quick_xml::Reader;
+
+    let mut reader = Reader::from_str(xml);
+    reader.config_mut().trim_text(true);
+
+    let mut articles = Vec::new();
+    let mut current_tag = String::new();
+    let mut in_item = false;
+
+    let mut title = String::new();
+    let mut link = String::new();
+    let mut guid = String::new();
+    let mut pub_date = String::new();
+    let mut description = String::new();
+
+    loop {
+        let event = reader
+            .read_event()
+            .map_err(|err| PriceError::InvalidResponse {
+                reason: format!("failed to parse RSS feed: {err}"),
+            })?;
+
+        match event {
+            Event::Eof => break,
+            Event::Start(e) => {
+                let name = String::from_utf8_lossy(e.name().as_ref()).into_owned();
+                if name == "item" {
+                    in_item = true;
+                    title.clear();
+                    link.clear();
+                    guid.clear();
+                    pub_date.clear();
+                    description.clear();
+                }
+                current_tag = name;
+            }
+            Event::End(e) => {
+                let name = String::from_utf8_lossy(e.name().as_ref()).into_owned();
+                if name == "item" && in_item {
+                    articles.push(NewsArticle {
+                        id: guid.clone(),
+                        title: title.clone(),
+                        summary: description.clone(),
+                        url: link.clone(),
+                        published_at: pub_date.clone(),
+                    });
+                    in_item = false;
+                }
+                current_tag.clear();
+            }
+            Event::Text(e) if in_item => {
+                let text = e.unescape().unwrap_or_default().into_owned();
+                assign_rss_field(
+                    &current_tag,
+                    text,
+                    &mut title,
+                    &mut link,
+                    &mut guid,
+                    &mut pub_date,
+                    &mut description,
+                );
+            }
+            Event::CData(e) if in_item => {
+                let text = String::from_utf8_lossy(&e.into_inner()).into_owned();
+                assign_rss_field(
+                    &current_tag,
+                    text,
+                    &mut title,
+                    &mut link,
+                    &mut guid,
+                    &mut pub_date,
+                    &mut description,
+                );
+            }
+            _ => {}
+        }
+    }
+
+    Ok(articles)
+}
+
+fn assign_rss_field(
+    tag: &str,
+    text: String,
+    title: &mut String,
+    link: &mut String,
+    guid: &mut String,
+    pub_date: &mut String,
+    description: &mut String,
+) {
+    match tag {
+        "title" => *title = text,
+        "link" => *link = text,
+        "guid" => *guid = text,
+        "pubDate" => *pub_date = text,
+        "description" => *description = text,
+        _ => {}
+    }
+}
+
 // --- Async: same lookup as get_price, but as a real Rust `async fn`,
 // exported to Swift as a native `async`/`await` function (no manual
 // thread-hopping needed on the Swift side, unlike the sync get_price).
@@ -363,6 +636,56 @@ mod eliza_tests {
                     .expect("bytes should decode as a valid SayResponse");
                 println!("Eliza says: {}", decoded.sentence);
                 assert!(!decoded.sentence.is_empty());
+            }
+            Err(e) => panic!("unexpected error: {e}"),
+        }
+    }
+}
+
+#[cfg(test)]
+mod backend_tests {
+    use super::*;
+
+    #[test]
+    fn fetches_real_coin_details() {
+        let result = get_coin_details("bitcoin".to_string());
+        match result {
+            Ok(details) => {
+                println!("{:?}", details);
+                assert_eq!(details.symbol, "btc");
+                assert!(details.current_price_usd > 0.0);
+                assert!(!details.description.is_empty());
+            }
+            Err(PriceError::RateLimited) => println!("rate limited, skipping"),
+            Err(e) => panic!("unexpected error: {e}"),
+        }
+    }
+
+    #[test]
+    fn searches_real_coins() {
+        let result = search_coins("bitcoin".to_string());
+        match result {
+            Ok(results) => {
+                println!("{:?}", results);
+                assert!(!results.is_empty());
+                assert!(results.iter().any(|r| r.coin_id == "bitcoin"));
+            }
+            Err(PriceError::RateLimited) => println!("rate limited, skipping"),
+            Err(e) => panic!("unexpected error: {e}"),
+        }
+    }
+
+    #[test]
+    fn fetches_real_news() {
+        let result = get_news();
+        match result {
+            Ok(articles) => {
+                println!("got {} articles", articles.len());
+                if let Some(first) = articles.first() {
+                    println!("{:?}", first);
+                }
+                assert!(!articles.is_empty());
+                assert!(!articles[0].title.is_empty());
             }
             Err(e) => panic!("unexpected error: {e}"),
         }
