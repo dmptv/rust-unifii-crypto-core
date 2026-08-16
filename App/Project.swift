@@ -36,6 +36,21 @@ let marketsFeature = Target.target(
     ]
 )
 
+let newsFeature = Target.target(
+    name: "NewsFeature",
+    destinations: .iOS,
+    product: .staticFramework,
+    bundleId: "com.example.cryptocoreapp.newsfeature",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/NewsFeature/Sources/**"],
+    dependencies: [
+        .external(name: "CryptoCoreKit"),
+        .target(name: "NavigationKit"),
+        .external(name: "Swinject"),
+    ]
+)
+
 let asyncFeature = Target.target(
     name: "AsyncFeature",
     destinations: .iOS,
@@ -78,6 +93,7 @@ let app = Target.target(
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "MarketsFeature"),
+        .target(name: "NewsFeature"),
         .target(name: "AsyncFeature"),
         .target(name: "GrpcFeature"),
         .target(name: "NavigationKit"),
@@ -87,5 +103,5 @@ let app = Target.target(
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, navigationKit, marketsFeature, asyncFeature, grpcFeature]
+    targets: [app, navigationKit, marketsFeature, newsFeature, asyncFeature, grpcFeature]
 )
