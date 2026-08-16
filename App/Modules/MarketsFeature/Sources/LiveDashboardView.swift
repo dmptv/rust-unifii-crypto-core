@@ -149,6 +149,7 @@ private struct MarketRowView: View {
     let price: Double?
     let history: [Double]
     let baseline: Double?
+    let onTap: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -183,6 +184,8 @@ private struct MarketRowView: View {
             }
         }
         .padding(.vertical, 14)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
     }
 
     private var displayName: String {
@@ -211,12 +214,23 @@ private struct MarketRowView: View {
     }
 }
 
+// CoinGecko ids for get_coin_details, keyed by the Binance symbols this
+// dashboard already streams — kept here since this view is the only place
+// that knows about both.
+private let coinGeckoIds = [
+    "btcusdt": "bitcoin",
+    "ethusdt": "ethereum",
+    "solusdt": "solana",
+]
+
 public struct LiveDashboardView: View {
     @ObservedObject public var viewModel: TickerViewModel
     private let symbols = ["btcusdt", "ethusdt", "solusdt"]
+    private let onSelectCoin: (String) -> Void
 
-    public init(viewModel: TickerViewModel) {
+    public init(viewModel: TickerViewModel, onSelectCoin: @escaping (String) -> Void = { _ in }) {
         self.viewModel = viewModel
+        self.onSelectCoin = onSelectCoin
     }
 
     public var body: some View {
@@ -242,7 +256,12 @@ public struct LiveDashboardView: View {
                     symbol: symbol.uppercased(),
                     price: viewModel.prices[symbol.uppercased()],
                     history: viewModel.history[symbol.uppercased()] ?? [],
-                    baseline: viewModel.baselines[symbol.uppercased()]
+                    baseline: viewModel.baselines[symbol.uppercased()],
+                    onTap: {
+                        if let coinId = coinGeckoIds[symbol] {
+                            onSelectCoin(coinId)
+                        }
+                    }
                 )
                 Divider().overlay(Color.white.opacity(0.1))
             }

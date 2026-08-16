@@ -8,6 +8,19 @@ let deploymentTargets: DeploymentTargets = .iOS("26.0")
 // Tuist/Package.swift. Feature modules depend on it exactly the same way
 // they'd depend on any third-party SPM package.
 
+let navigationKit = Target.target(
+    name: "NavigationKit",
+    destinations: .iOS,
+    product: .staticFramework,
+    bundleId: "com.example.cryptocoreapp.navigationkit",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/NavigationKit/Sources/**"],
+    dependencies: [
+        .external(name: "CryptoCoreKit")
+    ]
+)
+
 let marketsFeature = Target.target(
     name: "MarketsFeature",
     destinations: .iOS,
@@ -17,7 +30,9 @@ let marketsFeature = Target.target(
     infoPlist: .default,
     sources: ["Modules/MarketsFeature/Sources/**"],
     dependencies: [
-        .external(name: "CryptoCoreKit")
+        .external(name: "CryptoCoreKit"),
+        .target(name: "NavigationKit"),
+        .external(name: "Swinject"),
     ]
 )
 
@@ -65,10 +80,12 @@ let app = Target.target(
         .target(name: "MarketsFeature"),
         .target(name: "AsyncFeature"),
         .target(name: "GrpcFeature"),
+        .target(name: "NavigationKit"),
+        .external(name: "Swinject"),
     ]
 )
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, marketsFeature, asyncFeature, grpcFeature]
+    targets: [app, navigationKit, marketsFeature, asyncFeature, grpcFeature]
 )
