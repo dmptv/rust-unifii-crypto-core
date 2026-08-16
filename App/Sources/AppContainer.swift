@@ -1,6 +1,7 @@
 import MarketsFeature
 import NewsFeature
 import Swinject
+import WatchlistFeature
 
 // Single composition root: aggregates every feature module's Assembly so
 // coordinators can resolve their dependencies through one Container instead
@@ -10,6 +11,7 @@ enum AppContainer {
         [
             MarketsAssembly(),
             NewsAssembly(),
+            WatchlistAssembly(),
         ]
     ).resolver
 }
