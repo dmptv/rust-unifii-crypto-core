@@ -452,6 +452,24 @@ private struct FfiConverterString: FfiConverter {
     }
 }
 
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+private struct FfiConverterData: FfiConverterRustBuffer {
+    typealias SwiftType = Data
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Data {
+        let len: Int32 = try readInt(&buf)
+        return try Data(readBytes(&buf, count: Int(len)))
+    }
+
+    static func write(_ value: Data, into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        writeBytes(&buf, value)
+    }
+}
+
 public protocol PriceTickerProtocol: AnyObject {
     func stop()
 }
@@ -1002,7 +1020,7 @@ private func uniffiFutureContinuationCallback(handle: UInt64, pollResult: Int8) 
     }
 }
 
-public func askEliza(sentence: String) async throws -> String {
+public func askEliza(sentence: String) async throws -> Data {
     return
         try await uniffiRustCallAsync(
             rustFutureFunc: {
@@ -1012,7 +1030,7 @@ public func askEliza(sentence: String) async throws -> String {
             pollFunc: ffi_crypto_core_rust_future_poll_rust_buffer,
             completeFunc: ffi_crypto_core_rust_future_complete_rust_buffer,
             freeFunc: ffi_crypto_core_rust_future_free_rust_buffer,
-            liftFunc: FfiConverterString.lift,
+            liftFunc: FfiConverterData.lift,
             errorHandler: FfiConverterTypeElizaError.lift
         )
 }
@@ -1064,7 +1082,7 @@ private var initializationResult: InitializationResult = {
     if bindings_contract_version != scaffolding_contract_version {
         return InitializationResult.contractVersionMismatch
     }
-    if uniffi_crypto_core_checksum_func_ask_eliza() != 40660 {
+    if uniffi_crypto_core_checksum_func_ask_eliza() != 28829 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_crypto_core_checksum_func_get_price() != 33392 {

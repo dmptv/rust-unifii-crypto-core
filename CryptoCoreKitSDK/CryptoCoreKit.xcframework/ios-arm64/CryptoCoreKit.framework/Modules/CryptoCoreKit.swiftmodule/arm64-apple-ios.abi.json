@@ -2572,9 +2572,9 @@
         "children": [
           {
             "kind": "TypeNominal",
-            "name": "String",
-            "printedName": "Swift.String",
-            "usr": "s:SS"
+            "name": "Data",
+            "printedName": "Foundation.Data",
+            "usr": "s:10Foundation4DataV"
           },
           {
             "kind": "TypeNominal",
@@ -2584,8 +2584,8 @@
           }
         ],
         "declKind": "Func",
-        "usr": "s:13CryptoCoreKit8askEliza8sentenceS2S_tYaKF",
-        "mangledName": "$s13CryptoCoreKit8askEliza8sentenceS2S_tYaKF",
+        "usr": "s:13CryptoCoreKit8askEliza8sentence10Foundation4DataVSS_tYaKF",
+        "mangledName": "$s13CryptoCoreKit8askEliza8sentence10Foundation4DataVSS_tYaKF",
         "moduleName": "CryptoCoreKit",
         "declAttributes": [
           "AccessControl"
@@ -2725,112 +2725,112 @@
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 21894,
+      "offset": 22415,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 21966,
+      "offset": 22487,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 22011,
+      "offset": 22532,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 22067,
+      "offset": 22588,
       "length": 1,
       "value": "2"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "StringLiteral",
-      "offset": 24276,
+      "offset": 24797,
       "length": 72,
       "value": "\"Uniffi callback interface TickerListener: handle missing in uniffiFree\""
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 32227,
+      "offset": 32748,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 32285,
+      "offset": 32806,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 36033,
+      "offset": 36550,
       "length": 2,
       "value": "26"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 36379,
+      "offset": 36896,
       "length": 5,
-      "value": "40660"
+      "value": "28829"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 36504,
+      "offset": 37021,
       "length": 5,
       "value": "33392"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 36635,
+      "offset": 37152,
       "length": 4,
       "value": "6063"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 36755,
+      "offset": 37272,
       "length": 5,
       "value": "13978"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 36889,
+      "offset": 37406,
       "length": 5,
       "value": "29650"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 37031,
+      "offset": 37548,
       "length": 5,
       "value": "29728"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 37172,
+      "offset": 37689,
       "length": 5,
       "value": "39150"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 37310,
+      "offset": 37827,
       "length": 4,
       "value": "4151"
     }
