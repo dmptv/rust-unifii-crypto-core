@@ -1,4 +1,5 @@
 {
+  "originHash" : "e0778d6f31785a0ac681c246b563658bcc5d089f5b94b03e58a39aeff88a7191",
   "pins" : [
     {
       "identity" : "swift-protobuf",
@@ -8,7 +9,16 @@
         "revision" : "102a647b573f60f73afdce5613a51d71349fe507",
         "version" : "1.30.0"
       }
+    },
+    {
+      "identity" : "swinject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swinject/Swinject.git",
+      "state" : {
+        "revision" : "b685b549fe4d8ae265fc7a2f27d0789720425d69",
+        "version" : "2.10.0"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

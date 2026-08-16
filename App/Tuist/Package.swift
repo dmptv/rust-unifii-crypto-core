@@ -19,5 +19,6 @@ let package = Package(
     dependencies: [
         .package(path: "../../CryptoCoreKitSDK"),
         .package(path: "../../ElizaProtoKit"),
+        .package(url: "https://github.com/Swinject/Swinject.git", from: "2.9.1"),
     ]
 )

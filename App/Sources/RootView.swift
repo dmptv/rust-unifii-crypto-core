@@ -13,10 +13,11 @@ struct RootView: View {
     @StateObject private var tickerViewModel = TickerViewModel()
     @StateObject private var asyncPriceViewModel = AsyncPriceViewModel()
     @StateObject private var grpcViewModel = GrpcViewModel()
+    @StateObject private var marketsCoordinator = MarketsCoordinator(container: AppContainer.shared)
 
     var body: some View {
         TabView {
-            LiveDashboardView(viewModel: tickerViewModel)
+            MarketsCoordinatorView(coordinator: marketsCoordinator, tickerViewModel: tickerViewModel)
                 .tabItem {
                     Label("Live", systemImage: "chart.line.uptrend.xyaxis")
                 }
