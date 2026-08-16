@@ -40,6 +40,11 @@ struct RootView: View {
                 .tabItem {
                     Label("gRPC", systemImage: "bubble.left.and.bubble.right")
                 }
+
+            DebugPushTriggerView()
+                .tabItem {
+                    Label("Push", systemImage: "bell.badge")
+                }
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $newsCoordinator.isPresented) {
