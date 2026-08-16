@@ -354,6 +354,81 @@ fn assign_rss_field(
     }
 }
 
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct CoinListing {
+    pub coin_id: String,
+    pub name: String,
+    pub symbol: String,
+    pub current_price_usd: f64,
+    pub market_cap_rank: Option<i64>,
+    pub image_url: String,
+}
+
+#[derive(Debug, Clone, uniffi::Record)]
+pub struct CoinsPage {
+    pub coins: Vec<CoinListing>,
+    // Opaque to Swift by design: it's a page number under the hood today,
+    // but callers only ever pass back exactly what they were given, the
+    // same contract a real cursor-paginated API (Stripe, GitHub GraphQL)
+    // exposes even when the backend implements it via offset/page
+    // internally. Swift must not parse or construct this string itself.
+    pub next_cursor: Option<String>,
+}
+
+const COINS_PAGE_SIZE: u32 = 25;
+
+#[uniffi::export]
+pub fn get_coins_page(cursor: Option<String>) -> Result<CoinsPage, PriceError> {
+    let page: u32 = match cursor {
+        Some(ref c) => c.parse().map_err(|_| PriceError::InvalidInput {
+            reason: "malformed cursor".to_string(),
+        })?,
+        None => 1,
+    };
+
+    let url = format!(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={COINS_PAGE_SIZE}&page={page}&sparkline=false"
+    );
+    let response = ureq::get(&url).call().map_err(|err| match err {
+        ureq::Error::Status(429, _) => PriceError::RateLimited,
+        ureq::Error::Status(code, _) => PriceError::Network {
+            reason: format!("HTTP {code}"),
+        },
+        ureq::Error::Transport(transport) => PriceError::Network {
+            reason: transport.to_string(),
+        },
+    })?;
+
+    let body: Vec<serde_json::Value> =
+        response
+            .into_json()
+            .map_err(|err| PriceError::InvalidResponse {
+                reason: err.to_string(),
+            })?;
+
+    let coins: Vec<CoinListing> = body
+        .iter()
+        .filter_map(|c| {
+            Some(CoinListing {
+                coin_id: c["id"].as_str()?.to_string(),
+                name: c["name"].as_str()?.to_string(),
+                symbol: c["symbol"].as_str()?.to_string(),
+                current_price_usd: c["current_price"].as_f64().unwrap_or(0.0),
+                market_cap_rank: c["market_cap_rank"].as_i64(),
+                image_url: c["image"].as_str().unwrap_or_default().to_string(),
+            })
+        })
+        .collect();
+
+    let next_cursor = if coins.len() as u32 == COINS_PAGE_SIZE {
+        Some((page + 1).to_string())
+    } else {
+        None
+    };
+
+    Ok(CoinsPage { coins, next_cursor })
+}
+
 // --- Async: same lookup as get_price, but as a real Rust `async fn`,
 // exported to Swift as a native `async`/`await` function (no manual
 // thread-hopping needed on the Swift side, unlike the sync get_price).
@@ -689,5 +764,24 @@ mod backend_tests {
             }
             Err(e) => panic!("unexpected error: {e}"),
         }
+    }
+
+    #[test]
+    fn paginates_real_coins() {
+        let first = match get_coins_page(None) {
+            Ok(page) => page,
+            Err(PriceError::RateLimited) => {
+                println!("rate limited, skipping");
+                return;
+            }
+            Err(e) => panic!("unexpected error: {e}"),
+        };
+        assert_eq!(first.coins.len(), COINS_PAGE_SIZE as usize);
+        assert!(first.next_cursor.is_some());
+
+        let cursor = first.next_cursor.clone().unwrap();
+        let second = get_coins_page(Some(cursor)).expect("second page should succeed");
+        assert_eq!(second.coins.len(), COINS_PAGE_SIZE as usize);
+        assert_ne!(first.coins[0].coin_id, second.coins[0].coin_id);
     }
 }

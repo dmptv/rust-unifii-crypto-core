@@ -12,4 +12,10 @@ public final class RustMarketsService: MarketsServicing {
             try getCoinDetails(coinId: coinId)
         }.value
     }
+
+    public func coinsPage(cursor: String?) async throws -> CoinsPage {
+        try await Task.detached(priority: .userInitiated) {
+            try getCoinsPage(cursor: cursor)
+        }.value
+    }
 }
