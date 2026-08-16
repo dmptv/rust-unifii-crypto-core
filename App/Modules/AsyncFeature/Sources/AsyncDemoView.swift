@@ -3,15 +3,23 @@ import CryptoCoreKit
 
 @MainActor
 public final class AsyncPriceViewModel: ObservableObject {
+    // Separate state per section: these are two independent demos (a real
+    // price fetch vs. deliberately triggering a validation error) sharing
+    // one loading/result flag would tie their buttons together — tapping
+    // one would disable and overwrite the other.
     @Published public var priceResult: String?
-    @Published public var errorDetail: String?
-    @Published public var isLoading = false
+    @Published public var priceErrorDetail: String?
+    @Published public var isPriceLoading = false
+
+    @Published public var errorDemoResult: String?
+    @Published public var errorDemoDetail: String?
+    @Published public var isErrorDemoLoading = false
 
     public init() {}
 
     public func fetchPrice(coinId: String) {
-        isLoading = true
-        errorDetail = nil
+        isPriceLoading = true
+        priceErrorDetail = nil
         // No Task.detached / MainActor.run needed here, unlike the sync
         // getPrice() call on the Live tab: this Task already runs on the
         // main actor, and `await` suspends it without blocking a thread —
@@ -23,12 +31,30 @@ public final class AsyncPriceViewModel: ObservableObject {
                 priceResult = formatted(info.usdPrice)
             } catch let error as PriceError {
                 priceResult = nil
-                errorDetail = detail(for: error)
+                priceErrorDetail = detail(for: error)
             } catch {
                 priceResult = nil
-                errorDetail = "\(error)"
+                priceErrorDetail = "\(error)"
             }
-            isLoading = false
+            isPriceLoading = false
+        }
+    }
+
+    public func triggerErrorDemo(coinId: String) {
+        isErrorDemoLoading = true
+        errorDemoDetail = nil
+        Task {
+            do {
+                let info = try await getPriceAsync(coinId: coinId)
+                errorDemoResult = formatted(info.usdPrice)
+            } catch let error as PriceError {
+                errorDemoResult = nil
+                errorDemoDetail = detail(for: error)
+            } catch {
+                errorDemoResult = nil
+                errorDemoDetail = "\(error)"
+            }
+            isErrorDemoLoading = false
         }
     }
 
@@ -81,7 +107,7 @@ public struct AsyncDemoView: View {
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.gray)
 
-                resultCard
+                resultCard(result: viewModel.priceResult, errorDetail: viewModel.priceErrorDetail)
 
                 Button("Get ETH price") {
                     viewModel.fetchPrice(coinId: "ethereum")
@@ -89,7 +115,7 @@ public struct AsyncDemoView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(.blue)
                 .frame(maxWidth: .infinity)
-                .disabled(viewModel.isLoading)
+                .disabled(viewModel.isPriceLoading)
             }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -97,13 +123,15 @@ public struct AsyncDemoView: View {
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.gray)
 
+                resultCard(result: viewModel.errorDemoResult, errorDetail: viewModel.errorDemoDetail)
+
                 Button("Trigger invalid coin") {
-                    viewModel.fetchPrice(coinId: "this-coin-does-not-exist")
+                    viewModel.triggerErrorDemo(coinId: "this-coin-does-not-exist")
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
                 .frame(maxWidth: .infinity)
-                .disabled(viewModel.isLoading)
+                .disabled(viewModel.isErrorDemoLoading)
             }
 
             Spacer(minLength: 12)
@@ -115,9 +143,9 @@ public struct AsyncDemoView: View {
     }
 
     @ViewBuilder
-    private var resultCard: some View {
+    private func resultCard(result: String?, errorDetail: String?) -> some View {
         Group {
-            if let errorDetail = viewModel.errorDetail {
+            if let errorDetail {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("ERROR")
                         .font(.caption.weight(.bold))
@@ -127,7 +155,7 @@ public struct AsyncDemoView: View {
                         .foregroundStyle(.white)
                 }
             } else {
-                Text(viewModel.priceResult ?? "—")
+                Text(result ?? "—")
                     .font(.system(size: 38, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
             }
