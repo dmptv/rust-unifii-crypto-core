@@ -1,16 +1,16 @@
 import CryptoCoreKit
 import Foundation
 import NavigationKit
+import SwiftData
 
-// Search goes through the Rust node like every other public-API call;
-// the watchlist itself is local device state, so it's plain UserDefaults
-// rather than anything crossing the FFI boundary.
+// Search goes through the Rust node like every other public-API call; the
+// watchlist itself is local device state, persisted with SwiftData rather
+// than crossing the FFI boundary.
 public final class RustWatchlistService: WatchlistServicing {
-    private let defaultsKey = "com.example.cryptocoreapp.watchlist"
-    private let defaults: UserDefaults
+    private let modelContext: ModelContext
 
-    public init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
+    public init(modelContext: ModelContext) {
+        self.modelContext = modelContext
     }
 
     public func searchCoins(query: String) async throws -> [CoinSearchResult] {
@@ -20,18 +20,20 @@ public final class RustWatchlistService: WatchlistServicing {
     }
 
     public func add(_ coin: WatchlistedCoin) {
-        var coins = watchlistedCoins()
-        guard !coins.contains(where: { $0.coinId == coin.coinId }) else { return }
-        coins.append(coin)
-        guard let data = try? JSONEncoder().encode(coins) else { return }
-        defaults.set(data, forKey: defaultsKey)
+        let coinId = coin.coinId
+        let descriptor = FetchDescriptor<WatchlistedCoinModel>(
+            predicate: #Predicate { $0.coinId == coinId }
+        )
+        guard (try? modelContext.fetchCount(descriptor)) == 0 else { return }
+        modelContext.insert(WatchlistedCoinModel(coinId: coin.coinId, coinName: coin.coinName))
+        try? modelContext.save()
     }
 
     public func watchlistedCoins() -> [WatchlistedCoin] {
-        guard let data = defaults.data(forKey: defaultsKey),
-              let coins = try? JSONDecoder().decode([WatchlistedCoin].self, from: data) else {
-            return []
-        }
-        return coins
+        let descriptor = FetchDescriptor<WatchlistedCoinModel>(
+            sortBy: [SortDescriptor(\.addedAt, order: .reverse)]
+        )
+        let models = (try? modelContext.fetch(descriptor)) ?? []
+        return models.map { WatchlistedCoin(coinId: $0.coinId, coinName: $0.coinName) }
     }
 }
