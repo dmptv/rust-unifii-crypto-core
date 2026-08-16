@@ -1,0 +1,2343 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "CryptoCoreKit",
+    "printedName": "CryptoCoreKit",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "crypto_coreFFI",
+        "printedName": "crypto_coreFFI",
+        "declKind": "Import",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "ImplementationOnly"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "PriceTickerProtocol",
+        "printedName": "PriceTickerProtocol",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "stop",
+            "printedName": "stop()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit19PriceTickerProtocolP4stopyyF",
+            "mangledName": "$s13CryptoCoreKit19PriceTickerProtocolP4stopyyF",
+            "moduleName": "CryptoCoreKit",
+            "genericSig": "<τ_0_0 where τ_0_0 : CryptoCoreKit.PriceTickerProtocol>",
+            "sugared_genericSig": "<Self where Self : CryptoCoreKit.PriceTickerProtocol>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:13CryptoCoreKit19PriceTickerProtocolP",
+        "mangledName": "$s13CryptoCoreKit19PriceTickerProtocolP",
+        "moduleName": "CryptoCoreKit",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "PriceTicker",
+        "printedName": "PriceTicker",
+        "children": [
+          {
+            "kind": "TypeDecl",
+            "name": "NoPointer",
+            "printedName": "NoPointer",
+            "children": [
+              {
+                "kind": "Constructor",
+                "name": "init",
+                "printedName": "init()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "NoPointer",
+                    "printedName": "CryptoCoreKit.PriceTicker.NoPointer",
+                    "usr": "s:13CryptoCoreKit11PriceTickerC9NoPointerV"
+                  }
+                ],
+                "declKind": "Constructor",
+                "usr": "s:13CryptoCoreKit11PriceTickerC9NoPointerVAEycfc",
+                "mangledName": "$s13CryptoCoreKit11PriceTickerC9NoPointerVAEycfc",
+                "moduleName": "CryptoCoreKit",
+                "declAttributes": [
+                  "AccessControl"
+                ],
+                "init_kind": "Designated"
+              }
+            ],
+            "declKind": "Struct",
+            "usr": "s:13CryptoCoreKit11PriceTickerC9NoPointerV",
+            "mangledName": "$s13CryptoCoreKit11PriceTickerC9NoPointerV",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "Documentation",
+              "RawDocComment"
+            ],
+            "conformances": [
+              {
+                "kind": "Conformance",
+                "name": "Copyable",
+                "printedName": "Copyable",
+                "usr": "s:s8CopyableP",
+                "mangledName": "$ss8CopyableP"
+              },
+              {
+                "kind": "Conformance",
+                "name": "Escapable",
+                "printedName": "Escapable",
+                "usr": "s:s9EscapableP",
+                "mangledName": "$ss9EscapableP"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(unsafeFromRawPointer:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13CryptoCoreKit11PriceTickerC20unsafeFromRawPointerACSv_tcfc",
+            "mangledName": "$s13CryptoCoreKit11PriceTickerC20unsafeFromRawPointerACSv_tcfc",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "Required",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(noPointer:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "NoPointer",
+                "printedName": "CryptoCoreKit.PriceTicker.NoPointer",
+                "usr": "s:13CryptoCoreKit11PriceTickerC9NoPointerV"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13CryptoCoreKit11PriceTickerC9noPointerA2C02NoG0V_tcfc",
+            "mangledName": "$s13CryptoCoreKit11PriceTickerC9noPointerA2C02NoG0V_tcfc",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "Documentation",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "uniffiClonePointer",
+            "printedName": "uniffiClonePointer()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit11PriceTickerC18uniffiClonePointerSvyF",
+            "mangledName": "$s13CryptoCoreKit11PriceTickerC18uniffiClonePointerSvyF",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "Documentation"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(symbols:listener:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.String]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListener",
+                "printedName": "any CryptoCoreKit.TickerListener",
+                "usr": "s:13CryptoCoreKit14TickerListenerP"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13CryptoCoreKit11PriceTickerC7symbols8listenerACSaySSG_AA0E8Listener_ptKcfc",
+            "mangledName": "$s13CryptoCoreKit11PriceTickerC7symbols8listenerACSaySSG_AA0E8Listener_ptKcfc",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "Convenience",
+              "AccessControl"
+            ],
+            "throwing": true,
+            "init_kind": "Convenience"
+          },
+          {
+            "kind": "Function",
+            "name": "stop",
+            "printedName": "stop()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit11PriceTickerC4stopyyF",
+            "mangledName": "$s13CryptoCoreKit11PriceTickerC4stopyyF",
+            "moduleName": "CryptoCoreKit",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:13CryptoCoreKit11PriceTickerC",
+        "mangledName": "$s13CryptoCoreKit11PriceTickerC",
+        "moduleName": "CryptoCoreKit",
+        "isOpen": true,
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "PriceTickerProtocol",
+            "printedName": "PriceTickerProtocol",
+            "usr": "s:13CryptoCoreKit19PriceTickerProtocolP",
+            "mangledName": "$s13CryptoCoreKit19PriceTickerProtocolP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FfiConverterTypePriceTicker",
+        "printedName": "FfiConverterTypePriceTicker",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "lift",
+            "printedName": "lift(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit27FfiConverterTypePriceTickerV4liftyAA0gH0CSvKFZ",
+            "mangledName": "$s13CryptoCoreKit27FfiConverterTypePriceTickerV4liftyAA0gH0CSvKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "lower",
+            "printedName": "lower(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit27FfiConverterTypePriceTickerV5lowerySvAA0gH0CFZ",
+            "mangledName": "$s13CryptoCoreKit27FfiConverterTypePriceTickerV5lowerySvAA0gH0CFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "read",
+            "printedName": "read(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Tuple",
+                "printedName": "(data: Foundation.Data, offset: Swift.Int)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "paramValueOwnership": "InOut"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit27FfiConverterTypePriceTickerV4read4fromAA0gH0C10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "mangledName": "$s13CryptoCoreKit27FfiConverterTypePriceTickerV4read4fromAA0gH0C10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "write",
+            "printedName": "write(_:into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceTicker",
+                "printedName": "CryptoCoreKit.PriceTicker",
+                "usr": "s:13CryptoCoreKit11PriceTickerC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.UInt8]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UInt8",
+                    "printedName": "Swift.UInt8",
+                    "usr": "s:s5UInt8V"
+                  }
+                ],
+                "paramValueOwnership": "InOut",
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit27FfiConverterTypePriceTickerV5write_4intoyAA0gH0C_Says5UInt8VGztFZ",
+            "mangledName": "$s13CryptoCoreKit27FfiConverterTypePriceTickerV5write_4intoyAA0gH0C_Says5UInt8VGztFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13CryptoCoreKit27FfiConverterTypePriceTickerV",
+        "mangledName": "$s13CryptoCoreKit27FfiConverterTypePriceTickerV",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Function",
+        "name": "FfiConverterTypePriceTicker_lift",
+        "printedName": "FfiConverterTypePriceTicker_lift(_:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "PriceTicker",
+            "printedName": "CryptoCoreKit.PriceTicker",
+            "usr": "s:13CryptoCoreKit11PriceTickerC"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "UnsafeMutableRawPointer",
+            "printedName": "Swift.UnsafeMutableRawPointer",
+            "usr": "s:Sv"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit32FfiConverterTypePriceTicker_liftyAA0gH0CSvKF",
+        "mangledName": "$s13CryptoCoreKit32FfiConverterTypePriceTicker_liftyAA0gH0CSvKF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "throwing": true,
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "Function",
+        "name": "FfiConverterTypePriceTicker_lower",
+        "printedName": "FfiConverterTypePriceTicker_lower(_:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "UnsafeMutableRawPointer",
+            "printedName": "Swift.UnsafeMutableRawPointer",
+            "usr": "s:Sv"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "PriceTicker",
+            "printedName": "CryptoCoreKit.PriceTicker",
+            "usr": "s:13CryptoCoreKit11PriceTickerC"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit33FfiConverterTypePriceTicker_lowerySvAA0gH0CF",
+        "mangledName": "$s13CryptoCoreKit33FfiConverterTypePriceTicker_lowerySvAA0gH0CF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TickerListener",
+        "printedName": "TickerListener",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "onUpdate",
+            "printedName": "onUpdate(ticker:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit14TickerListenerP8onUpdate6tickeryAA9PriceInfoV_tF",
+            "mangledName": "$s13CryptoCoreKit14TickerListenerP8onUpdate6tickeryAA9PriceInfoV_tF",
+            "moduleName": "CryptoCoreKit",
+            "genericSig": "<τ_0_0 where τ_0_0 : CryptoCoreKit.TickerListener>",
+            "sugared_genericSig": "<Self where Self : CryptoCoreKit.TickerListener>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "onError",
+            "printedName": "onError(message:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit14TickerListenerP7onError7messageySS_tF",
+            "mangledName": "$s13CryptoCoreKit14TickerListenerP7onError7messageySS_tF",
+            "moduleName": "CryptoCoreKit",
+            "genericSig": "<τ_0_0 where τ_0_0 : CryptoCoreKit.TickerListener>",
+            "sugared_genericSig": "<Self where Self : CryptoCoreKit.TickerListener>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:13CryptoCoreKit14TickerListenerP",
+        "mangledName": "$s13CryptoCoreKit14TickerListenerP",
+        "moduleName": "CryptoCoreKit",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TickerListenerImpl",
+        "printedName": "TickerListenerImpl",
+        "children": [
+          {
+            "kind": "TypeDecl",
+            "name": "NoPointer",
+            "printedName": "NoPointer",
+            "children": [
+              {
+                "kind": "Constructor",
+                "name": "init",
+                "printedName": "init()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "NoPointer",
+                    "printedName": "CryptoCoreKit.TickerListenerImpl.NoPointer",
+                    "usr": "s:13CryptoCoreKit18TickerListenerImplC9NoPointerV"
+                  }
+                ],
+                "declKind": "Constructor",
+                "usr": "s:13CryptoCoreKit18TickerListenerImplC9NoPointerVAEycfc",
+                "mangledName": "$s13CryptoCoreKit18TickerListenerImplC9NoPointerVAEycfc",
+                "moduleName": "CryptoCoreKit",
+                "declAttributes": [
+                  "AccessControl"
+                ],
+                "init_kind": "Designated"
+              }
+            ],
+            "declKind": "Struct",
+            "usr": "s:13CryptoCoreKit18TickerListenerImplC9NoPointerV",
+            "mangledName": "$s13CryptoCoreKit18TickerListenerImplC9NoPointerV",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "Documentation",
+              "RawDocComment"
+            ],
+            "conformances": [
+              {
+                "kind": "Conformance",
+                "name": "Copyable",
+                "printedName": "Copyable",
+                "usr": "s:s8CopyableP",
+                "mangledName": "$ss8CopyableP"
+              },
+              {
+                "kind": "Conformance",
+                "name": "Escapable",
+                "printedName": "Escapable",
+                "usr": "s:s9EscapableP",
+                "mangledName": "$ss9EscapableP"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(unsafeFromRawPointer:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListenerImpl",
+                "printedName": "CryptoCoreKit.TickerListenerImpl",
+                "usr": "s:13CryptoCoreKit18TickerListenerImplC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13CryptoCoreKit18TickerListenerImplC20unsafeFromRawPointerACSv_tcfc",
+            "mangledName": "$s13CryptoCoreKit18TickerListenerImplC20unsafeFromRawPointerACSv_tcfc",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "Required",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(noPointer:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListenerImpl",
+                "printedName": "CryptoCoreKit.TickerListenerImpl",
+                "usr": "s:13CryptoCoreKit18TickerListenerImplC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "NoPointer",
+                "printedName": "CryptoCoreKit.TickerListenerImpl.NoPointer",
+                "usr": "s:13CryptoCoreKit18TickerListenerImplC9NoPointerV"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13CryptoCoreKit18TickerListenerImplC9noPointerA2C02NoH0V_tcfc",
+            "mangledName": "$s13CryptoCoreKit18TickerListenerImplC9noPointerA2C02NoH0V_tcfc",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "Documentation",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "uniffiClonePointer",
+            "printedName": "uniffiClonePointer()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit18TickerListenerImplC18uniffiClonePointerSvyF",
+            "mangledName": "$s13CryptoCoreKit18TickerListenerImplC18uniffiClonePointerSvyF",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "Documentation"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "onUpdate",
+            "printedName": "onUpdate(ticker:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit18TickerListenerImplC8onUpdate6tickeryAA9PriceInfoV_tF",
+            "mangledName": "$s13CryptoCoreKit18TickerListenerImplC8onUpdate6tickeryAA9PriceInfoV_tF",
+            "moduleName": "CryptoCoreKit",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "onError",
+            "printedName": "onError(message:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit18TickerListenerImplC7onError7messageySS_tF",
+            "mangledName": "$s13CryptoCoreKit18TickerListenerImplC7onError7messageySS_tF",
+            "moduleName": "CryptoCoreKit",
+            "isOpen": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:13CryptoCoreKit18TickerListenerImplC",
+        "mangledName": "$s13CryptoCoreKit18TickerListenerImplC",
+        "moduleName": "CryptoCoreKit",
+        "isOpen": true,
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "TickerListener",
+            "printedName": "TickerListener",
+            "usr": "s:13CryptoCoreKit14TickerListenerP",
+            "mangledName": "$s13CryptoCoreKit14TickerListenerP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FfiConverterTypeTickerListener",
+        "printedName": "FfiConverterTypeTickerListener",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "lift",
+            "printedName": "lift(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListener",
+                "printedName": "any CryptoCoreKit.TickerListener",
+                "usr": "s:13CryptoCoreKit14TickerListenerP"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit30FfiConverterTypeTickerListenerV4liftyAA0gH0_pSvKFZ",
+            "mangledName": "$s13CryptoCoreKit30FfiConverterTypeTickerListenerV4liftyAA0gH0_pSvKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "lower",
+            "printedName": "lower(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UnsafeMutableRawPointer",
+                "printedName": "Swift.UnsafeMutableRawPointer",
+                "usr": "s:Sv"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListener",
+                "printedName": "any CryptoCoreKit.TickerListener",
+                "usr": "s:13CryptoCoreKit14TickerListenerP"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit30FfiConverterTypeTickerListenerV5lowerySvAA0gH0_pFZ",
+            "mangledName": "$s13CryptoCoreKit30FfiConverterTypeTickerListenerV5lowerySvAA0gH0_pFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "read",
+            "printedName": "read(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListener",
+                "printedName": "any CryptoCoreKit.TickerListener",
+                "usr": "s:13CryptoCoreKit14TickerListenerP"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Tuple",
+                "printedName": "(data: Foundation.Data, offset: Swift.Int)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "paramValueOwnership": "InOut"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit30FfiConverterTypeTickerListenerV4read4fromAA0gH0_p10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "mangledName": "$s13CryptoCoreKit30FfiConverterTypeTickerListenerV4read4fromAA0gH0_p10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "write",
+            "printedName": "write(_:into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "TickerListener",
+                "printedName": "any CryptoCoreKit.TickerListener",
+                "usr": "s:13CryptoCoreKit14TickerListenerP"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.UInt8]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UInt8",
+                    "printedName": "Swift.UInt8",
+                    "usr": "s:s5UInt8V"
+                  }
+                ],
+                "paramValueOwnership": "InOut",
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit30FfiConverterTypeTickerListenerV5write_4intoyAA0gH0_p_Says5UInt8VGztFZ",
+            "mangledName": "$s13CryptoCoreKit30FfiConverterTypeTickerListenerV5write_4intoyAA0gH0_p_Says5UInt8VGztFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13CryptoCoreKit30FfiConverterTypeTickerListenerV",
+        "mangledName": "$s13CryptoCoreKit30FfiConverterTypeTickerListenerV",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Function",
+        "name": "FfiConverterTypeTickerListener_lift",
+        "printedName": "FfiConverterTypeTickerListener_lift(_:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "TickerListener",
+            "printedName": "any CryptoCoreKit.TickerListener",
+            "usr": "s:13CryptoCoreKit14TickerListenerP"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "UnsafeMutableRawPointer",
+            "printedName": "Swift.UnsafeMutableRawPointer",
+            "usr": "s:Sv"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit35FfiConverterTypeTickerListener_liftyAA0gH0_pSvKF",
+        "mangledName": "$s13CryptoCoreKit35FfiConverterTypeTickerListener_liftyAA0gH0_pSvKF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "throwing": true,
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "Function",
+        "name": "FfiConverterTypeTickerListener_lower",
+        "printedName": "FfiConverterTypeTickerListener_lower(_:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "UnsafeMutableRawPointer",
+            "printedName": "Swift.UnsafeMutableRawPointer",
+            "usr": "s:Sv"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "TickerListener",
+            "printedName": "any CryptoCoreKit.TickerListener",
+            "usr": "s:13CryptoCoreKit14TickerListenerP"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit36FfiConverterTypeTickerListener_lowerySvAA0gH0_pF",
+        "mangledName": "$s13CryptoCoreKit36FfiConverterTypeTickerListener_lowerySvAA0gH0_pF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "PriceInfo",
+        "printedName": "PriceInfo",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "coinId",
+            "printedName": "coinId",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit9PriceInfoV6coinIdSSvp",
+            "mangledName": "$s13CryptoCoreKit9PriceInfoV6coinIdSSvp",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV6coinIdSSvg",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV6coinIdSSvg",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV6coinIdSSvs",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV6coinIdSSvs",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV6coinIdSSvM",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV6coinIdSSvM",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "usdPrice",
+            "printedName": "usdPrice",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit9PriceInfoV03usdD0Sdvp",
+            "mangledName": "$s13CryptoCoreKit9PriceInfoV03usdD0Sdvp",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV03usdD0Sdvg",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV03usdD0Sdvg",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Double",
+                    "printedName": "Swift.Double",
+                    "usr": "s:Sd"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV03usdD0Sdvs",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV03usdD0Sdvs",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV03usdD0SdvM",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV03usdD0SdvM",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(coinId:usdPrice:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Double",
+                "printedName": "Swift.Double",
+                "usr": "s:Sd"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:13CryptoCoreKit9PriceInfoV6coinId03usdD0ACSS_Sdtcfc",
+            "mangledName": "$s13CryptoCoreKit9PriceInfoV6coinId03usdD0ACSS_Sdtcfc",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit9PriceInfoV2eeoiySbAC_ACtFZ",
+            "mangledName": "$s13CryptoCoreKit9PriceInfoV2eeoiySbAC_ACtFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit9PriceInfoV4hash4intoys6HasherVz_tF",
+            "mangledName": "$s13CryptoCoreKit9PriceInfoV4hash4intoys6HasherVz_tF",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit9PriceInfoV9hashValueSivp",
+            "mangledName": "$s13CryptoCoreKit9PriceInfoV9hashValueSivp",
+            "moduleName": "CryptoCoreKit",
+            "implicit": true,
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit9PriceInfoV9hashValueSivg",
+                "mangledName": "$s13CryptoCoreKit9PriceInfoV9hashValueSivg",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13CryptoCoreKit9PriceInfoV",
+        "mangledName": "$s13CryptoCoreKit9PriceInfoV",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FfiConverterTypePriceInfo",
+        "printedName": "FfiConverterTypePriceInfo",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "read",
+            "printedName": "read(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Tuple",
+                "printedName": "(data: Foundation.Data, offset: Swift.Int)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "paramValueOwnership": "InOut"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit25FfiConverterTypePriceInfoV4read4fromAA0gH0V10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "mangledName": "$s13CryptoCoreKit25FfiConverterTypePriceInfoV4read4fromAA0gH0V10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "write",
+            "printedName": "write(_:into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceInfo",
+                "printedName": "CryptoCoreKit.PriceInfo",
+                "usr": "s:13CryptoCoreKit9PriceInfoV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.UInt8]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UInt8",
+                    "printedName": "Swift.UInt8",
+                    "usr": "s:s5UInt8V"
+                  }
+                ],
+                "paramValueOwnership": "InOut",
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit25FfiConverterTypePriceInfoV5write_4intoyAA0gH0V_Says5UInt8VGztFZ",
+            "mangledName": "$s13CryptoCoreKit25FfiConverterTypePriceInfoV5write_4intoyAA0gH0V_Says5UInt8VGztFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13CryptoCoreKit25FfiConverterTypePriceInfoV",
+        "mangledName": "$s13CryptoCoreKit25FfiConverterTypePriceInfoV",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "PriceError",
+        "printedName": "PriceError",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "RateLimited",
+            "printedName": "RateLimited",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(CryptoCoreKit.PriceError.Type) -> CryptoCoreKit.PriceError",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "PriceError",
+                    "printedName": "CryptoCoreKit.PriceError",
+                    "usr": "s:13CryptoCoreKit10PriceErrorO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "CryptoCoreKit.PriceError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13CryptoCoreKit10PriceErrorO11RateLimitedyA2CmF",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO11RateLimitedyA2CmF",
+            "moduleName": "CryptoCoreKit"
+          },
+          {
+            "kind": "Var",
+            "name": "Network",
+            "printedName": "Network",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(CryptoCoreKit.PriceError.Type) -> (Swift.String) -> CryptoCoreKit.PriceError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> CryptoCoreKit.PriceError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Tuple",
+                        "printedName": "(reason: Swift.String)",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "CryptoCoreKit.PriceError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13CryptoCoreKit10PriceErrorO7NetworkyACSS_tcACmF",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO7NetworkyACSS_tcACmF",
+            "moduleName": "CryptoCoreKit"
+          },
+          {
+            "kind": "Var",
+            "name": "InvalidResponse",
+            "printedName": "InvalidResponse",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(CryptoCoreKit.PriceError.Type) -> (Swift.String) -> CryptoCoreKit.PriceError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> CryptoCoreKit.PriceError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Tuple",
+                        "printedName": "(reason: Swift.String)",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "CryptoCoreKit.PriceError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13CryptoCoreKit10PriceErrorO15InvalidResponseyACSS_tcACmF",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO15InvalidResponseyACSS_tcACmF",
+            "moduleName": "CryptoCoreKit"
+          },
+          {
+            "kind": "Var",
+            "name": "InvalidInput",
+            "printedName": "InvalidInput",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(CryptoCoreKit.PriceError.Type) -> (Swift.String) -> CryptoCoreKit.PriceError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> CryptoCoreKit.PriceError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Tuple",
+                        "printedName": "(reason: Swift.String)",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "CryptoCoreKit.PriceError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "PriceError",
+                        "printedName": "CryptoCoreKit.PriceError",
+                        "usr": "s:13CryptoCoreKit10PriceErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13CryptoCoreKit10PriceErrorO12InvalidInputyACSS_tcACmF",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO12InvalidInputyACSS_tcACmF",
+            "moduleName": "CryptoCoreKit"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceError",
+                "printedName": "CryptoCoreKit.PriceError",
+                "usr": "s:13CryptoCoreKit10PriceErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceError",
+                "printedName": "CryptoCoreKit.PriceError",
+                "usr": "s:13CryptoCoreKit10PriceErrorO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit10PriceErrorO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO2eeoiySbAC_ACtFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "implicit": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit10PriceErrorO9hashValueSivp",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO9hashValueSivp",
+            "moduleName": "CryptoCoreKit",
+            "implicit": true,
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit10PriceErrorO9hashValueSivg",
+                "mangledName": "$s13CryptoCoreKit10PriceErrorO9hashValueSivg",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit10PriceErrorO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO4hash4intoys6HasherVz_tF",
+            "moduleName": "CryptoCoreKit",
+            "implicit": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "errorDescription",
+            "printedName": "errorDescription",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit10PriceErrorO16errorDescriptionSSSgvp",
+            "mangledName": "$s13CryptoCoreKit10PriceErrorO16errorDescriptionSSSgvp",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit10PriceErrorO16errorDescriptionSSSgvg",
+                "mangledName": "$s13CryptoCoreKit10PriceErrorO16errorDescriptionSSSgvg",
+                "moduleName": "CryptoCoreKit",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:13CryptoCoreKit10PriceErrorO",
+        "mangledName": "$s13CryptoCoreKit10PriceErrorO",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "LocalizedError",
+            "printedName": "LocalizedError",
+            "usr": "s:10Foundation14LocalizedErrorP",
+            "mangledName": "$s10Foundation14LocalizedErrorP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Error",
+            "printedName": "Error",
+            "usr": "s:s5ErrorP",
+            "mangledName": "$ss5ErrorP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FfiConverterTypePriceError",
+        "printedName": "FfiConverterTypePriceError",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "read",
+            "printedName": "read(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "PriceError",
+                "printedName": "CryptoCoreKit.PriceError",
+                "usr": "s:13CryptoCoreKit10PriceErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Tuple",
+                "printedName": "(data: Foundation.Data, offset: Swift.Int)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "paramValueOwnership": "InOut"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit26FfiConverterTypePriceErrorV4read4fromAA0gH0O10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "mangledName": "$s13CryptoCoreKit26FfiConverterTypePriceErrorV4read4fromAA0gH0O10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "write",
+            "printedName": "write(_:into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "PriceError",
+                "printedName": "CryptoCoreKit.PriceError",
+                "usr": "s:13CryptoCoreKit10PriceErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.UInt8]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UInt8",
+                    "printedName": "Swift.UInt8",
+                    "usr": "s:s5UInt8V"
+                  }
+                ],
+                "paramValueOwnership": "InOut",
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit26FfiConverterTypePriceErrorV5write_4intoyAA0gH0O_Says5UInt8VGztFZ",
+            "mangledName": "$s13CryptoCoreKit26FfiConverterTypePriceErrorV5write_4intoyAA0gH0O_Says5UInt8VGztFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13CryptoCoreKit26FfiConverterTypePriceErrorV",
+        "mangledName": "$s13CryptoCoreKit26FfiConverterTypePriceErrorV",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Function",
+        "name": "getPrice",
+        "printedName": "getPrice(coinId:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "PriceInfo",
+            "printedName": "CryptoCoreKit.PriceInfo",
+            "usr": "s:13CryptoCoreKit9PriceInfoV"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "String",
+            "printedName": "Swift.String",
+            "usr": "s:SS"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit8getPrice6coinIdAA0E4InfoVSS_tKF",
+        "mangledName": "$s13CryptoCoreKit8getPrice6coinIdAA0E4InfoVSS_tKF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "throwing": true,
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "Function",
+        "name": "getPriceAsync",
+        "printedName": "getPriceAsync(coinId:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "PriceInfo",
+            "printedName": "CryptoCoreKit.PriceInfo",
+            "usr": "s:13CryptoCoreKit9PriceInfoV"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "String",
+            "printedName": "Swift.String",
+            "usr": "s:SS"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit13getPriceAsync6coinIdAA0E4InfoVSS_tYaKF",
+        "mangledName": "$s13CryptoCoreKit13getPriceAsync6coinIdAA0E4InfoVSS_tYaKF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "throwing": true,
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "Function",
+        "name": "greet",
+        "printedName": "greet(name:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "String",
+            "printedName": "Swift.String",
+            "usr": "s:SS"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "String",
+            "printedName": "Swift.String",
+            "usr": "s:SS"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit5greet4nameS2S_tF",
+        "mangledName": "$s13CryptoCoreKit5greet4nameS2S_tF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "funcSelfKind": "NonMutating"
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9072,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9105,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9149,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 9186,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "Dictionary",
+      "offset": 12404,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 12480,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 21894,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 21966,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 22011,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 22067,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "StringLiteral",
+      "offset": 24276,
+      "length": 72,
+      "value": "\"Uniffi callback interface TickerListener: handle missing in uniffiFree\""
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 30903,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 30961,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34114,
+      "length": 2,
+      "value": "26"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34460,
+      "length": 5,
+      "value": "33392"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34591,
+      "length": 4,
+      "value": "6063"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34711,
+      "length": 5,
+      "value": "13978"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34845,
+      "length": 5,
+      "value": "29650"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 34987,
+      "length": 5,
+      "value": "29728"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 35128,
+      "length": 5,
+      "value": "39150"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 35266,
+      "length": 4,
+      "value": "4151"
+    }
+  ]
+}

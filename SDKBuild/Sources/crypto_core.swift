@@ -8,7 +8,7 @@ import Foundation
 // might be in a separate module, or it might be compiled inline into
 // this module. This is a bit of light hackery to work with both.
 #if canImport(crypto_coreFFI)
-    import crypto_coreFFI
+    @_implementationOnly import crypto_coreFFI
 #endif
 
 private extension RustBuffer {
@@ -809,14 +809,14 @@ public struct FfiConverterTypePriceInfo: FfiConverterRustBuffer {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePriceInfo_lift(_ buf: RustBuffer) throws -> PriceInfo {
+func FfiConverterTypePriceInfo_lift(_ buf: RustBuffer) throws -> PriceInfo {
     return try FfiConverterTypePriceInfo.lift(buf)
 }
 
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
-public func FfiConverterTypePriceInfo_lower(_ value: PriceInfo) -> RustBuffer {
+func FfiConverterTypePriceInfo_lower(_ value: PriceInfo) -> RustBuffer {
     return FfiConverterTypePriceInfo.lower(value)
 }
 

@@ -2,22 +2,11 @@ import ProjectDescription
 
 let deploymentTargets: DeploymentTargets = .iOS("26.0")
 
-// Wraps the raw UniFFI-generated bindings + .xcframework behind a module
-// boundary. Feature modules import CryptoCoreKit, never the xcframework
-// directly — the generated FfiConverter/RustBuffer plumbing stays contained
-// to this one module.
-let cryptoCoreKit = Target.target(
-    name: "CryptoCoreKit",
-    destinations: .iOS,
-    product: .staticFramework,
-    bundleId: "com.example.cryptocoreapp.cryptocorekit",
-    deploymentTargets: deploymentTargets,
-    infoPlist: .default,
-    sources: ["Modules/CryptoCoreKit/Sources/**"],
-    dependencies: [
-        .xcframework(path: "../crypto_core/crypto_core.xcframework")
-    ]
-)
+// CryptoCoreKit is no longer a Tuist target built from source — it's an
+// external, closed-source SDK package (see ../CryptoCoreKitSDK) built from
+// ../SDKBuild and referenced here as a binary dependency via
+// Tuist/Package.swift. Feature modules depend on it exactly the same way
+// they'd depend on any third-party SPM package.
 
 let marketsFeature = Target.target(
     name: "MarketsFeature",
@@ -28,7 +17,7 @@ let marketsFeature = Target.target(
     infoPlist: .default,
     sources: ["Modules/MarketsFeature/Sources/**"],
     dependencies: [
-        .target(name: "CryptoCoreKit")
+        .external(name: "CryptoCoreKit")
     ]
 )
 
@@ -41,7 +30,7 @@ let asyncFeature = Target.target(
     infoPlist: .default,
     sources: ["Modules/AsyncFeature/Sources/**"],
     dependencies: [
-        .target(name: "CryptoCoreKit")
+        .external(name: "CryptoCoreKit")
     ]
 )
 
@@ -66,5 +55,5 @@ let app = Target.target(
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, cryptoCoreKit, marketsFeature, asyncFeature]
+    targets: [app, marketsFeature, asyncFeature]
 )

@@ -9,5 +9,20 @@ App/CryptoCoreApp.xcworkspace/
 App/.tuist-bin/
 App/Tuist/.build/
 
+# SDKBuild: the throwaway project used to compile CryptoCoreKit into a
+# closed-source .xcframework (regenerate with `tuist generate`). Its output
+# copy of the xcframework is intermediate — the tracked copy that actually
+# gets distributed lives in CryptoCoreKitSDK/.
+SDKBuild/build/
+SDKBuild/Derived/
+SDKBuild/CryptoCoreKitSDKBuild.xcodeproj/
+SDKBuild/CryptoCoreKitSDKBuild.xcworkspace/
+SDKBuild/CryptoCoreKit.xcframework/
+
+# CryptoCoreKitSDK: the distributable SPM package. CryptoCoreKit.xcframework
+# itself IS tracked (it's the whole point — a closed-source binary package),
+# only SPM's own local resolution cache is ignored.
+CryptoCoreKitSDK/.build/
+
 # macOS
 .DS_Store
