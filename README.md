@@ -24,10 +24,16 @@ the client via generic interfaces" architecture.
     from Rust to Swift through a UniFFI callback interface.
   - `AsyncFeature` — the same price lookup exposed as a native Rust `async fn`, generated as a native Swift
     `async`/`await` function, including live error propagation (`Result<T, E>` → Swift `throws`).
-  - Both feature modules depend on `CryptoCoreKit` as an external SPM package (via `Tuist/Package.swift`), not as
-    in-workspace source — exactly the way they'd depend on any third-party SDK.
-  - The app target itself is the composition root, wiring both features' view models together (see
+  - `GrpcFeature` — Rust as a real gRPC *client* to an external service (Buf's public Eliza demo), returning raw
+    protobuf wire bytes across the FFI boundary instead of a decoded type; Swift deserializes them itself using
+    `ElizaProtoKit` (see "gRPC: Rust as a client to an external service" below).
+  - `MarketsFeature`/`AsyncFeature`/`GrpcFeature` depend on `CryptoCoreKit` as an external SPM package (via
+    `Tuist/Package.swift`), not as in-workspace source — exactly the way they'd depend on any third-party SDK.
+  - The app target itself is the composition root, wiring all three features' view models together (see
     `App/Sources/RootView.swift`).
+- `ElizaProtoKit/` — stands in for a backend team's proto-contract repository: publishes `eliza.proto` plus the
+  Swift models `protoc --swift_out` generates from it. See "gRPC" below for why this is a separate package instead
+  of source living inside `GrpcFeature`.
 
 ## What's demonstrated
 
@@ -38,6 +44,7 @@ the client via generic interfaces" architecture.
 | Callback interface (Rust → Swift push) | `TickerListener` trait, implemented as a Swift class |
 | Reference-counted `Object` handles | `PriceTicker` (owns a background thread + WebSocket connection) |
 | Native async/await | `get_price_async(coinId:) -> PriceInfo` |
+| Raw bytes across the boundary (`Vec<u8>` → `Data`) | `ask_eliza(sentence:) -> Data` (protobuf wire bytes, decoded independently on each side) |
 
 ## Building
 
@@ -110,6 +117,63 @@ framework, not as source):
    them; UniFFI only emits them for multi-crate scenarios this project doesn't have.
 
 Re-apply both edits after copying a freshly-regenerated `bindings/crypto_core.swift` into `SDKBuild/Sources/`.
+
+## gRPC: Rust as a client to an external service
+
+`ask_eliza(sentence:)` calls a real, public, unauthenticated gRPC service — Buf's Eliza demo
+(`connectrpc.eliza.v1.ElizaService.Say` at `demo.connectrpc.com`) — via `tonic`. This is deliberately *not* about
+using gRPC between Swift and Rust (UniFFI already solves that in-process call); it demonstrates the Rust core
+acting as a gRPC client to a genuinely external service.
+
+**The interesting design choice:** Rust doesn't hand Swift a decoded string. `tonic`/`prost` decode the gRPC
+response into a Rust struct as part of making the call (unavoidable — that's how the generated client works), but
+the Rust function immediately re-encodes it back to raw protobuf wire bytes (`prost::Message::encode_to_vec`) and
+returns those bytes as-is. Swift deserializes them independently, using its own code generated from the *same*
+`eliza.proto` — mirroring how a backend team's proto contract and a client team's generated code stay in sync via
+one shared `.proto` file in a real multi-repo setup, each side running its own language's protoc plugin.
+
+**Why `ElizaProtoKit` is a separate package** rather than proto-generated source living inside `GrpcFeature`: it
+plays the same "team owns and publishes this contract" role as `CryptoCoreKitSDK` does for the compiled SDK —
+`.package(path:)` here, `.package(url: "https://github.com/<backend-team>/ElizaProtoKit.git", from: "1.0.0")` in a
+real multi-repo setup, same dependency mechanism either way.
+
+**Regenerating `Sources/ElizaProtoKit/Generated/eliza.pb.swift` after changing `eliza.proto`:**
+
+Ideally this would happen automatically via SwiftProtobuf's official SPM build plugin
+(`.plugins: [.plugin(name: "SwiftProtobufPlugin", package: "swift-protobuf")]`) — but Tuist's project generation
+doesn't run build-tool plugins declared by a *different* package against a local target, so the plugin silently
+never executes and the target compiles with zero sources. The generated file is committed and produced by hand
+instead:
+
+```bash
+# protoc-gen-swift's generated code must come from the exact same swift-protobuf
+# version ElizaProtoKit depends on (currently 1.30.0) — a version mismatch
+# produces a real compile error (_NameMap init signature changed between
+# versions), not a warning. Homebrew only ships the latest protoc-gen-swift,
+# so build the matching one from the already-resolved package checkout:
+cd App/Tuist/.build/checkouts/swift-protobuf   # after `tuist install` in App/
+swift build -c release --product protoc-gen-swift
+cp .build/out/Products/Release/protoc-gen-swift ../../../../../ElizaProtoKit/.tools/protoc-gen-swift
+
+cd ../../../../../ElizaProtoKit
+protoc --plugin=protoc-gen-swift=.tools/protoc-gen-swift \
+  --swift_out=Sources/ElizaProtoKit/Generated --swift_opt=Visibility=Public \
+  --proto_path=proto proto/eliza.proto
+```
+
+`--swift_opt=Visibility=Public` matters — without it, `protoc-gen-swift` emits `internal` types, invisible to
+`GrpcFeature` across the module boundary.
+
+**Beta-SDK deployment target quirk:** `swift-protobuf`'s `PrivacyInfo.xcprivacy` resource forces Xcode to
+synthesize an auxiliary resource-bundle target that Tuist's `PackageSettings.targetSettings` can't override by
+name; on an SDK whose minimum supported deployment target is higher than the package's implicit default (iOS 27
+beta here, floor 15.0 vs. the implicit 12.0), this bundle target fails to build. Fixed with a one-line patch after
+every `tuist generate`, since the derived project isn't tracked in git:
+
+```bash
+sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' \
+  App/Tuist/.build/tuist-derived/SwiftProtobuf/SwiftProtobuf.xcodeproj/project.pbxproj
+```
 
 ## Working with the Xcode project (multi-developer workflow)
 

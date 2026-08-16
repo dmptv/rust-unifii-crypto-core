@@ -185,9 +185,16 @@ fn parse_binance_trade(text: &str) -> Option<PriceInfo> {
 }
 
 // --- gRPC: Rust core as a gRPC *client* to a real external gRPC service
-// (Buf's public Eliza demo, connectrpc.eliza.v1.ElizaService). Swift never
-// sees tonic/prost or the .proto-generated types — it gets a plain String
-// through the same UniFFI async-export/typed-error pattern as get_price_async.
+// (Buf's public Eliza demo, connectrpc.eliza.v1.ElizaService). Rust owns the
+// gRPC transport (tonic handles HTTP/2, TLS, gRPC framing, status codes) but
+// deliberately does NOT hand the client a decoded Swift-native type. Instead,
+// after tonic/prost decode the response into a Rust struct, it's immediately
+// re-encoded back to raw protobuf wire bytes (`prost::Message::encode_to_vec`)
+// and those bytes cross the FFI boundary as-is. Swift owns deserialization on
+// its side via its own copy of the same eliza.proto (see ../ElizaProtoKit) —
+// both ends independently generate code from one shared contract, the same
+// way a backend team's proto and a client team's proto stay in sync in a real
+// multi-repo setup.
 
 mod eliza {
     tonic::include_proto!("connectrpc.eliza.v1");
@@ -220,7 +227,7 @@ fn validate_free_text(value: &str) -> Result<(), ElizaError> {
 }
 
 #[uniffi::export]
-pub async fn ask_eliza(sentence: String) -> Result<String, ElizaError> {
+pub async fn ask_eliza(sentence: String) -> Result<Vec<u8>, ElizaError> {
     validate_free_text(&sentence)?;
 
     ASYNC_RUNTIME
@@ -238,7 +245,11 @@ pub async fn ask_eliza(sentence: String) -> Result<String, ElizaError> {
                     reason: err.to_string(),
                 })?;
 
-            Ok(response.into_inner().sentence)
+            // Re-encode the already-decoded response back into raw protobuf
+            // wire bytes. Swift decodes these itself using ElizaProtoKit's
+            // generated SayResponse — it never sees this Rust struct.
+            use prost::Message;
+            Ok(response.into_inner().encode_to_vec())
         })
         .await
         .expect("eliza task panicked")
@@ -346,7 +357,13 @@ mod eliza_tests {
     async fn talks_to_real_eliza_service() {
         let result = ask_eliza("Hello, are you a real gRPC service?".to_string()).await;
         match result {
-            Ok(reply) => println!("Eliza says: {reply}"),
+            Ok(raw_bytes) => {
+                use prost::Message;
+                let decoded = eliza::SayResponse::decode(raw_bytes.as_slice())
+                    .expect("bytes should decode as a valid SayResponse");
+                println!("Eliza says: {}", decoded.sentence);
+                assert!(!decoded.sentence.is_empty());
+            }
             Err(e) => panic!("unexpected error: {e}"),
         }
     }

@@ -110,7 +110,7 @@ extension CryptoCoreKit::PriceError : Foundation::LocalizedError {
     get
   }
 }
-public func askEliza(sentence: Swift::String) async throws -> Swift::String
+public func askEliza(sentence: Swift::String) async throws -> Foundation::Data
 public func getPrice(coinId: Swift::String) throws -> CryptoCoreKit::PriceInfo
 public func getPriceAsync(coinId: Swift::String) async throws -> CryptoCoreKit::PriceInfo
 public func greet(name: Swift::String) -> Swift::String

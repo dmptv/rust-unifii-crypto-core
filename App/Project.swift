@@ -43,7 +43,8 @@ let grpcFeature = Target.target(
     infoPlist: .default,
     sources: ["Modules/GrpcFeature/Sources/**"],
     dependencies: [
-        .external(name: "CryptoCoreKit")
+        .external(name: "CryptoCoreKit"),
+        .external(name: "ElizaProtoKit"),
     ]
 )
 
