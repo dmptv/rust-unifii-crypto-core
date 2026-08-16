@@ -9,7 +9,12 @@ let project = Project(
             product: .app,
             bundleId: "com.example.cryptocoreapp",
             deploymentTargets: .iOS("26.0"),
-            infoPlist: .default,
+            infoPlist: .extendingDefault(with: [
+                "UILaunchScreen": [
+                    "UIColorName": "",
+                    "UIImageRespectsSafeAreaInsets": false,
+                ],
+            ]),
             sources: ["Sources/**"],
             dependencies: [
                 .xcframework(path: "../crypto_core/crypto_core.xcframework")
