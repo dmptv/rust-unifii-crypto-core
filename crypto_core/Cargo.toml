@@ -20,6 +20,8 @@ tungstenite = { version = "0.24", features = ["rustls-tls-webpki-roots"] }
 tokio = { version = "1", features = ["rt-multi-thread"] }
 tonic = { version = "0.12", features = ["tls-webpki-roots"] }
 prost = "0.13"
+quick-xml = "0.36"
+urlencoding = "2"
 
 [build-dependencies]
 tonic-build = "0.12"

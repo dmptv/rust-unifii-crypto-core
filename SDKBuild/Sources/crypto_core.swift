@@ -398,6 +398,22 @@ private class UniffiHandleMap<T> {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
+private struct FfiConverterInt64: FfiConverterPrimitive {
+    typealias FfiType = Int64
+    typealias SwiftType = Int64
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Int64 {
+        return try lift(readInt(&buf))
+    }
+
+    static func write(_ value: Int64, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
 private struct FfiConverterDouble: FfiConverterPrimitive {
     typealias FfiType = Double
     typealias SwiftType = Double
@@ -777,6 +793,269 @@ public func FfiConverterTypeTickerListener_lower(_ value: TickerListener) -> Uns
     return FfiConverterTypeTickerListener.lower(value)
 }
 
+public struct CoinDetails {
+    public var coinId: String
+    public var name: String
+    public var symbol: String
+    public var description: String
+    public var homepageUrl: String
+    public var currentPriceUsd: Double
+    public var marketCapUsd: Double
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(coinId: String, name: String, symbol: String, description: String, homepageUrl: String, currentPriceUsd: Double, marketCapUsd: Double) {
+        self.coinId = coinId
+        self.name = name
+        self.symbol = symbol
+        self.description = description
+        self.homepageUrl = homepageUrl
+        self.currentPriceUsd = currentPriceUsd
+        self.marketCapUsd = marketCapUsd
+    }
+}
+
+extension CoinDetails: Equatable, Hashable {
+    public static func == (lhs: CoinDetails, rhs: CoinDetails) -> Bool {
+        if lhs.coinId != rhs.coinId {
+            return false
+        }
+        if lhs.name != rhs.name {
+            return false
+        }
+        if lhs.symbol != rhs.symbol {
+            return false
+        }
+        if lhs.description != rhs.description {
+            return false
+        }
+        if lhs.homepageUrl != rhs.homepageUrl {
+            return false
+        }
+        if lhs.currentPriceUsd != rhs.currentPriceUsd {
+            return false
+        }
+        if lhs.marketCapUsd != rhs.marketCapUsd {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(coinId)
+        hasher.combine(name)
+        hasher.combine(symbol)
+        hasher.combine(description)
+        hasher.combine(homepageUrl)
+        hasher.combine(currentPriceUsd)
+        hasher.combine(marketCapUsd)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCoinDetails: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CoinDetails {
+        return
+            try CoinDetails(
+                coinId: FfiConverterString.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                symbol: FfiConverterString.read(from: &buf),
+                description: FfiConverterString.read(from: &buf),
+                homepageUrl: FfiConverterString.read(from: &buf),
+                currentPriceUsd: FfiConverterDouble.read(from: &buf),
+                marketCapUsd: FfiConverterDouble.read(from: &buf)
+            )
+    }
+
+    public static func write(_ value: CoinDetails, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.coinId, into: &buf)
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterString.write(value.symbol, into: &buf)
+        FfiConverterString.write(value.description, into: &buf)
+        FfiConverterString.write(value.homepageUrl, into: &buf)
+        FfiConverterDouble.write(value.currentPriceUsd, into: &buf)
+        FfiConverterDouble.write(value.marketCapUsd, into: &buf)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+func FfiConverterTypeCoinDetails_lift(_ buf: RustBuffer) throws -> CoinDetails {
+    return try FfiConverterTypeCoinDetails.lift(buf)
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+func FfiConverterTypeCoinDetails_lower(_ value: CoinDetails) -> RustBuffer {
+    return FfiConverterTypeCoinDetails.lower(value)
+}
+
+public struct CoinSearchResult {
+    public var coinId: String
+    public var name: String
+    public var symbol: String
+    public var marketCapRank: Int64?
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(coinId: String, name: String, symbol: String, marketCapRank: Int64?) {
+        self.coinId = coinId
+        self.name = name
+        self.symbol = symbol
+        self.marketCapRank = marketCapRank
+    }
+}
+
+extension CoinSearchResult: Equatable, Hashable {
+    public static func == (lhs: CoinSearchResult, rhs: CoinSearchResult) -> Bool {
+        if lhs.coinId != rhs.coinId {
+            return false
+        }
+        if lhs.name != rhs.name {
+            return false
+        }
+        if lhs.symbol != rhs.symbol {
+            return false
+        }
+        if lhs.marketCapRank != rhs.marketCapRank {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(coinId)
+        hasher.combine(name)
+        hasher.combine(symbol)
+        hasher.combine(marketCapRank)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeCoinSearchResult: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> CoinSearchResult {
+        return
+            try CoinSearchResult(
+                coinId: FfiConverterString.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                symbol: FfiConverterString.read(from: &buf),
+                marketCapRank: FfiConverterOptionInt64.read(from: &buf)
+            )
+    }
+
+    public static func write(_ value: CoinSearchResult, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.coinId, into: &buf)
+        FfiConverterString.write(value.name, into: &buf)
+        FfiConverterString.write(value.symbol, into: &buf)
+        FfiConverterOptionInt64.write(value.marketCapRank, into: &buf)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+func FfiConverterTypeCoinSearchResult_lift(_ buf: RustBuffer) throws -> CoinSearchResult {
+    return try FfiConverterTypeCoinSearchResult.lift(buf)
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+func FfiConverterTypeCoinSearchResult_lower(_ value: CoinSearchResult) -> RustBuffer {
+    return FfiConverterTypeCoinSearchResult.lower(value)
+}
+
+public struct NewsArticle {
+    public var id: String
+    public var title: String
+    public var summary: String
+    public var url: String
+    public var publishedAt: String
+
+    // Default memberwise initializers are never public by default, so we
+    // declare one manually.
+    public init(id: String, title: String, summary: String, url: String, publishedAt: String) {
+        self.id = id
+        self.title = title
+        self.summary = summary
+        self.url = url
+        self.publishedAt = publishedAt
+    }
+}
+
+extension NewsArticle: Equatable, Hashable {
+    public static func == (lhs: NewsArticle, rhs: NewsArticle) -> Bool {
+        if lhs.id != rhs.id {
+            return false
+        }
+        if lhs.title != rhs.title {
+            return false
+        }
+        if lhs.summary != rhs.summary {
+            return false
+        }
+        if lhs.url != rhs.url {
+            return false
+        }
+        if lhs.publishedAt != rhs.publishedAt {
+            return false
+        }
+        return true
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(title)
+        hasher.combine(summary)
+        hasher.combine(url)
+        hasher.combine(publishedAt)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+public struct FfiConverterTypeNewsArticle: FfiConverterRustBuffer {
+    public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> NewsArticle {
+        return
+            try NewsArticle(
+                id: FfiConverterString.read(from: &buf),
+                title: FfiConverterString.read(from: &buf),
+                summary: FfiConverterString.read(from: &buf),
+                url: FfiConverterString.read(from: &buf),
+                publishedAt: FfiConverterString.read(from: &buf)
+            )
+    }
+
+    public static func write(_ value: NewsArticle, into buf: inout [UInt8]) {
+        FfiConverterString.write(value.id, into: &buf)
+        FfiConverterString.write(value.title, into: &buf)
+        FfiConverterString.write(value.summary, into: &buf)
+        FfiConverterString.write(value.url, into: &buf)
+        FfiConverterString.write(value.publishedAt, into: &buf)
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+func FfiConverterTypeNewsArticle_lift(_ buf: RustBuffer) throws -> NewsArticle {
+    return try FfiConverterTypeNewsArticle.lift(buf)
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+func FfiConverterTypeNewsArticle_lower(_ value: NewsArticle) -> RustBuffer {
+    return FfiConverterTypeNewsArticle.lower(value)
+}
+
 public struct PriceInfo {
     public var coinId: String
     public var usdPrice: Double
@@ -951,6 +1230,30 @@ extension PriceError: Foundation.LocalizedError {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
+private struct FfiConverterOptionInt64: FfiConverterRustBuffer {
+    typealias SwiftType = Int64?
+
+    static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        guard let value = value else {
+            writeInt(&buf, Int8(0))
+            return
+        }
+        writeInt(&buf, Int8(1))
+        FfiConverterInt64.write(value, into: &buf)
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SwiftType {
+        switch try readInt(&buf) as Int8 {
+        case 0: return nil
+        case 1: return try FfiConverterInt64.read(from: &buf)
+        default: throw UniffiInternalError.unexpectedOptionalTag
+        }
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
 private struct FfiConverterSequenceString: FfiConverterRustBuffer {
     typealias SwiftType = [String]
 
@@ -968,6 +1271,56 @@ private struct FfiConverterSequenceString: FfiConverterRustBuffer {
         seq.reserveCapacity(Int(len))
         for _ in 0 ..< len {
             try seq.append(FfiConverterString.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeCoinSearchResult: FfiConverterRustBuffer {
+    typealias SwiftType = [CoinSearchResult]
+
+    static func write(_ value: [CoinSearchResult], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeCoinSearchResult.write(item, into: &buf)
+        }
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [CoinSearchResult] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [CoinSearchResult]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            try seq.append(FfiConverterTypeCoinSearchResult.read(from: &buf))
+        }
+        return seq
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
+private struct FfiConverterSequenceTypeNewsArticle: FfiConverterRustBuffer {
+    typealias SwiftType = [NewsArticle]
+
+    static func write(_ value: [NewsArticle], into buf: inout [UInt8]) {
+        let len = Int32(value.count)
+        writeInt(&buf, len)
+        for item in value {
+            FfiConverterTypeNewsArticle.write(item, into: &buf)
+        }
+    }
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> [NewsArticle] {
+        let len: Int32 = try readInt(&buf)
+        var seq = [NewsArticle]()
+        seq.reserveCapacity(Int(len))
+        for _ in 0 ..< len {
+            try seq.append(FfiConverterTypeNewsArticle.read(from: &buf))
         }
         return seq
     }
@@ -1035,6 +1388,21 @@ public func askEliza(sentence: String) async throws -> Data {
         )
 }
 
+public func getCoinDetails(coinId: String) throws -> CoinDetails {
+    return try FfiConverterTypeCoinDetails.lift(rustCallWithError(FfiConverterTypePriceError.lift) {
+        uniffi_crypto_core_fn_func_get_coin_details(
+            FfiConverterString.lower(coinId), $0
+        )
+    })
+}
+
+public func getNews() throws -> [NewsArticle] {
+    return try FfiConverterSequenceTypeNewsArticle.lift(rustCallWithError(FfiConverterTypePriceError.lift) {
+        uniffi_crypto_core_fn_func_get_news($0
+        )
+    })
+}
+
 public func getPrice(coinId: String) throws -> PriceInfo {
     return try FfiConverterTypePriceInfo.lift(rustCallWithError(FfiConverterTypePriceError.lift) {
         uniffi_crypto_core_fn_func_get_price(
@@ -1066,6 +1434,14 @@ public func greet(name: String) -> String {
     })
 }
 
+public func searchCoins(query: String) throws -> [CoinSearchResult] {
+    return try FfiConverterSequenceTypeCoinSearchResult.lift(rustCallWithError(FfiConverterTypePriceError.lift) {
+        uniffi_crypto_core_fn_func_search_coins(
+            FfiConverterString.lower(query), $0
+        )
+    })
+}
+
 private enum InitializationResult {
     case ok
     case contractVersionMismatch
@@ -1085,6 +1461,12 @@ private var initializationResult: InitializationResult = {
     if uniffi_crypto_core_checksum_func_ask_eliza() != 28829 {
         return InitializationResult.apiChecksumMismatch
     }
+    if uniffi_crypto_core_checksum_func_get_coin_details() != 48209 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_crypto_core_checksum_func_get_news() != 14858 {
+        return InitializationResult.apiChecksumMismatch
+    }
     if uniffi_crypto_core_checksum_func_get_price() != 33392 {
         return InitializationResult.apiChecksumMismatch
     }
@@ -1092,6 +1474,9 @@ private var initializationResult: InitializationResult = {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_crypto_core_checksum_func_greet() != 13978 {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if uniffi_crypto_core_checksum_func_search_coins() != 37454 {
         return InitializationResult.apiChecksumMismatch
     }
     if uniffi_crypto_core_checksum_method_priceticker_stop() != 29650 {

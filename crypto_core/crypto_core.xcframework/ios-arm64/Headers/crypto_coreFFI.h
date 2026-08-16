@@ -324,6 +324,17 @@ void uniffi_crypto_core_fn_method_tickerlistener_on_error(void*_Nonnull ptr, Rus
 uint64_t uniffi_crypto_core_fn_func_ask_eliza(RustBuffer sentence
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_COIN_DETAILS
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_COIN_DETAILS
+RustBuffer uniffi_crypto_core_fn_func_get_coin_details(RustBuffer coin_id, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_NEWS
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_NEWS
+RustBuffer uniffi_crypto_core_fn_func_get_news(RustCallStatus *_Nonnull out_status
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_PRICE
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_PRICE
 RustBuffer uniffi_crypto_core_fn_func_get_price(RustBuffer coin_id, RustCallStatus *_Nonnull out_status
@@ -337,6 +348,11 @@ uint64_t uniffi_crypto_core_fn_func_get_price_async(RustBuffer coin_id
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GREET
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GREET
 RustBuffer uniffi_crypto_core_fn_func_greet(RustBuffer name, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_SEARCH_COINS
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_SEARCH_COINS
+RustBuffer uniffi_crypto_core_fn_func_search_coins(RustBuffer query, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_FFI_CRYPTO_CORE_RUSTBUFFER_ALLOC
@@ -625,6 +641,18 @@ uint16_t uniffi_crypto_core_checksum_func_ask_eliza(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_COIN_DETAILS
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_COIN_DETAILS
+uint16_t uniffi_crypto_core_checksum_func_get_coin_details(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_NEWS
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_NEWS
+uint16_t uniffi_crypto_core_checksum_func_get_news(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_PRICE
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_PRICE
 uint16_t uniffi_crypto_core_checksum_func_get_price(void
@@ -640,6 +668,12 @@ uint16_t uniffi_crypto_core_checksum_func_get_price_async(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GREET
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GREET
 uint16_t uniffi_crypto_core_checksum_func_greet(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_SEARCH_COINS
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_SEARCH_COINS
+uint16_t uniffi_crypto_core_checksum_func_search_coins(void
     
 );
 #endif
