@@ -1,6 +1,7 @@
 import SwiftUI
 import MarketsFeature
 import NewsFeature
+import WatchlistFeature
 import NavigationKit
 import AsyncFeature
 import GrpcFeature
@@ -17,6 +18,7 @@ struct RootView: View {
     @StateObject private var grpcViewModel = GrpcViewModel()
     @StateObject private var marketsCoordinator = MarketsCoordinator(container: AppContainer.shared)
     @StateObject private var newsCoordinator = NewsCoordinator(container: AppContainer.shared)
+    @StateObject private var watchlistCoordinator = WatchlistCoordinator(container: AppContainer.shared)
 
     var body: some View {
         TabView {
@@ -40,19 +42,46 @@ struct RootView: View {
         // 2.4: News is reachable from any tab, exactly as a deep link
         // would present it, without disturbing the tabs themselves.
         .overlay(alignment: .topTrailing) {
-            Button {
-                newsCoordinator.handle(.list)
-            } label: {
-                Image(systemName: "newspaper.fill")
-                    .foregroundStyle(.white)
-                    .padding(10)
-                    .background(.ultraThinMaterial, in: Circle())
+            HStack(spacing: 10) {
+                Button {
+                    watchlistCoordinator.handle(.search)
+                } label: {
+                    Image(systemName: "star.fill")
+                        .foregroundStyle(.white)
+                        .padding(10)
+                        .background(.ultraThinMaterial, in: Circle())
+                }
+                // TEMPORARY: simulates a deep link landing directly on
+                // Confirm (skipping Search) — exercises the "back always
+                // home" behavior without needing to type into the search
+                // field. Remove once step 2.4 wires real deep links and
+                // simctl push testing replaces this.
+                Button {
+                    watchlistCoordinator.handle(.confirm(coinId: "bitcoin", coinName: "Bitcoin"))
+                } label: {
+                    Image(systemName: "star.circle")
+                        .foregroundStyle(.white)
+                        .padding(10)
+                        .background(.ultraThinMaterial, in: Circle())
+                }
+                Button {
+                    newsCoordinator.handle(.list)
+                } label: {
+                    Image(systemName: "newspaper.fill")
+                        .foregroundStyle(.white)
+                        .padding(10)
+                        .background(.ultraThinMaterial, in: Circle())
+                }
             }
             .padding(.top, 56)
             .padding(.trailing, 16)
         }
         .sheet(isPresented: $newsCoordinator.isPresented) {
             NewsCoordinatorView(coordinator: newsCoordinator)
+                .preferredColorScheme(.dark)
+        }
+        .sheet(isPresented: $watchlistCoordinator.isPresented) {
+            WatchlistCoordinatorView(coordinator: watchlistCoordinator)
                 .preferredColorScheme(.dark)
         }
     }
