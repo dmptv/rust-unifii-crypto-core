@@ -143,25 +143,18 @@ Ideally this would happen automatically via SwiftProtobuf's official SPM build p
 (`.plugins: [.plugin(name: "SwiftProtobufPlugin", package: "swift-protobuf")]`) — but Tuist's project generation
 doesn't run build-tool plugins declared by a *different* package against a local target, so the plugin silently
 never executes and the target compiles with zero sources. The generated file is committed and produced by hand
-instead:
+instead, via one script:
 
 ```bash
-# protoc-gen-swift's generated code must come from the exact same swift-protobuf
-# version ElizaProtoKit depends on (currently 1.30.0) — a version mismatch
-# produces a real compile error (_NameMap init signature changed between
-# versions), not a warning. Homebrew only ships the latest protoc-gen-swift,
-# so build the matching one from the already-resolved package checkout:
-cd App/Tuist/.build/checkouts/swift-protobuf   # after `tuist install` in App/
-swift build -c release --product protoc-gen-swift
-cp .build/out/Products/Release/protoc-gen-swift ../../../../../ElizaProtoKit/.tools/protoc-gen-swift
-
-cd ../../../../../ElizaProtoKit
-protoc --plugin=protoc-gen-swift=.tools/protoc-gen-swift \
-  --swift_out=Sources/ElizaProtoKit/Generated --swift_opt=Visibility=Public \
-  --proto_path=proto proto/eliza.proto
+cd ElizaProtoKit
+./generate.sh
 ```
 
-`--swift_opt=Visibility=Public` matters — without it, `protoc-gen-swift` emits `internal` types, invisible to
+`generate.sh` builds a `protoc-gen-swift` matching the exact `swift-protobuf` version `ElizaProtoKit` depends on
+(currently 1.30.0) and caches it in `.tools/` (gitignored) — a version mismatch between the generator and the
+runtime is a real compile error (the internal `_NameMap` init signature changes between versions), not a warning,
+and Homebrew only ships the latest `protoc-gen-swift`, so the matching one has to be built from source once. It
+also passes `--swift_opt=Visibility=Public`, which matters — without it, `protoc-gen-swift` emits `internal` types, invisible to
 `GrpcFeature` across the module boundary.
 
 **Beta-SDK deployment target quirk:** `swift-protobuf`'s `PrivacyInfo.xcprivacy` resource forces Xcode to
