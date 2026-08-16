@@ -8,6 +8,15 @@ App/CryptoCoreApp.xcodeproj/
 App/CryptoCoreApp.xcworkspace/
 App/.tuist-bin/
 App/Tuist/.build/
+App/Tuist/.swiftpm/
+
+# SwiftProtobufVendored: local SPM package standing in for a vendored copy
+# of swift-protobuf's runtime (see README). .build is SPM's resolution
+# cache; the .xcodeproj/Derived below are Tuist-generated when other
+# packages resolve it (regenerate with `tuist generate`).
+SwiftProtobufVendored/.build/
+SwiftProtobufVendored/Derived/
+SwiftProtobufVendored/SwiftProtobufVendored.xcodeproj/
 
 # SDKBuild: the throwaway project used to compile CryptoCoreKit into a
 # closed-source .xcframework (regenerate with `tuist generate`). Its output

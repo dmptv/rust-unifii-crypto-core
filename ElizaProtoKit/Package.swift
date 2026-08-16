@@ -19,13 +19,15 @@ let package = Package(
         .library(name: "ElizaProtoKit", targets: ["ElizaProtoKit"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.30.0")
+        // Vendored rather than fetched from apple/swift-protobuf directly —
+        // see SwiftProtobufVendored/Package.swift for why.
+        .package(path: "../SwiftProtobufVendored")
     ],
     targets: [
         .target(
             name: "ElizaProtoKit",
             dependencies: [
-                .product(name: "SwiftProtobuf", package: "swift-protobuf")
+                .product(name: "SwiftProtobuf", package: "SwiftProtobufVendored")
             ]
         )
     ]

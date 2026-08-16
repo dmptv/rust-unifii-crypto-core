@@ -7,12 +7,14 @@ import ProjectDescription
 let packageSettings = PackageSettings(
     baseSettings: .settings(base: ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"]),
     targetSettings: [
-        "SwiftProtobuf": ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"],
-        "SwiftProtobuf_SwiftProtobuf": ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"],
         // Swinject's own Package.swift declares .iOS(.v12) — without this
         // override, every `tuist generate` regenerates its derived
         // .xcodeproj with IPHONEOS_DEPLOYMENT_TARGET back at 12.0.
         "Swinject": ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"],
+        // SwiftProtobuf no longer appears here: it's vendored (see
+        // ../../SwiftProtobufVendored) specifically to avoid the same
+        // class of bug on its synthesized resource-bundle target, which
+        // targetSettings can't reach by name at all.
     ]
 )
 #endif
