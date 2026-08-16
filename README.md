@@ -55,3 +55,27 @@ xcodebuild -create-xcframework \
 cd ../App
 tuist generate
 ```
+
+## Working with the Xcode project (multi-developer workflow)
+
+`App/CryptoCoreApp.xcodeproj` and `App/CryptoCoreApp.xcworkspace` are **generated, not committed** (see
+`.gitignore`). `App/Project.swift` is the single source of truth for the project's targets, sources, and
+dependencies — the same role a hand-maintained `.pbxproj` would normally play, except it's a plain Swift file that
+diffs and merges cleanly.
+
+This matters for more than one person working on the app: a raw `.xcodeproj` is a single sprawling XML-ish file
+that Xcode rewrites on nearly every build, so two developers touching it at the same time reliably produce merge
+conflicts in a file nobody can read by eye. With `Project.swift` as the only tracked artifact, there's nothing
+project-shaped to conflict over — everyone regenerates their own `.xcodeproj`/`.xcworkspace` locally and never
+commits it.
+
+**Team workflow:**
+- Never `git add` anything under `CryptoCoreApp.xcodeproj/` or `CryptoCoreApp.xcworkspace/` — they're gitignored
+  already, so this should never come up, but if Xcode ever prompts to add new files to "the project", decline and
+  add the actual source file to `Sources/**` instead (picked up automatically by the `sources: ["Sources/**"]`
+  glob in `Project.swift`).
+- Adding a new source file, target, or dependency = editing `Project.swift`, not clicking around in Xcode's file
+  inspector.
+- After pulling changes that touch `Project.swift` (or the first time you open the project), run `tuist generate`
+  again before building — this repo pins the exact `tuist` version via `.mise.toml` (`4.79.4`) so everyone
+  generates an identical project structure; run `mise install` once to pick it up.
