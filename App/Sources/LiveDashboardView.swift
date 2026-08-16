@@ -209,7 +209,7 @@ private struct MarketRowView: View {
 }
 
 struct LiveDashboardView: View {
-    @StateObject private var viewModel = TickerViewModel()
+    @ObservedObject var viewModel: TickerViewModel
     private let symbols = ["btcusdt", "ethusdt", "solusdt"]
 
     var body: some View {
