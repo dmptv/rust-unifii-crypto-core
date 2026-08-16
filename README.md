@@ -179,15 +179,9 @@ official route — SwiftProtobuf's SPM build plugin, run automatically at build 
 project generation doesn't execute build-tool plugins declared by a *different* package against a local target,
 so the plugin would silently never run and the target would compile with zero sources.
 
-**Known environment quirk (Xcode 27 beta):** `swift-protobuf`'s `PrivacyInfo.xcprivacy` resource forces Xcode to
-synthesize a resource-bundle target whose deployment target Tuist can't override by name, and this beta SDK
-rejects anything below iOS 15 (the package's implicit default is 12). One-line fix after every `tuist generate`
-in `App/`:
-
-```bash
-sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0;/IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' \
-  App/Tuist/.build/tuist-derived/SwiftProtobuf/SwiftProtobuf.xcodeproj/project.pbxproj
-```
+**`swift-protobuf` is vendored** in `SwiftProtobufVendored/` rather than pulled from GitHub — `ElizaProtoKit`
+depends on it via `.package(path: "../SwiftProtobufVendored")`. `import SwiftProtobuf` resolves the same way
+everywhere; nothing else changes.
 
 ## Working with the Xcode project (multi-developer workflow)
 
