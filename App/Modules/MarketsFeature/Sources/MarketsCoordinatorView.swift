@@ -11,9 +11,11 @@ public struct MarketsCoordinatorView: View {
 
     public var body: some View {
         NavigationStack(path: $coordinator.path) {
-            LiveDashboardView(viewModel: tickerViewModel) { coinId in
-                coordinator.showCoinDetail(coinId: coinId)
-            }
+            LiveDashboardView(
+                viewModel: tickerViewModel,
+                onSelectCoin: { coinId in coordinator.showCoinDetail(coinId: coinId) },
+                onBrowseAllCoins: { coordinator.showCoinList() }
+            )
             .navigationDestination(for: MarketsRoute.self) { route in
                 switch route {
                 case .coinDetail(let coinId):
@@ -23,6 +25,11 @@ public struct MarketsCoordinatorView: View {
                     )
                 case .priceAlert(let coinId):
                     PriceAlertView(coinId: coinId)
+                case .coinList:
+                    CoinListView(
+                        viewModel: coordinator.makeCoinListViewModel(),
+                        onSelect: { coinId in coordinator.showCoinDetail(coinId: coinId) }
+                    )
                 }
             }
         }

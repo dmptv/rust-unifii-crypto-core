@@ -141,10 +141,16 @@ public struct LiveDashboardView: View {
     @ObservedObject public var viewModel: TickerViewModel
     private let symbols = ["btcusdt", "ethusdt", "solusdt"]
     private let onSelectCoin: (String) -> Void
+    private let onBrowseAllCoins: () -> Void
 
-    public init(viewModel: TickerViewModel, onSelectCoin: @escaping (String) -> Void = { _ in }) {
+    public init(
+        viewModel: TickerViewModel,
+        onSelectCoin: @escaping (String) -> Void = { _ in },
+        onBrowseAllCoins: @escaping () -> Void = {}
+    ) {
         self.viewModel = viewModel
         self.onSelectCoin = onSelectCoin
+        self.onBrowseAllCoins = onBrowseAllCoins
     }
 
     public var body: some View {
@@ -186,6 +192,14 @@ public struct LiveDashboardView: View {
                     .foregroundStyle(.red)
                     .padding(.top, 8)
             }
+
+            Button("Browse all coins") {
+                onBrowseAllCoins()
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 16)
 
             Spacer(minLength: 12)
 

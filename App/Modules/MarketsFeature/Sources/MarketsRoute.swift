@@ -5,4 +5,5 @@
 public enum MarketsRoute: Hashable {
     case coinDetail(coinId: String)
     case priceAlert(coinId: String)
+    case coinList
 }

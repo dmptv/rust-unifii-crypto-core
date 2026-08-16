@@ -329,6 +329,11 @@ uint64_t uniffi_crypto_core_fn_func_ask_eliza(RustBuffer sentence
 RustBuffer uniffi_crypto_core_fn_func_get_coin_details(RustBuffer coin_id, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_COINS_PAGE
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_COINS_PAGE
+RustBuffer uniffi_crypto_core_fn_func_get_coins_page(RustBuffer cursor, RustCallStatus *_Nonnull out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_NEWS
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_NEWS
 RustBuffer uniffi_crypto_core_fn_func_get_news(RustCallStatus *_Nonnull out_status
@@ -644,6 +649,12 @@ uint16_t uniffi_crypto_core_checksum_func_ask_eliza(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_COIN_DETAILS
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_COIN_DETAILS
 uint16_t uniffi_crypto_core_checksum_func_get_coin_details(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_COINS_PAGE
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_COINS_PAGE
+uint16_t uniffi_crypto_core_checksum_func_get_coins_page(void
     
 );
 #endif

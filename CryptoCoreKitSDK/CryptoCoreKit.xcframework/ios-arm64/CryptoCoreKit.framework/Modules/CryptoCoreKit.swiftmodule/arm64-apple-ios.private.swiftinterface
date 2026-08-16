@@ -73,6 +73,26 @@ extension CryptoCoreKit::CoinDetails : Swift::Equatable, Swift::Hashable {
   public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::CoinDetails
   public static func write(_ value: CryptoCoreKit::CoinDetails, into buf: inout [Swift::UInt8])
 }
+public struct CoinListing {
+  public var coinId: Swift::String
+  public var name: Swift::String
+  public var symbol: Swift::String
+  public var currentPriceUsd: Swift::Double
+  public var marketCapRank: Swift::Int64?
+  public var imageUrl: Swift::String
+  public init(coinId: Swift::String, name: Swift::String, symbol: Swift::String, currentPriceUsd: Swift::Double, marketCapRank: Swift::Int64?, imageUrl: Swift::String)
+}
+extension CryptoCoreKit::CoinListing : Swift::Equatable, Swift::Hashable {
+  public static func == (lhs: CryptoCoreKit::CoinListing, rhs: CryptoCoreKit::CoinListing) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+@_documentation(visibility: private) public struct FfiConverterTypeCoinListing {
+  public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::CoinListing
+  public static func write(_ value: CryptoCoreKit::CoinListing, into buf: inout [Swift::UInt8])
+}
 public struct CoinSearchResult {
   public var coinId: Swift::String
   public var name: Swift::String
@@ -90,6 +110,22 @@ extension CryptoCoreKit::CoinSearchResult : Swift::Equatable, Swift::Hashable {
 @_documentation(visibility: private) public struct FfiConverterTypeCoinSearchResult {
   public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::CoinSearchResult
   public static func write(_ value: CryptoCoreKit::CoinSearchResult, into buf: inout [Swift::UInt8])
+}
+public struct CoinsPage {
+  public var coins: [CryptoCoreKit::CoinListing]
+  public var nextCursor: Swift::String?
+  public init(coins: [CryptoCoreKit::CoinListing], nextCursor: Swift::String?)
+}
+extension CryptoCoreKit::CoinsPage : Swift::Equatable, Swift::Hashable {
+  public static func == (lhs: CryptoCoreKit::CoinsPage, rhs: CryptoCoreKit::CoinsPage) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+@_documentation(visibility: private) public struct FfiConverterTypeCoinsPage {
+  public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::CoinsPage
+  public static func write(_ value: CryptoCoreKit::CoinsPage, into buf: inout [Swift::UInt8])
 }
 public struct NewsArticle {
   public var id: Swift::String
@@ -170,6 +206,7 @@ extension CryptoCoreKit::PriceError : Foundation::LocalizedError {
 }
 public func askEliza(sentence: Swift::String) async throws -> Foundation::Data
 public func getCoinDetails(coinId: Swift::String) throws -> CryptoCoreKit::CoinDetails
+public func getCoinsPage(cursor: Swift::String?) throws -> CryptoCoreKit::CoinsPage
 public func getNews() throws -> [CryptoCoreKit::NewsArticle]
 public func getPrice(coinId: Swift::String) throws -> CryptoCoreKit::PriceInfo
 public func getPriceAsync(coinId: Swift::String) async throws -> CryptoCoreKit::PriceInfo

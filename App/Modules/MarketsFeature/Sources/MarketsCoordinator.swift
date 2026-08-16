@@ -47,7 +47,15 @@ public final class MarketsCoordinator: ObservableObject {
         handle(PriceAlertDestination.show(coinId: coinId))
     }
 
+    public func showCoinList() {
+        path.append(MarketsRoute.coinList)
+    }
+
     public func makeCoinDetailViewModel(coinId: String) -> CoinDetailViewModel {
         CoinDetailViewModel(coinId: coinId, service: container.resolve(MarketsServicing.self)!)
+    }
+
+    public func makeCoinListViewModel() -> CoinListViewModel {
+        CoinListViewModel(service: container.resolve(MarketsServicing.self)!)
     }
 }
