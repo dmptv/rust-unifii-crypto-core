@@ -1553,6 +1553,466 @@
       },
       {
         "kind": "TypeDecl",
+        "name": "ElizaError",
+        "printedName": "ElizaError",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "Network",
+            "printedName": "Network",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(CryptoCoreKit.ElizaError.Type) -> (Swift.String) -> CryptoCoreKit.ElizaError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> CryptoCoreKit.ElizaError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ElizaError",
+                        "printedName": "CryptoCoreKit.ElizaError",
+                        "usr": "s:13CryptoCoreKit10ElizaErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Tuple",
+                        "printedName": "(reason: Swift.String)",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "CryptoCoreKit.ElizaError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ElizaError",
+                        "printedName": "CryptoCoreKit.ElizaError",
+                        "usr": "s:13CryptoCoreKit10ElizaErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13CryptoCoreKit10ElizaErrorO7NetworkyACSS_tcACmF",
+            "mangledName": "$s13CryptoCoreKit10ElizaErrorO7NetworkyACSS_tcACmF",
+            "moduleName": "CryptoCoreKit"
+          },
+          {
+            "kind": "Var",
+            "name": "InvalidInput",
+            "printedName": "InvalidInput",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(CryptoCoreKit.ElizaError.Type) -> (Swift.String) -> CryptoCoreKit.ElizaError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> CryptoCoreKit.ElizaError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ElizaError",
+                        "printedName": "CryptoCoreKit.ElizaError",
+                        "usr": "s:13CryptoCoreKit10ElizaErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Tuple",
+                        "printedName": "(reason: Swift.String)",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "CryptoCoreKit.ElizaError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ElizaError",
+                        "printedName": "CryptoCoreKit.ElizaError",
+                        "usr": "s:13CryptoCoreKit10ElizaErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:13CryptoCoreKit10ElizaErrorO12InvalidInputyACSS_tcACmF",
+            "mangledName": "$s13CryptoCoreKit10ElizaErrorO12InvalidInputyACSS_tcACmF",
+            "moduleName": "CryptoCoreKit"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ElizaError",
+                "printedName": "CryptoCoreKit.ElizaError",
+                "usr": "s:13CryptoCoreKit10ElizaErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ElizaError",
+                "printedName": "CryptoCoreKit.ElizaError",
+                "usr": "s:13CryptoCoreKit10ElizaErrorO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit10ElizaErrorO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s13CryptoCoreKit10ElizaErrorO2eeoiySbAC_ACtFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "implicit": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit10ElizaErrorO9hashValueSivp",
+            "mangledName": "$s13CryptoCoreKit10ElizaErrorO9hashValueSivp",
+            "moduleName": "CryptoCoreKit",
+            "implicit": true,
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit10ElizaErrorO9hashValueSivg",
+                "mangledName": "$s13CryptoCoreKit10ElizaErrorO9hashValueSivg",
+                "moduleName": "CryptoCoreKit",
+                "implicit": true,
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit10ElizaErrorO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s13CryptoCoreKit10ElizaErrorO4hash4intoys6HasherVz_tF",
+            "moduleName": "CryptoCoreKit",
+            "implicit": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "errorDescription",
+            "printedName": "errorDescription",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:13CryptoCoreKit10ElizaErrorO16errorDescriptionSSSgvp",
+            "mangledName": "$s13CryptoCoreKit10ElizaErrorO16errorDescriptionSSSgvp",
+            "moduleName": "CryptoCoreKit",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:13CryptoCoreKit10ElizaErrorO16errorDescriptionSSSgvg",
+                "mangledName": "$s13CryptoCoreKit10ElizaErrorO16errorDescriptionSSSgvg",
+                "moduleName": "CryptoCoreKit",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:13CryptoCoreKit10ElizaErrorO",
+        "mangledName": "$s13CryptoCoreKit10ElizaErrorO",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "LocalizedError",
+            "printedName": "LocalizedError",
+            "usr": "s:10Foundation14LocalizedErrorP",
+            "mangledName": "$s10Foundation14LocalizedErrorP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Error",
+            "printedName": "Error",
+            "usr": "s:s5ErrorP",
+            "mangledName": "$ss5ErrorP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "FfiConverterTypeElizaError",
+        "printedName": "FfiConverterTypeElizaError",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "read",
+            "printedName": "read(from:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ElizaError",
+                "printedName": "CryptoCoreKit.ElizaError",
+                "usr": "s:13CryptoCoreKit10ElizaErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Tuple",
+                "printedName": "(data: Foundation.Data, offset: Swift.Int)",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Data",
+                    "printedName": "Foundation.Data",
+                    "usr": "s:10Foundation4DataV"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "paramValueOwnership": "InOut"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit26FfiConverterTypeElizaErrorV4read4fromAA0gH0O10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "mangledName": "$s13CryptoCoreKit26FfiConverterTypeElizaErrorV4read4fromAA0gH0O10Foundation4DataV4data_Si6offsettz_tKFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "write",
+            "printedName": "write(_:into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ElizaError",
+                "printedName": "CryptoCoreKit.ElizaError",
+                "usr": "s:13CryptoCoreKit10ElizaErrorO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[Swift.UInt8]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UInt8",
+                    "printedName": "Swift.UInt8",
+                    "usr": "s:s5UInt8V"
+                  }
+                ],
+                "paramValueOwnership": "InOut",
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:13CryptoCoreKit26FfiConverterTypeElizaErrorV5write_4intoyAA0gH0O_Says5UInt8VGztFZ",
+            "mangledName": "$s13CryptoCoreKit26FfiConverterTypeElizaErrorV5write_4intoyAA0gH0O_Says5UInt8VGztFZ",
+            "moduleName": "CryptoCoreKit",
+            "static": true,
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:13CryptoCoreKit26FfiConverterTypeElizaErrorV",
+        "mangledName": "$s13CryptoCoreKit26FfiConverterTypeElizaErrorV",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl",
+          "Documentation"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
         "name": "PriceError",
         "printedName": "PriceError",
         "children": [
@@ -2107,6 +2567,34 @@
       },
       {
         "kind": "Function",
+        "name": "askEliza",
+        "printedName": "askEliza(sentence:)",
+        "children": [
+          {
+            "kind": "TypeNominal",
+            "name": "String",
+            "printedName": "Swift.String",
+            "usr": "s:SS"
+          },
+          {
+            "kind": "TypeNominal",
+            "name": "String",
+            "printedName": "Swift.String",
+            "usr": "s:SS"
+          }
+        ],
+        "declKind": "Func",
+        "usr": "s:13CryptoCoreKit8askEliza8sentenceS2S_tYaKF",
+        "mangledName": "$s13CryptoCoreKit8askEliza8sentenceS2S_tYaKF",
+        "moduleName": "CryptoCoreKit",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "throwing": true,
+        "funcSelfKind": "NonMutating"
+      },
+      {
+        "kind": "Function",
         "name": "getPrice",
         "printedName": "getPrice(coinId:)",
         "children": [
@@ -2272,70 +2760,77 @@
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 30903,
+      "offset": 32227,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 30961,
+      "offset": 32285,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 34114,
+      "offset": 36033,
       "length": 2,
       "value": "26"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 34460,
+      "offset": 36379,
+      "length": 5,
+      "value": "40660"
+    },
+    {
+      "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
+      "kind": "IntegerLiteral",
+      "offset": 36504,
       "length": 5,
       "value": "33392"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 34591,
+      "offset": 36635,
       "length": 4,
       "value": "6063"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 34711,
+      "offset": 36755,
       "length": 5,
       "value": "13978"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 34845,
+      "offset": 36889,
       "length": 5,
       "value": "29650"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 34987,
+      "offset": 37031,
       "length": 5,
       "value": "29728"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 35128,
+      "offset": 37172,
       "length": 5,
       "value": "39150"
     },
     {
       "filePath": "\/Users\/user\/My_files\/Rust_UniFii\/SDKBuild\/Sources\/crypto_core.swift",
       "kind": "IntegerLiteral",
-      "offset": 35266,
+      "offset": 37310,
       "length": 4,
       "value": "4151"
     }

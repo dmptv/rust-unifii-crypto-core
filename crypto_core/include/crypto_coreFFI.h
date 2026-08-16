@@ -319,6 +319,11 @@ void uniffi_crypto_core_fn_method_tickerlistener_on_update(void*_Nonnull ptr, Ru
 void uniffi_crypto_core_fn_method_tickerlistener_on_error(void*_Nonnull ptr, RustBuffer message, RustCallStatus *_Nonnull out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_ASK_ELIZA
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_ASK_ELIZA
+uint64_t uniffi_crypto_core_fn_func_ask_eliza(RustBuffer sentence
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_PRICE
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_FUNC_GET_PRICE
 RustBuffer uniffi_crypto_core_fn_func_get_price(RustBuffer coin_id, RustCallStatus *_Nonnull out_status
@@ -612,6 +617,12 @@ void ffi_crypto_core_rust_future_free_void(uint64_t handle
 #ifndef UNIFFI_FFIDEF_FFI_CRYPTO_CORE_RUST_FUTURE_COMPLETE_VOID
 #define UNIFFI_FFIDEF_FFI_CRYPTO_CORE_RUST_FUTURE_COMPLETE_VOID
 void ffi_crypto_core_rust_future_complete_void(uint64_t handle, RustCallStatus *_Nonnull out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_ASK_ELIZA
+#define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_ASK_ELIZA
+uint16_t uniffi_crypto_core_checksum_func_ask_eliza(void
+    
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_CHECKSUM_FUNC_GET_PRICE
