@@ -71,11 +71,16 @@ commits it.
 
 **Team workflow:**
 - Never `git add` anything under `CryptoCoreApp.xcodeproj/` or `CryptoCoreApp.xcworkspace/` — they're gitignored
-  already, so this should never come up, but if Xcode ever prompts to add new files to "the project", decline and
-  add the actual source file to `Sources/**` instead (picked up automatically by the `sources: ["Sources/**"]`
-  glob in `Project.swift`).
-- Adding a new source file, target, or dependency = editing `Project.swift`, not clicking around in Xcode's file
-  inspector.
+  already, so this should never come up.
+- **New ordinary source files (a view, a view model, etc.) don't need `Project.swift` touched at all.**
+  `Project.swift` declares `sources: ["Sources/**"]` — a glob, not an explicit file list — so any `.swift` file
+  saved anywhere under `Sources/` is picked up automatically on the next `tuist generate`. Create it the normal
+  way (Xcode's File ▸ New, drag-and-drop, whatever) as long as it lands inside `Sources/`. Since the resulting
+  `.pbxproj` is never committed, two developers adding files at the same time never touch the same tracked file —
+  there's nothing to conflict over.
+- `Project.swift` only needs an actual edit for *structural* changes: a new target, a new external dependency (an
+  SPM package, another `.xcframework`), a build-setting/deployment-target change, or a source file living outside
+  the `Sources/**` glob.
 - After pulling changes that touch `Project.swift` (or the first time you open the project), run `tuist generate`
   again before building — this repo pins the exact `tuist` version via `.mise.toml` (`4.79.4`) so everyone
   generates an identical project structure; run `mise install` once to pick it up.
