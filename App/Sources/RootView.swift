@@ -13,5 +13,6 @@ struct RootView: View {
                     Label("Async", systemImage: "arrow.triangle.2.circlepath")
                 }
         }
+        .preferredColorScheme(.dark)
     }
 }

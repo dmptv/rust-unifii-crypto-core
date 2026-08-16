@@ -9,37 +9,41 @@ struct AsyncDemoView: View {
         VStack(alignment: .leading, spacing: 20) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Async")
-                    .font(.title2.bold())
+                    .font(.system(size: 32, weight: .heavy))
+                    .foregroundStyle(.white)
                 Text("Swift async/await over UniFFI")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                    .foregroundStyle(.gray)
             }
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text("ETH price")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+            Divider().overlay(Color.white.opacity(0.15))
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("ETH PRICE")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.gray)
 
                 resultCard
 
                 Button("Get ETH price") {
                     fetchPriceAsync(coinId: "ethereum")
                 }
-                .buttonStyle(.glassProminent)
+                .buttonStyle(.borderedProminent)
+                .tint(.blue)
                 .frame(maxWidth: .infinity)
                 .disabled(isLoading)
             }
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Error handling")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 10) {
+                Text("ERROR HANDLING")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.gray)
 
                 Button("Trigger invalid coin") {
                     fetchPriceAsync(coinId: "this-coin-does-not-exist")
                 }
-                .buttonStyle(.glass)
-                .tint(.orange)
+                .buttonStyle(.borderedProminent)
+                .tint(.red)
                 .frame(maxWidth: .infinity)
                 .disabled(isLoading)
             }
@@ -48,29 +52,30 @@ struct AsyncDemoView: View {
         }
         .padding()
         .padding(.bottom, 90)
+        .safeAreaPadding(.top)
+        .background(Color.black.ignoresSafeArea(edges: .bottom))
     }
 
     @ViewBuilder
     private var resultCard: some View {
         Group {
             if let errorDetail {
-                VStack(spacing: 4) {
-                    Text("Error")
-                        .font(.headline)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("ERROR")
+                        .font(.caption.weight(.bold))
                         .foregroundStyle(.red)
                     Text(errorDetail)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
+                        .font(.system(size: 20, weight: .heavy))
+                        .foregroundStyle(.white)
                 }
             } else {
                 Text(priceResult ?? "—")
-                    .font(.system(size: 28, weight: .bold, design: .monospaced))
+                    .font(.system(size: 38, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(20)
-        .glassEffect(in: RoundedRectangle(cornerRadius: 20))
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 8)
     }
 
     private func fetchPriceAsync(coinId: String) {
