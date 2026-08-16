@@ -1,4 +1,5 @@
 import MarketsFeature
+import NewsFeature
 import Swinject
 
 // Single composition root: aggregates every feature module's Assembly so
@@ -8,6 +9,7 @@ enum AppContainer {
     static let shared: Resolver = Assembler(
         [
             MarketsAssembly(),
+            NewsAssembly(),
         ]
     ).resolver
 }

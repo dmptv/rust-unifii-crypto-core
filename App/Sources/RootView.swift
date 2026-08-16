@@ -1,5 +1,7 @@
 import SwiftUI
 import MarketsFeature
+import NewsFeature
+import NavigationKit
 import AsyncFeature
 import GrpcFeature
 
@@ -14,6 +16,7 @@ struct RootView: View {
     @StateObject private var asyncPriceViewModel = AsyncPriceViewModel()
     @StateObject private var grpcViewModel = GrpcViewModel()
     @StateObject private var marketsCoordinator = MarketsCoordinator(container: AppContainer.shared)
+    @StateObject private var newsCoordinator = NewsCoordinator(container: AppContainer.shared)
 
     var body: some View {
         TabView {
@@ -33,5 +36,24 @@ struct RootView: View {
                 }
         }
         .preferredColorScheme(.dark)
+        // Stand-in for the push-notification trigger that lands in step
+        // 2.4: News is reachable from any tab, exactly as a deep link
+        // would present it, without disturbing the tabs themselves.
+        .overlay(alignment: .topTrailing) {
+            Button {
+                newsCoordinator.handle(.list)
+            } label: {
+                Image(systemName: "newspaper.fill")
+                    .foregroundStyle(.white)
+                    .padding(10)
+                    .background(.ultraThinMaterial, in: Circle())
+            }
+            .padding(.top, 56)
+            .padding(.trailing, 16)
+        }
+        .sheet(isPresented: $newsCoordinator.isPresented) {
+            NewsCoordinatorView(coordinator: newsCoordinator)
+                .preferredColorScheme(.dark)
+        }
     }
 }
