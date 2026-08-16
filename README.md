@@ -13,12 +13,21 @@ the client via generic interfaces" architecture.
 
 - `crypto_core/` — the Rust crate (`cargo build`), UniFFI proc-macro exports (no `.udl` file), generated Swift
   bindings under `bindings/`, and the compiled `crypto_core.xcframework` for iOS device + simulator.
-- `App/` — a SwiftUI iOS app (project generated via [tuist](https://tuist.io) from `Project.swift`) consuming the
-  `.xcframework`, with two tabs:
-  - **Live** — a market dashboard streaming real trade prices from Binance's public WebSocket, pushed from Rust to
-    Swift through a UniFFI callback interface.
-  - **Async** — the same price lookup exposed as a native Rust `async fn`, generated as a native Swift
+- `SDKBuild/` — a throwaway Tuist project whose only job is compiling `CryptoCoreKit`'s Swift wrapper together
+  with the Rust core into `CryptoCoreKit.xcframework` (see "Distributing CryptoCoreKit as a closed-source SDK"
+  below). Not part of the app workspace.
+- `CryptoCoreKitSDK/` — the distributable SPM package: a `Package.swift` with a single `.binaryTarget` pointing at
+  the compiled `CryptoCoreKit.xcframework` (tracked in git). No `.swift` source ships in this package.
+- `App/` — a SwiftUI iOS app (project generated via [tuist](https://tuist.io) from `Project.swift`), split into
+  Tuist modules:
+  - `MarketsFeature` — a market dashboard streaming real trade prices from Binance's public WebSocket, pushed
+    from Rust to Swift through a UniFFI callback interface.
+  - `AsyncFeature` — the same price lookup exposed as a native Rust `async fn`, generated as a native Swift
     `async`/`await` function, including live error propagation (`Result<T, E>` → Swift `throws`).
+  - Both feature modules depend on `CryptoCoreKit` as an external SPM package (via `Tuist/Package.swift`), not as
+    in-workspace source — exactly the way they'd depend on any third-party SDK.
+  - The app target itself is the composition root, wiring both features' view models together (see
+    `App/Sources/RootView.swift`).
 
 ## What's demonstrated
 
@@ -55,6 +64,52 @@ xcodebuild -create-xcframework \
 cd ../App
 tuist generate
 ```
+
+## Distributing CryptoCoreKit as a closed-source SDK
+
+`App/` doesn't consume `CryptoCoreKit`'s Swift source directly — it depends on `CryptoCoreKitSDK`, a real SPM
+package whose only target is a `.binaryTarget` pointing at a compiled `.xcframework`. No `.swift` file ships in
+that package; consumers get a Mach-O binary plus its public `.swiftinterface` (type signatures, no
+implementation).
+
+To rebuild the SDK after changing `SDKBuild/Sources/crypto_core.swift` (e.g. after regenerating fresh UniFFI
+bindings — see the note below):
+
+```bash
+cd SDKBuild
+tuist generate
+
+# Archive both platform slices with library evolution enabled, so the
+# resulting framework has a stable, textual .swiftinterface instead of a
+# compiler-version-locked .swiftmodule.
+xcodebuild archive -workspace CryptoCoreKitSDKBuild.xcworkspace -scheme CryptoCoreKit \
+  -destination "generic/platform=iOS" -archivePath ./build/CryptoCoreKit-iOS.xcarchive \
+  SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+
+xcodebuild archive -workspace CryptoCoreKitSDKBuild.xcworkspace -scheme CryptoCoreKit \
+  -destination "generic/platform=iOS Simulator" -archivePath ./build/CryptoCoreKit-iOS-Simulator.xcarchive \
+  SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES EXCLUDED_ARCHS=x86_64
+
+xcodebuild -create-xcframework \
+  -framework build/CryptoCoreKit-iOS.xcarchive/Products/Library/Frameworks/CryptoCoreKit.framework \
+  -framework build/CryptoCoreKit-iOS-Simulator.xcarchive/Products/Library/Frameworks/CryptoCoreKit.framework \
+  -output CryptoCoreKit.xcframework
+
+# Publish it into the SPM package that the app actually depends on.
+cp -R CryptoCoreKit.xcframework ../CryptoCoreKitSDK/CryptoCoreKit.xcframework
+cd ../App && tuist install --update && tuist generate
+```
+
+**Regenerating bindings note:** `SDKBuild/Sources/crypto_core.swift` is a *copy* of
+`crypto_core/bindings/crypto_core.swift`, patched in two places to keep the Rust FFI module out of the SDK's
+public/private interface (a UniFFI codegen detail that only matters once the wrapper ships as a compiled
+framework, not as source):
+1. `import crypto_coreFFI` → `@_implementationOnly import crypto_coreFFI`.
+2. The two free functions that leak `RustBuffer` into a `public` signature
+   (`FfiConverterTypePriceInfo_lift`/`_lower`) had `public` dropped — nothing outside the generated file calls
+   them; UniFFI only emits them for multi-crate scenarios this project doesn't have.
+
+Re-apply both edits after copying a freshly-regenerated `bindings/crypto_core.swift` into `SDKBuild/Sources/`.
 
 ## Working with the Xcode project (multi-developer workflow)
 

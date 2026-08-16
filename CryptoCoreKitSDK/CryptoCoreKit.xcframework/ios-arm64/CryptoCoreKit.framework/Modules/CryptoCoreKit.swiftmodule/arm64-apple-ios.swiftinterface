@@ -1,0 +1,95 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.4 effective-5.10 (swiftlang-6.4.0.20.104 clang-2100.3.20.102)
+// swift-module-flags: -target arm64-apple-ios26.0 -enable-objc-interop -enable-library-evolution -language-mode 5 -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name CryptoCoreKit
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+import Foundation
+import Swift
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public protocol PriceTickerProtocol : AnyObject {
+  func stop()
+}
+open class PriceTicker : CryptoCoreKit::PriceTickerProtocol {
+  @_documentation(visibility: private) public struct NoPointer {
+    public init()
+  }
+  required public init(unsafeFromRawPointer pointer: Swift::UnsafeMutableRawPointer)
+  @_documentation(visibility: private) public init(noPointer _: CryptoCoreKit::PriceTicker.CryptoCoreKit::NoPointer)
+  @_documentation(visibility: private) public func uniffiClonePointer() -> Swift::UnsafeMutableRawPointer
+  convenience public init(symbols: [Swift::String], listener: any CryptoCoreKit::TickerListener) throws
+  @objc deinit
+  open func stop()
+}
+@_documentation(visibility: private) public struct FfiConverterTypePriceTicker {
+  public static func lift(_ pointer: Swift::UnsafeMutableRawPointer) throws -> CryptoCoreKit::PriceTicker
+  public static func lower(_ value: CryptoCoreKit::PriceTicker) -> Swift::UnsafeMutableRawPointer
+  public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::PriceTicker
+  public static func write(_ value: CryptoCoreKit::PriceTicker, into buf: inout [Swift::UInt8])
+}
+@_documentation(visibility: private) public func FfiConverterTypePriceTicker_lift(_ pointer: Swift::UnsafeMutableRawPointer) throws -> CryptoCoreKit::PriceTicker
+@_documentation(visibility: private) public func FfiConverterTypePriceTicker_lower(_ value: CryptoCoreKit::PriceTicker) -> Swift::UnsafeMutableRawPointer
+public protocol TickerListener : AnyObject {
+  func onUpdate(ticker: CryptoCoreKit::PriceInfo)
+  func onError(message: Swift::String)
+}
+open class TickerListenerImpl : CryptoCoreKit::TickerListener {
+  @_documentation(visibility: private) public struct NoPointer {
+    public init()
+  }
+  required public init(unsafeFromRawPointer pointer: Swift::UnsafeMutableRawPointer)
+  @_documentation(visibility: private) public init(noPointer _: CryptoCoreKit::TickerListenerImpl.CryptoCoreKit::NoPointer)
+  @_documentation(visibility: private) public func uniffiClonePointer() -> Swift::UnsafeMutableRawPointer
+  @objc deinit
+  open func onUpdate(ticker: CryptoCoreKit::PriceInfo)
+  open func onError(message: Swift::String)
+}
+@_documentation(visibility: private) public struct FfiConverterTypeTickerListener {
+  public static func lift(_ pointer: Swift::UnsafeMutableRawPointer) throws -> any CryptoCoreKit::TickerListener
+  public static func lower(_ value: any CryptoCoreKit::TickerListener) -> Swift::UnsafeMutableRawPointer
+  public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> any CryptoCoreKit::TickerListener
+  public static func write(_ value: any CryptoCoreKit::TickerListener, into buf: inout [Swift::UInt8])
+}
+@_documentation(visibility: private) public func FfiConverterTypeTickerListener_lift(_ pointer: Swift::UnsafeMutableRawPointer) throws -> any CryptoCoreKit::TickerListener
+@_documentation(visibility: private) public func FfiConverterTypeTickerListener_lower(_ value: any CryptoCoreKit::TickerListener) -> Swift::UnsafeMutableRawPointer
+public struct PriceInfo {
+  public var coinId: Swift::String
+  public var usdPrice: Swift::Double
+  public init(coinId: Swift::String, usdPrice: Swift::Double)
+}
+extension CryptoCoreKit::PriceInfo : Swift::Equatable, Swift::Hashable {
+  public static func == (lhs: CryptoCoreKit::PriceInfo, rhs: CryptoCoreKit::PriceInfo) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+@_documentation(visibility: private) public struct FfiConverterTypePriceInfo {
+  public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::PriceInfo
+  public static func write(_ value: CryptoCoreKit::PriceInfo, into buf: inout [Swift::UInt8])
+}
+public enum PriceError {
+  case RateLimited
+  case Network(reason: Swift::String)
+  case InvalidResponse(reason: Swift::String)
+  case InvalidInput(reason: Swift::String)
+}
+@_documentation(visibility: private) public struct FfiConverterTypePriceError {
+  public static func read(from buf: inout (data: Foundation::Data, offset: Foundation::Data.Foundation::Index)) throws -> CryptoCoreKit::PriceError
+  public static func write(_ value: CryptoCoreKit::PriceError, into buf: inout [Swift::UInt8])
+}
+extension CryptoCoreKit::PriceError : Swift::Equatable, Swift::Hashable {
+  public static func == (a: CryptoCoreKit::PriceError, b: CryptoCoreKit::PriceError) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+extension CryptoCoreKit::PriceError : Foundation::LocalizedError {
+  public var errorDescription: Swift::String? {
+    get
+  }
+}
+public func getPrice(coinId: Swift::String) throws -> CryptoCoreKit::PriceInfo
+public func getPriceAsync(coinId: Swift::String) async throws -> CryptoCoreKit::PriceInfo
+public func greet(name: Swift::String) -> Swift::String
