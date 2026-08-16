@@ -1,4 +1,6 @@
 import SwiftUI
+import MarketsFeature
+import AsyncFeature
 
 /// Composition root: the one place in the app that constructs the view
 /// models and wires them to their views. Views receive their dependencies

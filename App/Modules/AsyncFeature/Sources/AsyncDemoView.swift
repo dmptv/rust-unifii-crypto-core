@@ -1,12 +1,15 @@
 import SwiftUI
+import CryptoCoreKit
 
 @MainActor
-final class AsyncPriceViewModel: ObservableObject {
-    @Published var priceResult: String?
-    @Published var errorDetail: String?
-    @Published var isLoading = false
+public final class AsyncPriceViewModel: ObservableObject {
+    @Published public var priceResult: String?
+    @Published public var errorDetail: String?
+    @Published public var isLoading = false
 
-    func fetchPrice(coinId: String) {
+    public init() {}
+
+    public func fetchPrice(coinId: String) {
         isLoading = true
         errorDetail = nil
         // No Task.detached / MainActor.run needed here, unlike the sync
@@ -53,10 +56,14 @@ final class AsyncPriceViewModel: ObservableObject {
     }
 }
 
-struct AsyncDemoView: View {
-    @ObservedObject var viewModel: AsyncPriceViewModel
+public struct AsyncDemoView: View {
+    @ObservedObject public var viewModel: AsyncPriceViewModel
 
-    var body: some View {
+    public init(viewModel: AsyncPriceViewModel) {
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Async")

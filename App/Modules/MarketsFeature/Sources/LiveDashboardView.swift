@@ -1,17 +1,20 @@
 import SwiftUI
+import CryptoCoreKit
 
 @MainActor
-final class TickerViewModel: ObservableObject {
-    @Published var prices: [String: Double] = [:]
-    @Published var history: [String: [Double]] = [:]
-    @Published var baselines: [String: Double] = [:]
-    @Published var errorMessage: String?
-    @Published var isStreaming = false
+public final class TickerViewModel: ObservableObject {
+    @Published public var prices: [String: Double] = [:]
+    @Published public var history: [String: [Double]] = [:]
+    @Published public var baselines: [String: Double] = [:]
+    @Published public var errorMessage: String?
+    @Published public var isStreaming = false
 
     private var ticker: PriceTicker?
     private var listener: BinanceListener?
 
-    func start(symbols: [String]) {
+    public init() {}
+
+    public func start(symbols: [String]) {
         guard !isStreaming else { return }
         errorMessage = nil
         prices = [:]
@@ -33,7 +36,7 @@ final class TickerViewModel: ObservableObject {
         }
     }
 
-    func stop() {
+    public func stop() {
         ticker?.stop()
         ticker = nil
         listener = nil
@@ -208,11 +211,15 @@ private struct MarketRowView: View {
     }
 }
 
-struct LiveDashboardView: View {
-    @ObservedObject var viewModel: TickerViewModel
+public struct LiveDashboardView: View {
+    @ObservedObject public var viewModel: TickerViewModel
     private let symbols = ["btcusdt", "ethusdt", "solusdt"]
 
-    var body: some View {
+    public init(viewModel: TickerViewModel) {
+        self.viewModel = viewModel
+    }
+
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
