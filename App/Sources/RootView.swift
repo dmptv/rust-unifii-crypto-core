@@ -10,11 +10,9 @@ import GrpcFeature
 /// Composition root: the one place in the app that constructs the view
 /// models and wires them to their views. Views receive their dependencies
 /// via `init` rather than creating them internally with `@StateObject` —
-/// this keeps `LiveDashboardView`/`AsyncDemoView`/`GrpcDemoView` free of
-/// hidden construction logic, so each can be previewed or tested with a
-/// substitute view model instead of a real one.
+/// this keeps `AsyncDemoView`/`GrpcDemoView` free of hidden construction
+/// logic, so each can be previewed or tested with a substitute store.
 struct RootView: View {
-    @StateObject private var tickerViewModel = TickerViewModel()
     @State private var asyncStore = Store(initialState: AsyncPriceFeature.State()) {
         AsyncPriceFeature()
     }
@@ -22,17 +20,17 @@ struct RootView: View {
         GrpcFeature()
     }
     // Owned by CryptoCoreApp, not here: DeepLinkRouter needs the same
-    // coordinator instances RootView displays, and that wiring has to
+    // store/coordinator instances RootView displays, and that wiring has to
     // happen before any notification can be handled - see
     // CryptoCoreApp.swift.
-    @ObservedObject var marketsCoordinator: MarketsCoordinator
+    let marketsStore: StoreOf<MarketsFeature>
     @ObservedObject var newsCoordinator: NewsCoordinator
     @ObservedObject var watchlistCoordinator: WatchlistCoordinator
     @ObservedObject var tabSelection: TabSelectionModel
 
     var body: some View {
         TabView(selection: $tabSelection.selectedTab) {
-            MarketsCoordinatorView(coordinator: marketsCoordinator, tickerViewModel: tickerViewModel)
+            MarketsCoordinatorView(store: marketsStore)
                 .tabItem {
                     Label("Live", systemImage: "chart.line.uptrend.xyaxis")
                 }

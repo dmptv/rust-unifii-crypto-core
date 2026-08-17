@@ -31,8 +31,7 @@ let marketsFeature = Target.target(
     sources: ["Modules/MarketsFeature/Sources/**"],
     dependencies: [
         .external(name: "CryptoCoreKit"),
-        .target(name: "NavigationKit"),
-        .external(name: "Swinject"),
+        .external(name: "ComposableArchitecture"),
     ]
 )
 

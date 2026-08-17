@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import Foundation
 import MarketsFeature
 import NavigationKit
@@ -5,23 +6,24 @@ import NewsFeature
 import WatchlistFeature
 
 // Decodes the "destination" object out of a push payload's userInfo and
-// delegates straight to the matching coordinator's handle(_:) — the same
-// entry point each coordinator already exposes for its own deep-link enum.
-// This is the only place that needs to know all three coordinators exist.
+// routes it to the right place. Markets is TCA now, so it gets an Action
+// sent to its Store directly; News/Watchlist are still Coordinator+Swinject
+// until they're migrated too - this file is a deliberate hybrid during the
+// transition, not a design decision to keep permanently.
 @MainActor
 final class DeepLinkRouter {
-    private let marketsCoordinator: MarketsCoordinator
+    private let marketsStore: StoreOf<MarketsFeature>
     private let newsCoordinator: NewsCoordinator
     private let watchlistCoordinator: WatchlistCoordinator
     private let tabSelection: TabSelectionModel
 
     init(
-        marketsCoordinator: MarketsCoordinator,
+        marketsStore: StoreOf<MarketsFeature>,
         newsCoordinator: NewsCoordinator,
         watchlistCoordinator: WatchlistCoordinator,
         tabSelection: TabSelectionModel
     ) {
-        self.marketsCoordinator = marketsCoordinator
+        self.marketsStore = marketsStore
         self.newsCoordinator = newsCoordinator
         self.watchlistCoordinator = watchlistCoordinator
         self.tabSelection = tabSelection
@@ -41,9 +43,12 @@ final class DeepLinkRouter {
 
     func route(_ destination: AppDestination) {
         switch destination {
-        case .markets(let d):
+        case .markets(let marketsDestination):
             tabSelection.selectedTab = .live
-            marketsCoordinator.handle(d)
+            switch marketsDestination {
+            case .coinDetail(.show(let coinId, let next)):
+                marketsStore.send(.deepLinkToCoinDetail(coinId: coinId, thenPriceAlert: next != nil))
+            }
         case .news(let d):
             newsCoordinator.handle(d)
         case .watchlist(let d):

@@ -1,4 +1,3 @@
-import MarketsFeature
 import NewsFeature
 import SwiftData
 import Swinject
@@ -22,7 +21,6 @@ enum AppContainer {
 
     static let shared: Resolver = Assembler(
         [
-            MarketsAssembly(),
             NewsAssembly(modelContainer: modelContainer),
             WatchlistAssembly(modelContainer: modelContainer),
         ]
