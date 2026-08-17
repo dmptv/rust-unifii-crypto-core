@@ -15,9 +15,11 @@ import GrpcFeature
 /// substitute view model instead of a real one.
 struct RootView: View {
     @StateObject private var tickerViewModel = TickerViewModel()
-    @StateObject private var grpcViewModel = GrpcViewModel()
     @State private var asyncStore = Store(initialState: AsyncPriceFeature.State()) {
         AsyncPriceFeature()
+    }
+    @State private var grpcStore = Store(initialState: GrpcFeature.State()) {
+        GrpcFeature()
     }
     // Owned by CryptoCoreApp, not here: DeepLinkRouter needs the same
     // coordinator instances RootView displays, and that wiring has to
@@ -42,7 +44,7 @@ struct RootView: View {
                 }
                 .tag(AppTab.async)
 
-            GrpcDemoView(viewModel: grpcViewModel)
+            GrpcDemoView(store: grpcStore)
                 .tabItem {
                     Label("gRPC", systemImage: "bubble.left.and.bubble.right")
                 }

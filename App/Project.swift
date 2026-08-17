@@ -91,6 +91,7 @@ let grpcFeature = Target.target(
     dependencies: [
         .external(name: "CryptoCoreKit"),
         .external(name: "ElizaProtoKit"),
+        .external(name: "ComposableArchitecture"),
     ]
 )
 

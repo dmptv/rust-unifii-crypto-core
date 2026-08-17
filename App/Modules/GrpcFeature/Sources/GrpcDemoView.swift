@@ -1,11 +1,11 @@
+import ComposableArchitecture
 import SwiftUI
 
 public struct GrpcDemoView: View {
-    @ObservedObject public var viewModel: GrpcViewModel
-    @State private var sentence: String = "Hello, are you a real gRPC service?"
+    @Bindable var store: StoreOf<GrpcFeature>
 
-    public init(viewModel: GrpcViewModel) {
-        self.viewModel = viewModel
+    public init(store: StoreOf<GrpcFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -26,18 +26,18 @@ public struct GrpcDemoView: View {
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.gray)
 
-                TextField("Say something to Eliza", text: $sentence, axis: .vertical)
+                TextField("Say something to Eliza", text: $store.sentence, axis: .vertical)
                     .foregroundStyle(.white)
                     .padding(12)
                     .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
 
                 Button("Send") {
-                    viewModel.ask(sentence)
+                    store.send(.sendTapped)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.blue)
                 .frame(maxWidth: .infinity)
-                .disabled(viewModel.isLoading || sentence.isEmpty)
+                .disabled(store.isLoading || store.sentence.isEmpty)
             }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -59,10 +59,10 @@ public struct GrpcDemoView: View {
     @ViewBuilder
     private var resultCard: some View {
         Group {
-            if viewModel.isLoading {
+            if store.isLoading {
                 ProgressView()
                     .tint(.white)
-            } else if let errorDetail = viewModel.errorDetail {
+            } else if let errorDetail = store.errorDetail {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("ERROR")
                         .font(.caption.weight(.bold))
@@ -72,7 +72,7 @@ public struct GrpcDemoView: View {
                         .foregroundStyle(.white)
                 }
             } else {
-                Text(viewModel.reply ?? "—")
+                Text(store.reply ?? "—")
                     .font(.system(size: 20, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
             }
