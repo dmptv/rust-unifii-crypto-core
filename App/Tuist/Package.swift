@@ -10,10 +10,6 @@ let packageSettings = PackageSettings(
     ],
     baseSettings: .settings(base: ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"]),
     targetSettings: [
-        // Swinject's own Package.swift declares .iOS(.v12) — without this
-        // override, every `tuist generate` regenerates its derived
-        // .xcodeproj with IPHONEOS_DEPLOYMENT_TARGET back at 12.0.
-        "Swinject": ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"],
         // TCA's macro plugin target declares macOS 13, below SwiftSyntax's
         // (its own dependency) minimum of macOS 15 on this toolchain.
         "ComposableArchitectureMacros": ["MACOSX_DEPLOYMENT_TARGET": "15.0"],
@@ -223,7 +219,6 @@ let package = Package(
     dependencies: [
         .package(path: "../../CryptoCoreKitSDK"),
         .package(path: "../../ElizaProtoKit"),
-        .package(url: "https://github.com/Swinject/Swinject.git", from: "2.9.1"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.26.1"),
     ]
 )

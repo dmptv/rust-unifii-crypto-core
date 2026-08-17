@@ -1,3 +1,4 @@
+import DesignSystemKit
 import NavigationKit
 import SwiftUI
 import UserNotifications
@@ -34,32 +35,32 @@ private struct PushTriggerButton: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.headline)
-                    .foregroundStyle(.white)
+                    .font(DSFont.headline)
+                    .foregroundStyle(DSColor.textPrimary)
                 Text(subtitle)
-                    .font(.caption)
-                    .foregroundStyle(.gray)
+                    .font(DSFont.caption)
+                    .foregroundStyle(DSColor.textSecondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+            .background(DSColor.surface, in: RoundedRectangle(cornerRadius: DSRadius.medium))
         }
     }
 }
 
 struct DebugPushTriggerView: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: DSSpacing.lg) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Push Debug")
-                    .font(.system(size: 32, weight: .heavy))
-                    .foregroundStyle(.white)
+                    .font(DSFont.screenTitle)
+                    .foregroundStyle(DSColor.textPrimary)
                 Text("Schedules a real local notification in ~4s")
-                    .font(.subheadline)
-                    .foregroundStyle(.gray)
+                    .font(DSFont.subheadline)
+                    .foregroundStyle(DSColor.textSecondary)
             }
 
-            Divider().overlay(Color.white.opacity(0.15))
+            Divider().overlay(DSColor.divider)
 
             PushTriggerButton(
                 title: "Markets: Bitcoin -> Price Alert",
@@ -114,6 +115,6 @@ struct DebugPushTriggerView: View {
         .padding()
         .padding(.bottom, 90)
         .safeAreaPadding(.top)
-        .background(Color.black.ignoresSafeArea(edges: .bottom))
+        .background(DSColor.background.ignoresSafeArea(edges: .bottom))
     }
 }

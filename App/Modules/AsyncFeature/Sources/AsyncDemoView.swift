@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 public struct AsyncDemoView: View {
@@ -9,22 +10,22 @@ public struct AsyncDemoView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: DSSpacing.xl) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Async")
-                    .font(.system(size: 32, weight: .heavy))
-                    .foregroundStyle(.white)
+                    .font(DSFont.screenTitle)
+                    .foregroundStyle(DSColor.textPrimary)
                 Text("Swift async/await over UniFFI · TCA")
-                    .font(.subheadline)
-                    .foregroundStyle(.gray)
+                    .font(DSFont.subheadline)
+                    .foregroundStyle(DSColor.textSecondary)
             }
 
-            Divider().overlay(Color.white.opacity(0.15))
+            Divider().overlay(DSColor.divider)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("ETH PRICE")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.gray)
+                    .font(DSFont.captionBold)
+                    .foregroundStyle(DSColor.textSecondary)
 
                 resultCard(result: store.priceResult, errorDetail: store.priceErrorDetail)
 
@@ -32,15 +33,15 @@ public struct AsyncDemoView: View {
                     store.send(.fetchPriceTapped)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.blue)
+                .tint(DSColor.accent)
                 .frame(maxWidth: .infinity)
                 .disabled(store.isPriceLoading)
             }
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("ERROR HANDLING")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.gray)
+                    .font(DSFont.captionBold)
+                    .foregroundStyle(DSColor.textSecondary)
 
                 resultCard(result: store.errorDemoResult, errorDetail: store.errorDemoDetail)
 
@@ -48,7 +49,7 @@ public struct AsyncDemoView: View {
                     store.send(.triggerErrorDemoTapped)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .tint(DSColor.error)
                 .frame(maxWidth: .infinity)
                 .disabled(store.isErrorDemoLoading)
             }
@@ -58,7 +59,7 @@ public struct AsyncDemoView: View {
         .padding()
         .padding(.bottom, 90)
         .safeAreaPadding(.top)
-        .background(Color.black.ignoresSafeArea(edges: .bottom))
+        .background(DSColor.background.ignoresSafeArea(edges: .bottom))
     }
 
     @ViewBuilder
@@ -67,19 +68,19 @@ public struct AsyncDemoView: View {
             if let errorDetail {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("ERROR")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(.red)
+                        .font(DSFont.captionBold)
+                        .foregroundStyle(DSColor.error)
                     Text(errorDetail)
-                        .font(.system(size: 20, weight: .heavy))
-                        .foregroundStyle(.white)
+                        .font(DSFont.emphasis)
+                        .foregroundStyle(DSColor.textPrimary)
                 }
             } else {
                 Text(result ?? "—")
-                    .font(.system(size: 38, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
+                    .font(DSFont.heroNumber)
+                    .foregroundStyle(DSColor.textPrimary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 8)
+        .padding(.vertical, DSSpacing.sm)
     }
 }

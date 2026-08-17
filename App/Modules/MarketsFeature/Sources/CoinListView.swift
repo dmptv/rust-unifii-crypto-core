@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import CryptoCoreKit
+import DesignSystemKit
 import SwiftUI
 
 public struct CoinListView: View {
@@ -13,12 +14,12 @@ public struct CoinListView: View {
         Group {
             if store.isLoadingInitial && store.coins.isEmpty {
                 ProgressView()
-                    .tint(.white)
+                    .tint(DSColor.textPrimary)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = store.errorMessage, store.coins.isEmpty {
                 Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+                    .font(DSFont.caption)
+                    .foregroundStyle(DSColor.error)
                     .padding()
             } else {
                 List {
@@ -28,7 +29,7 @@ public struct CoinListView: View {
                         } label: {
                             row(for: coin)
                         }
-                        .listRowBackground(Color.black)
+                        .listRowBackground(DSColor.background)
                         .onAppear {
                             store.send(.loadMoreIfNeeded(coin))
                         }
@@ -38,10 +39,10 @@ public struct CoinListView: View {
                         HStack {
                             Spacer()
                             ProgressView()
-                                .tint(.white)
+                                .tint(DSColor.textPrimary)
                             Spacer()
                         }
-                        .listRowBackground(Color.black)
+                        .listRowBackground(DSColor.background)
                     }
                 }
                 .listStyle(.plain)
@@ -51,7 +52,7 @@ public struct CoinListView: View {
                 }
             }
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(DSColor.background.ignoresSafeArea())
         .navigationTitle("Browse coins")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
@@ -60,26 +61,26 @@ public struct CoinListView: View {
     }
 
     private func row(for coin: CoinListing) -> some View {
-        HStack(spacing: 12) {
+        HStack(spacing: DSSpacing.md) {
             if let rank = coin.marketCapRank {
                 Text("#\(rank)")
-                    .font(.caption)
-                    .foregroundStyle(.gray)
-                    .frame(width: 32, alignment: .leading)
+                    .font(DSFont.caption)
+                    .foregroundStyle(DSColor.textSecondary)
+                    .frame(width: DSSpacing.xxl, alignment: .leading)
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text(coin.name)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(DSColor.textPrimary)
                 Text(coin.symbol.uppercased())
-                    .font(.caption)
-                    .foregroundStyle(.gray)
+                    .font(DSFont.caption)
+                    .foregroundStyle(DSColor.textSecondary)
             }
             Spacer()
             Text(formattedPrice(coin.currentPriceUsd))
-                .foregroundStyle(.white)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .foregroundStyle(DSColor.textPrimary)
+                .font(DSFont.numericCompact)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, DSSpacing.xs)
     }
 
     private func formattedPrice(_ value: Double) -> String {
