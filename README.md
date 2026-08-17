@@ -186,32 +186,32 @@ everywhere; nothing else changes.
 **Known environment quirk (Xcode 27 beta): deployment target on TCA's transitive dependencies.** The Composable
 Architecture pulls in ~60 targets across 13 packages (swift-perception, swift-sharing, swift-navigation,
 swift-syntax, etc.), and most declare an old deployment target in their own `Package.swift` that this beta SDK
-rejects. `PackageSettings.targetSettings` fixes this permanently for a *specific* target name (see `Swinject`,
-`ComposableArchitecture`, and `ComposableArchitectureMacros` in `App/Tuist/Package.swift`), but listing all ~60
-targets by name isn't worth it — that list would need updating on every TCA version bump. Instead, run this after
-every `tuist generate` in `App/`:
+rejects. Fixed permanently via an explicit `PackageSettings.targetSettings` entry for every one of those ~60
+targets in `App/Tuist/Package.swift` — no per-generate patch needed. This list needs extending whenever a TCA
+version bump adds or renames a transitive target; the error message names the offending target directly when that
+happens.
 
-```bash
-find . -name "*.pbxproj" -path "*tuist-derived*" | while read -r f; do
-  sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 1[0-4]\.[0-9];/IPHONEOS_DEPLOYMENT_TARGET = 26.0;/g' "$f"
-  sed -i '' 's/MACOSX_DEPLOYMENT_TARGET = 1[0-4]\.[0-9]*;/MACOSX_DEPLOYMENT_TARGET = 15.0;/g' "$f"
-done
-```
-
-**Known environment quirk (Xcode 27 beta): TCA dependency source patches.** Two of TCA's dependencies contain
+**Known environment quirk (Xcode 27 beta): TCA dependency source patches.** Three of TCA's dependencies contain
 pre-iOS-17 fallback code (dead at our deployment target — `#available(iOS 17, ...)` always succeeds) that this
 beta compiler still hard-errors on, either because it references a type marked `@available(iOS, obsoleted: 17)`
 or because of a genuinely redundant `Observable` conformance only reachable when a certain SPM trait is off. These
-live in `App/Tuist/.build/checkouts/`, which is gitignored and gets reset by `tuist install --update` (not by a
-plain `tuist generate`), so the patches need reapplying after a fresh dependency fetch:
+live in `App/Tuist/.build/checkouts/`, which is gitignored and gets reset by `tuist install --update` or `tuist
+clean` (not by a plain `tuist generate` or `xcodebuild build`), so the patches need reapplying after a fresh
+dependency fetch:
 
-- `swift-perception/Sources/PerceptionCore/SwiftUI/Bindable.swift`: add matching
+```bash
+App/patch-tca-dependencies.sh
+```
+
+Idempotent (safe to run any time, patched or not). It patches:
+
+- `swift-perception/Sources/PerceptionCore/SwiftUI/Bindable.swift`: adds matching
   `@available(iOS, obsoleted: 17)` (plus macOS/tvOS/watchOS) above the `extension Bindable: Identifiable` and
   `extension Bindable: Sendable` declarations, mirroring what the `Bindable` type itself already declares.
-- `swift-sharing/Sources/Sharing/SharedBinding.swift`: replace the `#else` branch's `PerceptionCore.Bindable`
+- `swift-sharing/Sources/Sharing/SharedBinding.swift`: replaces the `#else` branch's `PerceptionCore.Bindable`
   fallback (unreachable at our deployment target) with a `fatalError`, matching the visionOS case already in that
   file.
-- `swift-navigation/Sources/SwiftNavigation/UIBinding.swift`: guard the extra
+- `swift-navigation/Sources/SwiftNavigation/UIBinding.swift`: guards the extra
   `extension _UIBindingWrapper: Observable {}` with `#if Perception` (it's redundant when that trait is off,
   since `_UIBindingWrapper` already conforms via the `_Observable` typealias in that case).
 
