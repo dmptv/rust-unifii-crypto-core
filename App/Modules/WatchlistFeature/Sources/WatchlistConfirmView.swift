@@ -42,6 +42,7 @@ public struct WatchlistConfirmView: View {
             Spacer()
             Spacer()
         }
+        .frame(maxWidth: .infinity)
         .padding()
         .background(Color.black.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)

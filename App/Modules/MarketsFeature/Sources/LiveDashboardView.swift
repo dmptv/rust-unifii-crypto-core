@@ -193,14 +193,6 @@ public struct LiveDashboardView: View {
                     .padding(.top, 8)
             }
 
-            Button("Browse all coins") {
-                onBrowseAllCoins()
-            }
-            .buttonStyle(.bordered)
-            .tint(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.top, 16)
-
             Spacer(minLength: 12)
 
             Button(viewModel.isStreaming ? "Stop updates" : "Start updates") {
@@ -218,5 +210,16 @@ public struct LiveDashboardView: View {
         .padding()
         .safeAreaPadding(.top)
         .background(Color.black.ignoresSafeArea(edges: .bottom))
+        .toolbar {
+            // A toolbar item, not an inline button: this is the standard
+            // iOS signal for "navigates elsewhere" (compare Mail's compose
+            // icon), keeping it visually distinct from Start/Stop updates,
+            // which acts on this screen's own WebSocket connection.
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: onBrowseAllCoins) {
+                    Label("Browse all coins", systemImage: "list.bullet")
+                }
+            }
+        }
     }
 }

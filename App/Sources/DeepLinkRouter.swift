@@ -13,15 +13,18 @@ final class DeepLinkRouter {
     private let marketsCoordinator: MarketsCoordinator
     private let newsCoordinator: NewsCoordinator
     private let watchlistCoordinator: WatchlistCoordinator
+    private let tabSelection: TabSelectionModel
 
     init(
         marketsCoordinator: MarketsCoordinator,
         newsCoordinator: NewsCoordinator,
-        watchlistCoordinator: WatchlistCoordinator
+        watchlistCoordinator: WatchlistCoordinator,
+        tabSelection: TabSelectionModel
     ) {
         self.marketsCoordinator = marketsCoordinator
         self.newsCoordinator = newsCoordinator
         self.watchlistCoordinator = watchlistCoordinator
+        self.tabSelection = tabSelection
     }
 
     func handle(userInfo: [AnyHashable: Any]) {
@@ -39,6 +42,7 @@ final class DeepLinkRouter {
     func route(_ destination: AppDestination) {
         switch destination {
         case .markets(let d):
+            tabSelection.selectedTab = .live
             marketsCoordinator.handle(d)
         case .news(let d):
             newsCoordinator.handle(d)
