@@ -1,10 +1,11 @@
+import ComposableArchitecture
 import SwiftUI
 
 public struct AsyncDemoView: View {
-    @ObservedObject public var viewModel: AsyncPriceViewModel
+    let store: StoreOf<AsyncPriceFeature>
 
-    public init(viewModel: AsyncPriceViewModel) {
-        self.viewModel = viewModel
+    public init(store: StoreOf<AsyncPriceFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -13,7 +14,7 @@ public struct AsyncDemoView: View {
                 Text("Async")
                     .font(.system(size: 32, weight: .heavy))
                     .foregroundStyle(.white)
-                Text("Swift async/await over UniFFI")
+                Text("Swift async/await over UniFFI · TCA")
                     .font(.subheadline)
                     .foregroundStyle(.gray)
             }
@@ -25,15 +26,15 @@ public struct AsyncDemoView: View {
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.gray)
 
-                resultCard(result: viewModel.priceResult, errorDetail: viewModel.priceErrorDetail)
+                resultCard(result: store.priceResult, errorDetail: store.priceErrorDetail)
 
                 Button("Get ETH price") {
-                    viewModel.fetchPrice(coinId: "ethereum")
+                    store.send(.fetchPriceTapped)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.blue)
                 .frame(maxWidth: .infinity)
-                .disabled(viewModel.isPriceLoading)
+                .disabled(store.isPriceLoading)
             }
 
             VStack(alignment: .leading, spacing: 10) {
@@ -41,15 +42,15 @@ public struct AsyncDemoView: View {
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.gray)
 
-                resultCard(result: viewModel.errorDemoResult, errorDetail: viewModel.errorDemoDetail)
+                resultCard(result: store.errorDemoResult, errorDetail: store.errorDemoDetail)
 
                 Button("Trigger invalid coin") {
-                    viewModel.triggerErrorDemo(coinId: "this-coin-does-not-exist")
+                    store.send(.triggerErrorDemoTapped)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.red)
                 .frame(maxWidth: .infinity)
-                .disabled(viewModel.isErrorDemoLoading)
+                .disabled(store.isErrorDemoLoading)
             }
 
             Spacer(minLength: 12)

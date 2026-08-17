@@ -4,6 +4,7 @@ import NewsFeature
 import WatchlistFeature
 import NavigationKit
 import AsyncFeature
+import ComposableArchitecture
 import GrpcFeature
 
 /// Composition root: the one place in the app that constructs the view
@@ -14,8 +15,10 @@ import GrpcFeature
 /// substitute view model instead of a real one.
 struct RootView: View {
     @StateObject private var tickerViewModel = TickerViewModel()
-    @StateObject private var asyncPriceViewModel = AsyncPriceViewModel()
     @StateObject private var grpcViewModel = GrpcViewModel()
+    @State private var asyncStore = Store(initialState: AsyncPriceFeature.State()) {
+        AsyncPriceFeature()
+    }
     // Owned by CryptoCoreApp, not here: DeepLinkRouter needs the same
     // coordinator instances RootView displays, and that wiring has to
     // happen before any notification can be handled - see
@@ -33,7 +36,7 @@ struct RootView: View {
                 }
                 .tag(AppTab.live)
 
-            AsyncDemoView(viewModel: asyncPriceViewModel)
+            AsyncDemoView(store: asyncStore)
                 .tabItem {
                     Label("Async", systemImage: "arrow.triangle.2.circlepath")
                 }
