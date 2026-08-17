@@ -75,7 +75,8 @@ let asyncFeature = Target.target(
     infoPlist: .default,
     sources: ["Modules/AsyncFeature/Sources/**"],
     dependencies: [
-        .external(name: "CryptoCoreKit")
+        .external(name: "CryptoCoreKit"),
+        .external(name: "ComposableArchitecture"),
     ]
 )
 
@@ -114,6 +115,7 @@ let app = Target.target(
         .target(name: "GrpcFeature"),
         .target(name: "NavigationKit"),
         .external(name: "Swinject"),
+        .external(name: "ComposableArchitecture"),
     ]
 )
 
