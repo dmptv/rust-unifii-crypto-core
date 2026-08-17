@@ -1,32 +1,18 @@
 import ComposableArchitecture
 import Foundation
-import MarketsFeature
 import NavigationKit
-import NewsFeature
-import WatchlistFeature
 
 // Decodes the "destination" object out of a push payload's userInfo and
-// routes it to the right place. Markets is TCA now, so it gets an Action
-// sent to its Store directly; News/Watchlist are still Coordinator+Swinject
-// until they're migrated too - this file is a deliberate hybrid during the
-// transition, not a design decision to keep permanently.
+// sends it as one action to AppFeature's root Store. Routing logic itself
+// (which tab, which child action) lives in the reducer now - this class is
+// only the bridge from UNUserNotificationCenterDelegate's callback (a
+// UIKit/system world) into TCA's .send().
 @MainActor
 final class DeepLinkRouter {
-    private let marketsStore: StoreOf<MarketsFeature>
-    private let newsCoordinator: NewsCoordinator
-    private let watchlistCoordinator: WatchlistCoordinator
-    private let tabSelection: TabSelectionModel
+    private let store: StoreOf<AppFeature>
 
-    init(
-        marketsStore: StoreOf<MarketsFeature>,
-        newsCoordinator: NewsCoordinator,
-        watchlistCoordinator: WatchlistCoordinator,
-        tabSelection: TabSelectionModel
-    ) {
-        self.marketsStore = marketsStore
-        self.newsCoordinator = newsCoordinator
-        self.watchlistCoordinator = watchlistCoordinator
-        self.tabSelection = tabSelection
+    init(store: StoreOf<AppFeature>) {
+        self.store = store
     }
 
     func handle(userInfo: [AnyHashable: Any]) {
@@ -38,21 +24,6 @@ final class DeepLinkRouter {
         guard let destination = try? JSONDecoder().decode(AppDestination.self, from: data) else {
             return
         }
-        route(destination)
-    }
-
-    func route(_ destination: AppDestination) {
-        switch destination {
-        case .markets(let marketsDestination):
-            tabSelection.selectedTab = .live
-            switch marketsDestination {
-            case .coinDetail(.show(let coinId, let next)):
-                marketsStore.send(.deepLinkToCoinDetail(coinId: coinId, thenPriceAlert: next != nil))
-            }
-        case .news(let d):
-            newsCoordinator.handle(d)
-        case .watchlist(let d):
-            watchlistCoordinator.handle(d)
-        }
+        store.send(.deepLinkReceived(destination))
     }
 }

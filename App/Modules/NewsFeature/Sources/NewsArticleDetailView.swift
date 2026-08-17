@@ -1,33 +1,27 @@
+import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 public struct NewsArticleDetailView: View {
-    @ObservedObject var viewModel: NewsArticleDetailViewModel
+    let store: StoreOf<NewsArticleDetailFeature>
 
-    public init(viewModel: NewsArticleDetailViewModel) {
-        self.viewModel = viewModel
+    public init(store: StoreOf<NewsArticleDetailFeature>) {
+        self.store = store
     }
 
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                if viewModel.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 40)
-                } else if let error = viewModel.errorMessage {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                } else if let article = viewModel.article {
+            VStack(alignment: .leading, spacing: DSSpacing.lg) {
+                if let article = store.article {
                     Text(article.title)
-                        .font(.system(size: 26, weight: .heavy))
-                        .foregroundStyle(.white)
+                        .font(DSFont.sectionTitle)
+                        .foregroundStyle(DSColor.textPrimary)
                     Text(article.publishedAt)
-                        .font(.caption)
-                        .foregroundStyle(.gray)
+                        .font(DSFont.caption)
+                        .foregroundStyle(DSColor.textSecondary)
                     Text(article.summary)
-                        .font(.body)
-                        .foregroundStyle(.gray)
+                        .font(DSFont.body)
+                        .foregroundStyle(DSColor.textSecondary)
                     if let url = URL(string: article.url) {
                         Link("Read full article", destination: url)
                             .font(.callout.bold())
@@ -36,11 +30,12 @@ public struct NewsArticleDetailView: View {
             }
             .padding()
         }
-        .background(Color.black.ignoresSafeArea())
-        .navigationTitle(viewModel.article?.title ?? "Article")
+        .requestState(isLoading: store.isLoading, errorMessage: store.errorMessage)
+        .background(DSColor.background.ignoresSafeArea())
+        .navigationTitle(store.article?.title ?? "Article")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            await viewModel.load()
+            store.send(.onAppear)
         }
     }
 }

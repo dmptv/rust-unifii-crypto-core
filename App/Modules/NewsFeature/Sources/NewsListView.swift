@@ -1,60 +1,38 @@
+import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 public struct NewsListView: View {
-    @ObservedObject var viewModel: NewsListViewModel
-    let onSelect: (String) -> Void
-    let onClose: () -> Void
+    let store: StoreOf<NewsFeature>
 
-    public init(viewModel: NewsListViewModel, onSelect: @escaping (String) -> Void, onClose: @escaping () -> Void) {
-        self.viewModel = viewModel
-        self.onSelect = onSelect
-        self.onClose = onClose
+    public init(store: StoreOf<NewsFeature>) {
+        self.store = store
     }
 
     public var body: some View {
-        Group {
-            if viewModel.isLoading {
-                ProgressView()
-            } else if let error = viewModel.errorMessage {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .padding()
-            } else {
-                List(viewModel.articles, id: \.id) { article in
-                    Button {
-                        onSelect(article.id)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(article.title)
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                            Text(article.publishedAt)
-                                .font(.caption)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    .listRowBackground(Color.black)
+        List(store.articles, id: \.id) { article in
+            Button {
+                store.send(.articleTapped(article.id))
+            } label: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(article.title)
+                        .font(DSFont.headline)
+                        .foregroundStyle(DSColor.textPrimary)
+                    Text(article.publishedAt)
+                        .font(DSFont.caption)
+                        .foregroundStyle(DSColor.textSecondary)
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
             }
+            .listRowBackground(DSColor.background)
         }
-        .background(Color.black.ignoresSafeArea())
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .requestState(isLoading: store.isLoading, errorMessage: store.errorMessage)
+        .background(DSColor.background.ignoresSafeArea())
         .navigationTitle("News")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    onClose()
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.gray)
-                }
-            }
-        }
         .task {
-            await viewModel.load()
+            store.send(.onAppear)
         }
     }
 }

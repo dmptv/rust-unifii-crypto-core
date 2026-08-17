@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 public struct GrpcDemoView: View {
@@ -9,41 +10,41 @@ public struct GrpcDemoView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: DSSpacing.xl) {
             VStack(alignment: .leading, spacing: 2) {
                 Text("gRPC")
-                    .font(.system(size: 32, weight: .heavy))
-                    .foregroundStyle(.white)
+                    .font(DSFont.screenTitle)
+                    .foregroundStyle(DSColor.textPrimary)
                 Text("Rust as a gRPC client · Buf's Eliza demo")
-                    .font(.subheadline)
-                    .foregroundStyle(.gray)
+                    .font(DSFont.subheadline)
+                    .foregroundStyle(DSColor.textSecondary)
             }
 
-            Divider().overlay(Color.white.opacity(0.15))
+            Divider().overlay(DSColor.divider)
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("YOUR MESSAGE")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.gray)
+                    .font(DSFont.captionBold)
+                    .foregroundStyle(DSColor.textSecondary)
 
                 TextField("Say something to Eliza", text: $store.sentence, axis: .vertical)
-                    .foregroundStyle(.white)
-                    .padding(12)
-                    .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                    .foregroundStyle(DSColor.textPrimary)
+                    .padding(DSSpacing.md)
+                    .background(DSColor.surface, in: RoundedRectangle(cornerRadius: DSRadius.medium))
 
                 Button("Send") {
                     store.send(.sendTapped)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(.blue)
+                .tint(DSColor.accent)
                 .frame(maxWidth: .infinity)
                 .disabled(store.isLoading || store.sentence.isEmpty)
             }
 
             VStack(alignment: .leading, spacing: 10) {
                 Text("ELIZA REPLIES")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.gray)
+                    .font(DSFont.captionBold)
+                    .foregroundStyle(DSColor.textSecondary)
 
                 resultCard
             }
@@ -53,7 +54,7 @@ public struct GrpcDemoView: View {
         .padding()
         .padding(.bottom, 90)
         .safeAreaPadding(.top)
-        .background(Color.black.ignoresSafeArea(edges: .bottom))
+        .background(DSColor.background.ignoresSafeArea(edges: .bottom))
     }
 
     @ViewBuilder
@@ -61,23 +62,23 @@ public struct GrpcDemoView: View {
         Group {
             if store.isLoading {
                 ProgressView()
-                    .tint(.white)
+                    .tint(DSColor.textPrimary)
             } else if let errorDetail = store.errorDetail {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("ERROR")
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(.red)
+                        .font(DSFont.captionBold)
+                        .foregroundStyle(DSColor.error)
                     Text(errorDetail)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .font(DSFont.emphasis)
+                        .foregroundStyle(DSColor.textPrimary)
                 }
             } else {
                 Text(store.reply ?? "—")
-                    .font(.system(size: 20, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white)
+                    .font(DSFont.resultText)
+                    .foregroundStyle(DSColor.textPrimary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 8)
+        .padding(.vertical, DSSpacing.sm)
     }
 }

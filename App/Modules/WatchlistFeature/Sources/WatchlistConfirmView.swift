@@ -1,42 +1,43 @@
+import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 // The back control here deliberately does not use the system back button:
-// it always dismisses the whole Watchlist flow (coordinator.dismiss())
-// instead of popping to Search, since a deep link can land here directly
-// without Search ever having been on the stack.
+// it always sends backTapped, which the parent WatchlistFeature turns into
+// clearing its whole path, since a deep link can land here directly
+// without Search ever having been pushed.
 public struct WatchlistConfirmView: View {
-    @ObservedObject var viewModel: WatchlistConfirmViewModel
-    let onDismiss: () -> Void
+    let store: StoreOf<WatchlistConfirmFeature>
 
-    public init(viewModel: WatchlistConfirmViewModel, onDismiss: @escaping () -> Void) {
-        self.viewModel = viewModel
-        self.onDismiss = onDismiss
+    public init(store: StoreOf<WatchlistConfirmFeature>) {
+        self.store = store
     }
 
     public var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DSSpacing.xl) {
             Spacer()
 
-            Text(viewModel.isAdded ? "Added to watchlist" : "Add to watchlist?")
-                .font(.system(size: 26, weight: .heavy))
-                .foregroundStyle(.white)
+            Text(store.isAdded ? "Added to watchlist" : "Add to watchlist?")
+                .font(DSFont.sectionTitle)
+                .foregroundStyle(DSColor.textPrimary)
                 .multilineTextAlignment(.center)
 
-            Text(viewModel.coinName)
+            Text(store.coinName)
                 .font(.title2)
-                .foregroundStyle(.gray)
+                .foregroundStyle(DSColor.textSecondary)
 
-            if viewModel.isAdded {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 40))
-                    .foregroundStyle(.green)
+            if store.isAdded {
+                Image(systemName: DSIcon.success)
+                    .font(.system(size: DSIconSize.large))
+                    .foregroundStyle(DSColor.success)
+                    .accessibilityHidden(true)
             } else {
                 Button("Confirm") {
-                    viewModel.confirm()
+                    store.send(.confirmTapped)
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, DSSpacing.xxxl)
             }
 
             Spacer()
@@ -44,16 +45,18 @@ public struct WatchlistConfirmView: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(Color.black.ignoresSafeArea())
+        .background(DSColor.background.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
-                    onDismiss()
+                    store.send(.backTapped)
                 } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.white)
+                    Image(systemName: DSIcon.back)
+                        .foregroundStyle(DSColor.textPrimary)
                 }
+                .minTapTarget()
+                .accessibilityLabel("Back")
             }
         }
     }

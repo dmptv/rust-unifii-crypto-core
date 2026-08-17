@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 // Terminal screen of the Markets flow — no service call, so the "notify me"
@@ -14,21 +15,21 @@ public struct PriceAlertView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: DSSpacing.xl) {
             Text("Price alert")
-                .font(.system(size: 28, weight: .heavy))
-                .foregroundStyle(.white)
+                .font(DSFont.priceNumber)
+                .foregroundStyle(DSColor.textPrimary)
             Text(store.coinId)
-                .font(.subheadline)
-                .foregroundStyle(.gray)
+                .font(DSFont.subheadline)
+                .foregroundStyle(DSColor.textSecondary)
 
             Toggle("Notify me", isOn: $notifyEnabled)
-                .tint(.blue)
+                .tint(DSColor.accent)
 
             if notifyEnabled {
                 VStack(alignment: .leading) {
                     Text("Threshold: $\(Int(threshold))")
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(DSColor.textSecondary)
                     Slider(value: $threshold, in: 0...200_000, step: 100)
                 }
             }
@@ -36,7 +37,7 @@ public struct PriceAlertView: View {
             Spacer()
         }
         .padding()
-        .background(Color.black.ignoresSafeArea())
+        .background(DSColor.background.ignoresSafeArea())
         .navigationTitle("Price alert")
         .navigationBarTitleDisplayMode(.inline)
     }

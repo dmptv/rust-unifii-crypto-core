@@ -1,60 +1,57 @@
+import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 public struct WatchlistSearchView: View {
-    @ObservedObject var viewModel: WatchlistSearchViewModel
-    let onSelect: (String, String) -> Void
+    @Bindable var store: StoreOf<WatchlistSearchFeature>
 
-    public init(viewModel: WatchlistSearchViewModel, onSelect: @escaping (String, String) -> Void) {
-        self.viewModel = viewModel
-        self.onSelect = onSelect
+    public init(store: StoreOf<WatchlistSearchFeature>) {
+        self.store = store
     }
 
     public var body: some View {
         VStack(spacing: 0) {
-            TextField("Search coins", text: $viewModel.query)
+            TextField("Search coins", text: $store.query)
                 .textFieldStyle(.roundedBorder)
                 .autocorrectionDisabled()
                 .padding()
-                .onChange(of: viewModel.query) { _, _ in
-                    viewModel.queryChanged()
-                }
 
-            if viewModel.isLoading {
+            if store.isLoading {
                 ProgressView()
-                    .padding(.top, 20)
-            } else if let error = viewModel.errorMessage {
+                    .padding(.top, DSSpacing.xl)
+            } else if let error = store.errorMessage {
                 Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+                    .font(DSFont.caption)
+                    .foregroundStyle(DSColor.error)
                     .padding()
             }
 
-            List(viewModel.results, id: \.coinId) { result in
+            List(store.results, id: \.coinId) { result in
                 Button {
-                    onSelect(result.coinId, result.name)
+                    store.send(.coinTapped(coinId: result.coinId, coinName: result.name))
                 } label: {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(result.name)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(DSColor.textPrimary)
                             Text(result.symbol.uppercased())
-                                .font(.caption)
-                                .foregroundStyle(.gray)
+                                .font(DSFont.caption)
+                                .foregroundStyle(DSColor.textSecondary)
                         }
                         Spacer()
                         if let rank = result.marketCapRank {
                             Text("#\(rank)")
-                                .font(.caption)
-                                .foregroundStyle(.gray)
+                                .font(DSFont.caption)
+                                .foregroundStyle(DSColor.textSecondary)
                         }
                     }
                 }
-                .listRowBackground(Color.black)
+                .listRowBackground(DSColor.background)
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(DSColor.background.ignoresSafeArea())
         .navigationTitle("Add to watchlist")
         .navigationBarTitleDisplayMode(.inline)
     }

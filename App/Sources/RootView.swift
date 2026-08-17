@@ -1,67 +1,55 @@
 import SwiftUI
+import DesignSystemKit
 import MarketsFeature
 import NewsFeature
 import WatchlistFeature
-import NavigationKit
 import AsyncFeature
 import ComposableArchitecture
 import GrpcFeature
 
-/// Composition root: the one place in the app that constructs the view
-/// models and wires them to their views. Views receive their dependencies
-/// via `init` rather than creating them internally with `@StateObject` —
-/// this keeps `AsyncDemoView`/`GrpcDemoView` free of hidden construction
-/// logic, so each can be previewed or tested with a substitute store.
+/// Composition root: the one place in the app that scopes AppFeature's
+/// single Store down into each tab's own StoreOf<Feature>.
 struct RootView: View {
-    @State private var asyncStore = Store(initialState: AsyncPriceFeature.State()) {
-        AsyncPriceFeature()
-    }
-    @State private var grpcStore = Store(initialState: GrpcFeature.State()) {
-        GrpcFeature()
-    }
-    // Owned by CryptoCoreApp, not here: DeepLinkRouter needs the same
-    // store/coordinator instances RootView displays, and that wiring has to
-    // happen before any notification can be handled - see
-    // CryptoCoreApp.swift.
-    let marketsStore: StoreOf<MarketsFeature>
-    @ObservedObject var newsCoordinator: NewsCoordinator
-    @ObservedObject var watchlistCoordinator: WatchlistCoordinator
-    @ObservedObject var tabSelection: TabSelectionModel
+    @Bindable var store: StoreOf<AppFeature>
 
     var body: some View {
-        TabView(selection: $tabSelection.selectedTab) {
-            MarketsCoordinatorView(store: marketsStore)
+        TabView(selection: $store.selectedTab) {
+            MarketsCoordinatorView(store: store.scope(state: \.markets, action: \.markets))
                 .tabItem {
-                    Label("Live", systemImage: "chart.line.uptrend.xyaxis")
+                    Label("Live", systemImage: DSIcon.tabLive)
                 }
                 .tag(AppTab.live)
 
-            AsyncDemoView(store: asyncStore)
+            NewsCoordinatorView(store: store.scope(state: \.news, action: \.news))
                 .tabItem {
-                    Label("Async", systemImage: "arrow.triangle.2.circlepath")
+                    Label("News", systemImage: DSIcon.tabNews)
+                }
+                .tag(AppTab.news)
+
+            WatchlistCoordinatorView(store: store.scope(state: \.watchlist, action: \.watchlist))
+                .tabItem {
+                    Label("Watchlist", systemImage: DSIcon.tabWatchlist)
+                }
+                .tag(AppTab.watchlist)
+
+            AsyncDemoView(store: store.scope(state: \.async, action: \.async))
+                .tabItem {
+                    Label("Async", systemImage: DSIcon.tabAsync)
                 }
                 .tag(AppTab.async)
 
-            GrpcDemoView(store: grpcStore)
+            GrpcDemoView(store: store.scope(state: \.grpc, action: \.grpc))
                 .tabItem {
-                    Label("gRPC", systemImage: "bubble.left.and.bubble.right")
+                    Label("gRPC", systemImage: DSIcon.tabGrpc)
                 }
                 .tag(AppTab.grpc)
 
             DebugPushTriggerView()
                 .tabItem {
-                    Label("Push", systemImage: "bell.badge")
+                    Label("Push", systemImage: DSIcon.tabPush)
                 }
                 .tag(AppTab.push)
         }
         .preferredColorScheme(.dark)
-        .sheet(isPresented: $newsCoordinator.isPresented) {
-            NewsCoordinatorView(coordinator: newsCoordinator)
-                .preferredColorScheme(.dark)
-        }
-        .sheet(isPresented: $watchlistCoordinator.isPresented) {
-            WatchlistCoordinatorView(coordinator: watchlistCoordinator)
-                .preferredColorScheme(.dark)
-        }
     }
 }

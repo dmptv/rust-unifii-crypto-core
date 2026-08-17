@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 private struct StatusPill: View {
@@ -8,19 +9,14 @@ private struct StatusPill: View {
     var body: some View {
         HStack(spacing: 5) {
             Circle()
-                .fill(isActive ? Color.green : Color.gray)
+                .fill(isActive ? DSColor.success : DSColor.textSecondary)
                 .frame(width: 6, height: 6)
                 .scaleEffect(pulse ? 1.8 : 1.0)
                 .opacity(pulse ? 0.3 : 1.0)
-                .animation(
-                    isActive
-                        ? .easeInOut(duration: 0.9).repeatForever(autoreverses: true)
-                        : .default,
-                    value: pulse
-                )
+                .animation(isActive ? DSAnimation.pulse : .default, value: pulse)
             Text(isActive ? "Streaming" : "Offline")
-                .font(.caption)
-                .foregroundStyle(.gray)
+                .font(DSFont.caption)
+                .foregroundStyle(DSColor.textSecondary)
         }
         .onAppear { pulse = isActive }
         .onChange(of: isActive) { _, newValue in pulse = newValue }
@@ -70,8 +66,8 @@ private struct MarketRowView: View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .top) {
                 Text(displayName)
-                    .font(.system(size: 20, weight: .heavy))
-                    .foregroundStyle(.white)
+                    .font(DSFont.emphasis)
+                    .foregroundStyle(DSColor.textPrimary)
 
                 Spacer()
 
@@ -82,19 +78,19 @@ private struct MarketRowView: View {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 if let price {
                     Text(formattedPrice(price))
-                        .font(.system(size: 30, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
+                        .font(DSFont.priceNumber)
+                        .foregroundStyle(DSColor.textPrimary)
                 } else {
                     Text("—")
-                        .font(.system(size: 30, weight: .heavy))
+                        .font(DSFont.priceNumber)
                         .foregroundStyle(.white.opacity(0.25))
                 }
 
                 if let price, let baseline {
                     let delta = price - baseline
                     Text(deltaText(delta))
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(delta >= 0 ? .green : .red)
+                        .font(DSFont.numericCompact)
+                        .foregroundStyle(delta >= 0 ? DSColor.success : DSColor.error)
                 }
             }
         }
@@ -151,18 +147,18 @@ public struct LiveDashboardView: View {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Markets")
-                        .font(.system(size: 32, weight: .heavy))
-                        .foregroundStyle(.white)
+                        .font(DSFont.screenTitle)
+                        .foregroundStyle(DSColor.textPrimary)
                     Text("Live market data")
-                        .font(.subheadline)
-                        .foregroundStyle(.gray)
+                        .font(DSFont.subheadline)
+                        .foregroundStyle(DSColor.textSecondary)
                 }
                 Spacer()
                 StatusPill(isActive: store.ticker.isStreaming)
             }
-            .padding(.bottom, 12)
+            .padding(.bottom, DSSpacing.md)
 
-            Divider().overlay(Color.white.opacity(0.15))
+            Divider().overlay(DSColor.divider)
 
             ForEach(symbols, id: \.self) { symbol in
                 MarketRowView(
@@ -181,9 +177,9 @@ public struct LiveDashboardView: View {
 
             if let error = store.ticker.errorMessage {
                 Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-                    .padding(.top, 8)
+                    .font(DSFont.caption)
+                    .foregroundStyle(DSColor.error)
+                    .padding(.top, DSSpacing.sm)
             }
 
             Spacer(minLength: 12)
@@ -192,13 +188,13 @@ public struct LiveDashboardView: View {
                 store.send(.ticker(store.ticker.isStreaming ? .stopTapped : .startTapped))
             }
             .buttonStyle(.borderedProminent)
-            .tint(store.ticker.isStreaming ? .red : .blue)
+            .tint(store.ticker.isStreaming ? DSColor.error : DSColor.accent)
             .frame(maxWidth: .infinity)
             .padding(.bottom, 100)
         }
         .padding()
         .safeAreaPadding(.top)
-        .background(Color.black.ignoresSafeArea(edges: .bottom))
+        .background(DSColor.background.ignoresSafeArea(edges: .bottom))
         .toolbar {
             // A toolbar item, not an inline button: this is the standard
             // iOS signal for "navigates elsewhere" (compare Mail's compose
@@ -208,7 +204,7 @@ public struct LiveDashboardView: View {
                 Button {
                     store.send(.browseAllCoinsTapped)
                 } label: {
-                    Label("Browse all coins", systemImage: "list.bullet")
+                    Label("Browse all coins", systemImage: DSIcon.browseList)
                 }
             }
         }

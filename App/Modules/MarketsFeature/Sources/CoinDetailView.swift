@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import DesignSystemKit
 import SwiftUI
 
 public struct CoinDetailView: View {
@@ -10,31 +11,23 @@ public struct CoinDetailView: View {
 
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                if store.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 40)
-                } else if let error = store.errorMessage {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                } else if let details = store.details {
+            VStack(alignment: .leading, spacing: DSSpacing.lg) {
+                if let details = store.details {
                     Text(details.name)
-                        .font(.system(size: 32, weight: .heavy))
-                        .foregroundStyle(.white)
+                        .font(DSFont.screenTitle)
+                        .foregroundStyle(DSColor.textPrimary)
                     Text(details.symbol.uppercased())
-                        .font(.subheadline)
-                        .foregroundStyle(.gray)
+                        .font(DSFont.subheadline)
+                        .foregroundStyle(DSColor.textSecondary)
 
                     Text("$\(String(format: "%.2f", details.currentPriceUsd))")
-                        .font(.system(size: 28, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
+                        .font(DSFont.priceNumber)
+                        .foregroundStyle(DSColor.textPrimary)
 
                     if !details.description.isEmpty {
                         Text(details.description)
-                            .font(.body)
-                            .foregroundStyle(.gray)
+                            .font(DSFont.body)
+                            .foregroundStyle(DSColor.textSecondary)
                             .lineLimit(6)
                     }
 
@@ -43,12 +36,13 @@ public struct CoinDetailView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 8)
+                    .padding(.top, DSSpacing.sm)
                 }
             }
             .padding()
         }
-        .background(Color.black.ignoresSafeArea())
+        .requestState(isLoading: store.isLoading, errorMessage: store.errorMessage)
+        .background(DSColor.background.ignoresSafeArea())
         .navigationTitle(store.details?.name ?? "Coin")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {

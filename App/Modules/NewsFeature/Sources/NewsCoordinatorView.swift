@@ -1,28 +1,20 @@
+import ComposableArchitecture
 import SwiftUI
 
 public struct NewsCoordinatorView: View {
-    @ObservedObject var coordinator: NewsCoordinator
+    @Bindable var store: StoreOf<NewsFeature>
 
-    public init(coordinator: NewsCoordinator) {
-        self.coordinator = coordinator
+    public init(store: StoreOf<NewsFeature>) {
+        self.store = store
     }
 
     public var body: some View {
-        NavigationStack(path: $coordinator.path) {
-            NewsListView(
-                viewModel: coordinator.newsListViewModel,
-                onSelect: { articleId in
-                    coordinator.path.append(NewsRoute.articleDetail(articleId: articleId))
-                },
-                onClose: {
-                    coordinator.dismiss()
-                }
-            )
-            .navigationDestination(for: NewsRoute.self) { route in
-                switch route {
-                case .articleDetail(let articleId):
-                    NewsArticleDetailView(viewModel: coordinator.makeArticleDetailViewModel(articleId: articleId))
-                }
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            NewsListView(store: store)
+        } destination: { store in
+            switch store.case {
+            case let .articleDetail(store):
+                NewsArticleDetailView(store: store)
             }
         }
     }

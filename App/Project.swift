@@ -21,6 +21,16 @@ let navigationKit = Target.target(
     ]
 )
 
+let designSystemKit = Target.target(
+    name: "DesignSystemKit",
+    destinations: .iOS,
+    product: .staticFramework,
+    bundleId: "com.example.cryptocoreapp.designsystemkit",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/DesignSystemKit/Sources/**"]
+)
+
 let marketsFeature = Target.target(
     name: "MarketsFeature",
     destinations: .iOS,
@@ -32,6 +42,7 @@ let marketsFeature = Target.target(
     dependencies: [
         .external(name: "CryptoCoreKit"),
         .external(name: "ComposableArchitecture"),
+        .target(name: "DesignSystemKit"),
     ]
 )
 
@@ -45,8 +56,8 @@ let newsFeature = Target.target(
     sources: ["Modules/NewsFeature/Sources/**"],
     dependencies: [
         .external(name: "CryptoCoreKit"),
-        .target(name: "NavigationKit"),
-        .external(name: "Swinject"),
+        .external(name: "ComposableArchitecture"),
+        .target(name: "DesignSystemKit"),
     ]
 )
 
@@ -60,8 +71,8 @@ let watchlistFeature = Target.target(
     sources: ["Modules/WatchlistFeature/Sources/**"],
     dependencies: [
         .external(name: "CryptoCoreKit"),
-        .target(name: "NavigationKit"),
-        .external(name: "Swinject"),
+        .external(name: "ComposableArchitecture"),
+        .target(name: "DesignSystemKit"),
     ]
 )
 
@@ -76,6 +87,7 @@ let asyncFeature = Target.target(
     dependencies: [
         .external(name: "CryptoCoreKit"),
         .external(name: "ComposableArchitecture"),
+        .target(name: "DesignSystemKit"),
     ]
 )
 
@@ -91,6 +103,7 @@ let grpcFeature = Target.target(
         .external(name: "CryptoCoreKit"),
         .external(name: "ElizaProtoKit"),
         .external(name: "ComposableArchitecture"),
+        .target(name: "DesignSystemKit"),
     ]
 )
 
@@ -114,12 +127,12 @@ let app = Target.target(
         .target(name: "AsyncFeature"),
         .target(name: "GrpcFeature"),
         .target(name: "NavigationKit"),
-        .external(name: "Swinject"),
+        .target(name: "DesignSystemKit"),
         .external(name: "ComposableArchitecture"),
     ]
 )
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, navigationKit, marketsFeature, newsFeature, watchlistFeature, asyncFeature, grpcFeature]
+    targets: [app, navigationKit, designSystemKit, marketsFeature, newsFeature, watchlistFeature, asyncFeature, grpcFeature]
 )

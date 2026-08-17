@@ -1,28 +1,20 @@
+import ComposableArchitecture
 import SwiftUI
 
 public struct WatchlistCoordinatorView: View {
-    @ObservedObject var coordinator: WatchlistCoordinator
+    @Bindable var store: StoreOf<WatchlistFeature>
 
-    public init(coordinator: WatchlistCoordinator) {
-        self.coordinator = coordinator
+    public init(store: StoreOf<WatchlistFeature>) {
+        self.store = store
     }
 
     public var body: some View {
-        NavigationStack(path: $coordinator.path) {
-            WatchlistSearchView(
-                viewModel: coordinator.searchViewModel,
-                onSelect: { coinId, coinName in
-                    coordinator.showConfirm(coinId: coinId, coinName: coinName)
-                }
-            )
-            .navigationDestination(for: WatchlistRoute.self) { route in
-                switch route {
-                case .confirm(let coinId, let coinName):
-                    WatchlistConfirmView(
-                        viewModel: coordinator.makeConfirmViewModel(coinId: coinId, coinName: coinName),
-                        onDismiss: { coordinator.dismiss() }
-                    )
-                }
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            WatchlistSearchView(store: store.scope(state: \.search, action: \.search))
+        } destination: { store in
+            switch store.case {
+            case let .confirm(store):
+                WatchlistConfirmView(store: store)
             }
         }
     }
