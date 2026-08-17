@@ -23,28 +23,33 @@ struct RootView: View {
     @ObservedObject var marketsCoordinator: MarketsCoordinator
     @ObservedObject var newsCoordinator: NewsCoordinator
     @ObservedObject var watchlistCoordinator: WatchlistCoordinator
+    @ObservedObject var tabSelection: TabSelectionModel
 
     var body: some View {
-        TabView {
+        TabView(selection: $tabSelection.selectedTab) {
             MarketsCoordinatorView(coordinator: marketsCoordinator, tickerViewModel: tickerViewModel)
                 .tabItem {
                     Label("Live", systemImage: "chart.line.uptrend.xyaxis")
                 }
+                .tag(AppTab.live)
 
             AsyncDemoView(viewModel: asyncPriceViewModel)
                 .tabItem {
                     Label("Async", systemImage: "arrow.triangle.2.circlepath")
                 }
+                .tag(AppTab.async)
 
             GrpcDemoView(viewModel: grpcViewModel)
                 .tabItem {
                     Label("gRPC", systemImage: "bubble.left.and.bubble.right")
                 }
+                .tag(AppTab.grpc)
 
             DebugPushTriggerView()
                 .tabItem {
                     Label("Push", systemImage: "bell.badge")
                 }
+                .tag(AppTab.push)
         }
         .preferredColorScheme(.dark)
         .sheet(isPresented: $newsCoordinator.isPresented) {
