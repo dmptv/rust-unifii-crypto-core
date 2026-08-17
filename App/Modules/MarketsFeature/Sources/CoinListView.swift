@@ -1,41 +1,40 @@
+import ComposableArchitecture
 import CryptoCoreKit
 import SwiftUI
 
 public struct CoinListView: View {
-    @ObservedObject var viewModel: CoinListViewModel
-    let onSelect: (String) -> Void
+    let store: StoreOf<CoinListFeature>
 
-    public init(viewModel: CoinListViewModel, onSelect: @escaping (String) -> Void) {
-        self.viewModel = viewModel
-        self.onSelect = onSelect
+    public init(store: StoreOf<CoinListFeature>) {
+        self.store = store
     }
 
     public var body: some View {
         Group {
-            if viewModel.isLoadingInitial && viewModel.coins.isEmpty {
+            if store.isLoadingInitial && store.coins.isEmpty {
                 ProgressView()
                     .tint(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let error = viewModel.errorMessage, viewModel.coins.isEmpty {
+            } else if let error = store.errorMessage, store.coins.isEmpty {
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.red)
                     .padding()
             } else {
                 List {
-                    ForEach(viewModel.coins, id: \.coinId) { coin in
+                    ForEach(store.coins, id: \.coinId) { coin in
                         Button {
-                            onSelect(coin.coinId)
+                            store.send(.coinTapped(coin.coinId))
                         } label: {
                             row(for: coin)
                         }
                         .listRowBackground(Color.black)
-                        .task {
-                            await viewModel.loadMoreIfNeeded(currentItem: coin)
+                        .onAppear {
+                            store.send(.loadMoreIfNeeded(coin))
                         }
                     }
 
-                    if viewModel.isLoadingMore {
+                    if store.isLoadingMore {
                         HStack {
                             Spacer()
                             ProgressView()
@@ -48,15 +47,15 @@ public struct CoinListView: View {
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
                 .refreshable {
-                    await viewModel.refresh()
+                    await store.send(.refresh).finish()
                 }
             }
         }
         .background(Color.black.ignoresSafeArea())
         .navigationTitle("Browse coins")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await viewModel.loadInitialIfNeeded()
+        .onAppear {
+            store.send(.onAppear)
         }
     }
 

@@ -1,36 +1,24 @@
+import ComposableArchitecture
 import SwiftUI
 
 public struct MarketsCoordinatorView: View {
-    @ObservedObject var coordinator: MarketsCoordinator
-    private let tickerViewModel: TickerViewModel
+    @Bindable var store: StoreOf<MarketsFeature>
 
-    public init(coordinator: MarketsCoordinator, tickerViewModel: TickerViewModel) {
-        self.coordinator = coordinator
-        self.tickerViewModel = tickerViewModel
+    public init(store: StoreOf<MarketsFeature>) {
+        self.store = store
     }
 
     public var body: some View {
-        NavigationStack(path: $coordinator.path) {
-            LiveDashboardView(
-                viewModel: tickerViewModel,
-                onSelectCoin: { coinId in coordinator.showCoinDetail(coinId: coinId) },
-                onBrowseAllCoins: { coordinator.showCoinList() }
-            )
-            .navigationDestination(for: MarketsRoute.self) { route in
-                switch route {
-                case .coinDetail(let coinId):
-                    CoinDetailView(
-                        viewModel: coordinator.makeCoinDetailViewModel(coinId: coinId),
-                        onSetAlert: { coordinator.showPriceAlert(coinId: coinId) }
-                    )
-                case .priceAlert(let coinId):
-                    PriceAlertView(coinId: coinId)
-                case .coinList:
-                    CoinListView(
-                        viewModel: coordinator.makeCoinListViewModel(),
-                        onSelect: { coinId in coordinator.showCoinDetail(coinId: coinId) }
-                    )
-                }
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+            LiveDashboardView(store: store)
+        } destination: { store in
+            switch store.case {
+            case let .coinDetail(store):
+                CoinDetailView(store: store)
+            case let .priceAlert(store):
+                PriceAlertView(store: store)
+            case let .coinList(store):
+                CoinListView(store: store)
             }
         }
     }

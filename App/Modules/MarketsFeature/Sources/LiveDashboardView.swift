@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import SwiftUI
 
 private struct StatusPill: View {
@@ -138,19 +139,11 @@ private let coinGeckoIds = [
 ]
 
 public struct LiveDashboardView: View {
-    @ObservedObject public var viewModel: TickerViewModel
+    let store: StoreOf<MarketsFeature>
     private let symbols = ["btcusdt", "ethusdt", "solusdt"]
-    private let onSelectCoin: (String) -> Void
-    private let onBrowseAllCoins: () -> Void
 
-    public init(
-        viewModel: TickerViewModel,
-        onSelectCoin: @escaping (String) -> Void = { _ in },
-        onBrowseAllCoins: @escaping () -> Void = {}
-    ) {
-        self.viewModel = viewModel
-        self.onSelectCoin = onSelectCoin
-        self.onBrowseAllCoins = onBrowseAllCoins
+    public init(store: StoreOf<MarketsFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -165,7 +158,7 @@ public struct LiveDashboardView: View {
                         .foregroundStyle(.gray)
                 }
                 Spacer()
-                StatusPill(isActive: viewModel.isStreaming)
+                StatusPill(isActive: store.ticker.isStreaming)
             }
             .padding(.bottom, 12)
 
@@ -174,19 +167,19 @@ public struct LiveDashboardView: View {
             ForEach(symbols, id: \.self) { symbol in
                 MarketRowView(
                     symbol: symbol.uppercased(),
-                    price: viewModel.prices[symbol.uppercased()],
-                    history: viewModel.history[symbol.uppercased()] ?? [],
-                    baseline: viewModel.baselines[symbol.uppercased()],
+                    price: store.ticker.prices[symbol.uppercased()],
+                    history: store.ticker.history[symbol.uppercased()] ?? [],
+                    baseline: store.ticker.baselines[symbol.uppercased()],
                     onTap: {
                         if let coinId = coinGeckoIds[symbol] {
-                            onSelectCoin(coinId)
+                            store.send(.coinSelected(coinId))
                         }
                     }
                 )
                 Divider().overlay(Color.white.opacity(0.1))
             }
 
-            if let error = viewModel.errorMessage {
+            if let error = store.ticker.errorMessage {
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.red)
@@ -195,15 +188,11 @@ public struct LiveDashboardView: View {
 
             Spacer(minLength: 12)
 
-            Button(viewModel.isStreaming ? "Stop updates" : "Start updates") {
-                if viewModel.isStreaming {
-                    viewModel.stop()
-                } else {
-                    viewModel.start(symbols: symbols)
-                }
+            Button(store.ticker.isStreaming ? "Stop updates" : "Start updates") {
+                store.send(.ticker(store.ticker.isStreaming ? .stopTapped : .startTapped))
             }
             .buttonStyle(.borderedProminent)
-            .tint(viewModel.isStreaming ? .red : .blue)
+            .tint(store.ticker.isStreaming ? .red : .blue)
             .frame(maxWidth: .infinity)
             .padding(.bottom, 100)
         }
@@ -216,7 +205,9 @@ public struct LiveDashboardView: View {
             // icon), keeping it visually distinct from Start/Stop updates,
             // which acts on this screen's own WebSocket connection.
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: onBrowseAllCoins) {
+                Button {
+                    store.send(.browseAllCoinsTapped)
+                } label: {
                     Label("Browse all coins", systemImage: "list.bullet")
                 }
             }

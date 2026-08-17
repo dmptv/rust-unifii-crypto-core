@@ -1,14 +1,16 @@
+import ComposableArchitecture
 import SwiftUI
 
-// Terminal screen of the Markets flow — no service call, so no view model:
-// the "notify me" toggle is local UI state, not business logic.
+// Terminal screen of the Markets flow — no service call, so the "notify me"
+// toggle stays local View @State (trivial UI state, not business logic)
+// even though the screen is backed by a (nearly empty) PriceAlertFeature.
 public struct PriceAlertView: View {
-    let coinId: String
+    let store: StoreOf<PriceAlertFeature>
     @State private var notifyEnabled = false
     @State private var threshold: Double = 0
 
-    public init(coinId: String) {
-        self.coinId = coinId
+    public init(store: StoreOf<PriceAlertFeature>) {
+        self.store = store
     }
 
     public var body: some View {
@@ -16,7 +18,7 @@ public struct PriceAlertView: View {
             Text("Price alert")
                 .font(.system(size: 28, weight: .heavy))
                 .foregroundStyle(.white)
-            Text(coinId)
+            Text(store.coinId)
                 .font(.subheadline)
                 .foregroundStyle(.gray)
 

@@ -1,26 +1,25 @@
+import ComposableArchitecture
 import SwiftUI
 
 public struct CoinDetailView: View {
-    @ObservedObject var viewModel: CoinDetailViewModel
-    let onSetAlert: () -> Void
+    let store: StoreOf<CoinDetailFeature>
 
-    public init(viewModel: CoinDetailViewModel, onSetAlert: @escaping () -> Void) {
-        self.viewModel = viewModel
-        self.onSetAlert = onSetAlert
+    public init(store: StoreOf<CoinDetailFeature>) {
+        self.store = store
     }
 
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                if viewModel.isLoading {
+                if store.isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                         .padding(.top, 40)
-                } else if let error = viewModel.errorMessage {
+                } else if let error = store.errorMessage {
                     Text(error)
                         .font(.caption)
                         .foregroundStyle(.red)
-                } else if let details = viewModel.details {
+                } else if let details = store.details {
                     Text(details.name)
                         .font(.system(size: 32, weight: .heavy))
                         .foregroundStyle(.white)
@@ -40,7 +39,7 @@ public struct CoinDetailView: View {
                     }
 
                     Button("Set price alert") {
-                        onSetAlert()
+                        store.send(.setAlertTapped)
                     }
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
@@ -50,10 +49,10 @@ public struct CoinDetailView: View {
             .padding()
         }
         .background(Color.black.ignoresSafeArea())
-        .navigationTitle(viewModel.details?.name ?? "Coin")
+        .navigationTitle(store.details?.name ?? "Coin")
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await viewModel.load()
+        .onAppear {
+            store.send(.onAppear)
         }
     }
 }
