@@ -6,7 +6,22 @@ import ProjectDescription
 
 let packageSettings = PackageSettings(
     productTypes: [
-        "Sharing": .framework
+        // Sharing embeds these statically; anything else that also links
+        // them (like a unit test target depending on both Sharing and a
+        // feature module) ends up with two copies of the same Objective-C
+        // classes in one process - a dyld-level crash (0xbad400a), not just
+        // the build-time "may introduce unwanted side effects" warning.
+        // Making them dynamic too means everyone shares Sharing's one copy.
+        "Sharing": .framework,
+        "ConcurrencyExtras": .framework,
+        "CustomDump": .framework,
+        "Dependencies": .framework,
+        "IdentifiedCollections": .framework,
+        "InternalCollectionsUtilities": .framework,
+        "IssueReporting": .framework,
+        "OrderedCollections": .framework,
+        "PerceptionCore": .framework,
+        "XCTestDynamicOverlay": .framework,
     ],
     baseSettings: .settings(base: ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"]),
     targetSettings: [
