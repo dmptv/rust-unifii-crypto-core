@@ -107,6 +107,32 @@ let grpcFeature = Target.target(
     ]
 )
 
+let marketsFeatureTests = Target.target(
+    name: "MarketsFeatureTests",
+    destinations: .iOS,
+    product: .unitTests,
+    bundleId: "com.example.cryptocoreapp.marketsfeaturetests",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/MarketsFeature/Tests/**"],
+    dependencies: [
+        .target(name: "MarketsFeature"),
+    ]
+)
+
+let cryptoCoreKitTests = Target.target(
+    name: "CryptoCoreKitTests",
+    destinations: .iOS,
+    product: .unitTests,
+    bundleId: "com.example.cryptocoreapp.cryptocorekittests",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/CryptoCoreKitTests/Tests/**"],
+    dependencies: [
+        .external(name: "CryptoCoreKit"),
+    ]
+)
+
 let app = Target.target(
     name: "CryptoCoreApp",
     destinations: .iOS,
@@ -134,5 +160,5 @@ let app = Target.target(
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, navigationKit, designSystemKit, marketsFeature, newsFeature, watchlistFeature, asyncFeature, grpcFeature]
+    targets: [app, navigationKit, designSystemKit, marketsFeature, newsFeature, watchlistFeature, asyncFeature, grpcFeature, cryptoCoreKitTests, marketsFeatureTests]
 )

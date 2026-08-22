@@ -23,6 +23,8 @@ public struct TickerFeature {
 
     private enum CancelID { case streaming }
 
+    @Dependency(\.tickerClient) var tickerClient
+
     public init() {}
 
     public var body: some ReducerOf<Self> {
@@ -36,8 +38,8 @@ public struct TickerFeature {
                 state.baselines = [:]
                 state.isStreaming = true
                 let symbols = ["btcusdt", "ethusdt", "solusdt"]
-                return .run { send in
-                    await TickerStream.run(symbols: symbols, send: send)
+                return .run { [tickerClient] send in
+                    await TickerStream.run(symbols: symbols, tickerClient: tickerClient, send: send)
                 }
                 .cancellable(id: CancelID.streaming, cancelInFlight: true)
 
@@ -74,11 +76,11 @@ public struct TickerFeature {
 // `send`. The ticker is stopped when the stream terminates - cancelling the
 // owning Effect (via .cancellable) tears down the AsyncStream too.
 private enum TickerStream {
-    static func run(symbols: [String], send: Send<TickerFeature.Action>) async {
+    static func run(symbols: [String], tickerClient: TickerClient, send: Send<TickerFeature.Action>) async {
         let stream = AsyncStream<TickerFeature.Action> { continuation in
             let listener = Listener(continuation)
             do {
-                let ticker = try PriceTicker(symbols: symbols, listener: listener)
+                let ticker = try tickerClient.makeTicker(symbols, listener)
                 continuation.onTermination = { [listener] _ in
                     _ = listener
                     ticker.stop()
