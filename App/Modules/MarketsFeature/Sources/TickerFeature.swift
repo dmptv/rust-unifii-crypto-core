@@ -3,6 +3,7 @@ import CryptoCoreKit
 
 @Reducer
 public struct TickerFeature {
+    
     @ObservableState
     public struct State: Equatable {
         public var prices: [String: Double] = [:]
@@ -10,8 +11,14 @@ public struct TickerFeature {
         public var baselines: [String: Double] = [:]
         public var errorMessage: String?
         public var isStreaming = false
+        // Parent (MarketsFeature) owns which symbols this session watches;
+        // the default keeps `TickerFeature.State()` working for tests that
+        // don't care about the list.
+        public var watchedSymbols: [String] = ["btcusdt", "ethusdt", "solusdt"]
 
-        public init() {}
+        public init(watchedSymbols: [String] = ["btcusdt", "ethusdt", "solusdt"]) {
+            self.watchedSymbols = watchedSymbols
+        }
     }
 
     public enum Action {
@@ -37,7 +44,7 @@ public struct TickerFeature {
                 state.history = [:]
                 state.baselines = [:]
                 state.isStreaming = true
-                let symbols = ["btcusdt", "ethusdt", "solusdt"]
+                let symbols = state.watchedSymbols
                 return .run { [tickerClient] send in
                     await TickerStream.run(symbols: symbols, tickerClient: tickerClient, send: send)
                 }
@@ -76,9 +83,12 @@ public struct TickerFeature {
 // `send`. The ticker is stopped when the stream terminates - cancelling the
 // owning Effect (via .cancellable) tears down the AsyncStream too.
 private enum TickerStream {
+    
     static func run(symbols: [String], tickerClient: TickerClient, send: Send<TickerFeature.Action>) async {
+        
         let stream = AsyncStream<TickerFeature.Action> { continuation in
             let listener = Listener(continuation)
+            
             do {
                 let ticker = try tickerClient.makeTicker(symbols, listener)
                 continuation.onTermination = { [listener] _ in
