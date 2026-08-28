@@ -10,7 +10,11 @@ import ComposableArchitecture
 public struct MarketsFeature {
     @ObservableState
     public struct State: Equatable {
-        public var ticker = TickerFeature.State()
+        // Parent owns the watchlist for this screen and hands it to the
+        // child at construction time — a fourth symbol here (absent from
+        // TickerFeature's own default) is the tell that this data really
+        // comes from the parent, not the child's fallback.
+        public var ticker = TickerFeature.State(watchedSymbols: ["btcusdt", "ethusdt", "solusdt", "dogeusdt"])
         public var path = StackState<Path.State>()
 
         public init() {}

@@ -132,11 +132,11 @@ private let coinGeckoIds = [
     "btcusdt": "bitcoin",
     "ethusdt": "ethereum",
     "solusdt": "solana",
+    "dogeusdt": "dogecoin",
 ]
 
 public struct LiveDashboardView: View {
     let store: StoreOf<MarketsFeature>
-    private let symbols = ["btcusdt", "ethusdt", "solusdt"]
 
     public init(store: StoreOf<MarketsFeature>) {
         self.store = store
@@ -160,7 +160,7 @@ public struct LiveDashboardView: View {
 
             Divider().overlay(DSColor.divider)
 
-            ForEach(symbols, id: \.self) { symbol in
+            ForEach(store.ticker.watchedSymbols, id: \.self) { symbol in
                 MarketRowView(
                     symbol: symbol.uppercased(),
                     price: store.ticker.prices[symbol.uppercased()],

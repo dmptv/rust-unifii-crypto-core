@@ -17,6 +17,10 @@ enum AppTab: Hashable {
 struct AppFeature {
     @ObservableState
     struct State: Equatable {
+        // Auth gate, shown on launch - whole-tree optional-destination
+        // switch (@Presents/.ifLet), the one navigation pattern the rest
+        // of the app doesn't otherwise use.
+        @Presents var destination: Destination.State? = .auth(AuthFeature.State())
         var selectedTab: AppTab = .live
         var markets = MarketsFeature.State()
         var news = NewsFeature.State()
@@ -27,12 +31,18 @@ struct AppFeature {
 
     enum Action: BindableAction {
         case binding(BindingAction<State>)
+        case destination(PresentationAction<Destination.Action>)
         case markets(MarketsFeature.Action)
         case news(NewsFeature.Action)
         case watchlist(WatchlistFeature.Action)
         case async(AsyncPriceFeature.Action)
         case grpc(GrpcFeature.Action)
         case deepLinkReceived(AppDestination)
+    }
+
+    @Reducer(state: .equatable)
+    enum Destination {
+        case auth(AuthFeature)
     }
 
     var body: some ReducerOf<Self> {
@@ -44,6 +54,10 @@ struct AppFeature {
         Scope(state: \.grpc, action: \.grpc) { GrpcFeature() }
         Reduce { state, action in
             switch action {
+            case .destination(.presented(.auth(.loginSuccess))):
+                state.destination = nil
+                return .none
+
             case let .deepLinkReceived(destination):
                 switch destination {
                 case .markets(let marketsDestination):
@@ -72,9 +86,10 @@ struct AppFeature {
                     }
                 }
 
-            case .markets, .news, .watchlist, .async, .grpc, .binding:
+            case .destination, .markets, .news, .watchlist, .async, .grpc, .binding:
                 return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
     }
 }

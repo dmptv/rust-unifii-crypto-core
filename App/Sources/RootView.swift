@@ -51,5 +51,10 @@ struct RootView: View {
                 .tag(AppTab.push)
         }
         .preferredColorScheme(.dark)
+        .fullScreenCover(
+            item: $store.scope(state: \.destination?.auth, action: \.destination.auth)
+        ) { authStore in
+            AuthView(store: authStore)
+        }
     }
 }
