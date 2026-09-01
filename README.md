@@ -1,4 +1,4 @@
-# crypto_core — Rust + UniFFI learning project
+# crypto_core — Rust + UniFFI 
 
 A small Rust core, wrapped via [UniFFI](https://mozilla.github.io/uniffi-rs/) into a native Swift API, built to
 deliberately exercise the breadth of UniFFI's capabilities — not just one trivial function, but sync calls, typed
