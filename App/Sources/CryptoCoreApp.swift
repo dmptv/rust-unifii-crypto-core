@@ -18,7 +18,6 @@ struct CryptoCoreApp: App {
             RootView(store: appStore)
                 .onAppear {
                     appDelegate.deepLinkRouter = DeepLinkRouter(store: appStore)
-                    AppDependencyContainer.warmUpMainActorClients()
                 }
         }
     }

@@ -23,14 +23,11 @@ public final class LiveNewsClient: NewsClientProtocol, Sendable {
         self.store = store
     }
 
-    // Store's init touches ModelContainer.mainContext, which is
-    // @MainActor-isolated; live() itself isn't, so this asserts what's
-    // true at runtime (first access happens on the main actor) rather
-    // than threading @MainActor through the whole call chain up to
-    // AppDependencyContainer.
+    // Store's own actor initializer is nonisolated (safe to call from
+    // anywhere - no other code can race it before `self` exists), so no
+    // MainActor assumption is needed here at all.
     public static func live() -> LiveNewsClient {
-        let store = MainActor.assumeIsolated { Store() }
-        return LiveNewsClient(store: store)
+        LiveNewsClient(store: Store())
     }
 
     public func articles() async throws -> [NewsArticle] {
@@ -52,21 +49,23 @@ extension DependencyValues {
     }
 }
 
-// ModelContext's Sendable conformance is unavailable, so it can only ever
-// be touched from a single isolation domain - this class is pinned to the
-// main actor for that reason. @unchecked Sendable is safe here because
-// isolation, not the annotation, is what actually protects modelContext;
-// the annotation only lets `store` be captured by the @Sendable closure
-// above.
-@MainActor
-private final class Store: @unchecked Sendable {
+// A plain actor rather than a @MainActor class: gives modelContext its own
+// dedicated executor instead of MainActor's. On this Xcode 27 beta,
+// touching a fresh ModelContext's fetch(_:) after a real async hop onto
+// MainActor's executor reliably traps (EXC_BREAKPOINT) inside SwiftData -
+// confirmed by bisection to be independent of *how* the hop happens
+// (Task.detached, a plain continuation, MainActor.run, even
+// MainActor.assumeIsolated once already inside a MainActor-dispatched
+// call) and independent of "first fetch ever" (a synchronous warmup fetch
+// in init(), with no prior await anywhere, succeeds reliably, twice in a
+// row). Routing through a custom actor's executor instead of MainActor's
+// sidesteps whatever is broken specifically in that pairing.
+private actor Store {
     private let modelContext: ModelContext
 
     init() {
-        // Core Data's own retry-on-missing-directory recovery is
-        // observed to be flaky on this Xcode 27 beta simulator (works on
-        // one launch, EXC_BREAKPOINT-crashes the container on the next,
-        // same app, same machine) - don't depend on it. Guarantee the
+        // Core Data's own retry-on-missing-directory recovery is flaky on
+        // this Xcode 27 beta simulator - don't depend on it. Guarantee the
         // directory exists ourselves before ModelContainer ever tries to
         // create the store file inside it.
         if let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
@@ -81,7 +80,9 @@ private final class Store: @unchecked Sendable {
         let configuration = ModelConfiguration("NewsStore", schema: schema)
         do {
             let container = try ModelContainer(for: schema, configurations: configuration)
-            self.modelContext = container.mainContext
+            // Not container.mainContext - a fresh context confined to
+            // this actor's own isolation domain instead of MainActor's.
+            self.modelContext = ModelContext(container)
         } catch {
             fatalError("Failed to create SwiftData ModelContainer for News: \(error)")
         }

@@ -33,14 +33,11 @@ public final class LiveWatchlistClient: WatchlistClientProtocol, Sendable {
         self.store = store
     }
 
-    // Store's init touches ModelContainer.mainContext, which is
-    // @MainActor-isolated; live() itself isn't, so this asserts what's
-    // true at runtime (first access happens on the main actor) rather
-    // than threading @MainActor through the whole call chain up to
-    // AppDependencyContainer.
+    // Store's own actor initializer is nonisolated (safe to call from
+    // anywhere - no other code can race it before `self` exists), so no
+    // MainActor assumption is needed here at all.
     public static func live() -> LiveWatchlistClient {
-        let store = MainActor.assumeIsolated { Store() }
-        return LiveWatchlistClient(store: store)
+        LiveWatchlistClient(store: Store())
     }
 
     public func searchCoins(_ query: String) async throws -> [CoinSearchResult] {
@@ -68,14 +65,13 @@ extension DependencyValues {
     }
 }
 
-// ModelContext's Sendable conformance is unavailable, so it can only ever
-// be touched from a single isolation domain - this class is pinned to the
-// main actor for that reason. @unchecked Sendable is safe here because
-// isolation, not the annotation, is what actually protects modelContext;
-// the annotation only lets `store` be captured by the @Sendable closure
-// above.
-@MainActor
-private final class Store: @unchecked Sendable {
+// A plain actor rather than a @MainActor class: gives modelContext its own
+// dedicated executor instead of MainActor's. On this Xcode 27 beta,
+// touching a fresh ModelContext after a real async hop onto MainActor's
+// executor reliably traps inside SwiftData - see NewsClient.swift's Store
+// for the full bisection that found this. Routing through a custom
+// actor's executor instead sidesteps it.
+private actor Store {
     private let modelContext: ModelContext
 
     init() {
@@ -97,7 +93,9 @@ private final class Store: @unchecked Sendable {
         let configuration = ModelConfiguration("WatchlistStore", schema: schema)
         do {
             let container = try ModelContainer(for: schema, configurations: configuration)
-            self.modelContext = container.mainContext
+            // Not container.mainContext - a fresh context confined to
+            // this actor's own isolation domain instead of MainActor's.
+            self.modelContext = ModelContext(container)
         } catch {
             fatalError("Failed to create SwiftData ModelContainer for Watchlist: \(error)")
         }
