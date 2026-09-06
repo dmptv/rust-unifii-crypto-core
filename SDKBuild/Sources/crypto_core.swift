@@ -398,6 +398,22 @@ private class UniffiHandleMap<T> {
 #if swift(>=5.8)
     @_documentation(visibility: private)
 #endif
+private struct FfiConverterUInt16: FfiConverterPrimitive {
+    typealias FfiType = UInt16
+    typealias SwiftType = UInt16
+
+    static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> UInt16 {
+        return try lift(readInt(&buf))
+    }
+
+    static func write(_ value: SwiftType, into buf: inout [UInt8]) {
+        writeInt(&buf, lower(value))
+    }
+}
+
+#if swift(>=5.8)
+    @_documentation(visibility: private)
+#endif
 private struct FfiConverterInt64: FfiConverterPrimitive {
     typealias FfiType = Int64
     typealias SwiftType = Int64
@@ -529,11 +545,12 @@ open class PriceTicker:
         return try! rustCall { uniffi_crypto_core_fn_clone_priceticker(self.pointer, $0) }
     }
 
-    public convenience init(symbols: [String], listener: TickerListener) throws {
+    public convenience init(symbols: [String], port: UInt16, listener: TickerListener) throws {
         let pointer =
             try rustCallWithError(FfiConverterTypePriceError.lift) {
                 uniffi_crypto_core_fn_constructor_priceticker_new(
                     FfiConverterSequenceString.lower(symbols),
+                    FfiConverterUInt16.lower(port),
                     FfiConverterTypeTickerListener.lower(listener), $0
                 )
             }
@@ -1702,7 +1719,7 @@ private var initializationResult: InitializationResult = {
     if uniffi_crypto_core_checksum_method_tickerlistener_on_error() != 39150 {
         return InitializationResult.apiChecksumMismatch
     }
-    if uniffi_crypto_core_checksum_constructor_priceticker_new() != 4151 {
+    if uniffi_crypto_core_checksum_constructor_priceticker_new() != 19005 {
         return InitializationResult.apiChecksumMismatch
     }
 

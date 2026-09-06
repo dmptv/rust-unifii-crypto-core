@@ -1,5 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
+import DependencyContainerKit
 
 @main
 struct CryptoCoreApp: App {
@@ -8,11 +9,16 @@ struct CryptoCoreApp: App {
         AppFeature()
     }
 
+    init() {
+        AppDependencyContainer.registerDependencies()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView(store: appStore)
                 .onAppear {
                     appDelegate.deepLinkRouter = DeepLinkRouter(store: appStore)
+                    AppDependencyContainer.warmUpMainActorClients()
                 }
         }
     }

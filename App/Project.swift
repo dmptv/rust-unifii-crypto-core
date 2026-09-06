@@ -31,6 +31,23 @@ let designSystemKit = Target.target(
     sources: ["Modules/DesignSystemKit/Sources/**"]
 )
 
+// Holds nothing but an empty Swinject Container - knows about zero
+// concrete feature types, so every feature module can depend on it
+// without creating a cycle back to the app target that actually
+// registers into it (see AppDependencyContainer+Registration.swift).
+let dependencyContainerKit = Target.target(
+    name: "DependencyContainerKit",
+    destinations: .iOS,
+    product: .staticFramework,
+    bundleId: "com.example.cryptocoreapp.dependencycontainerkit",
+    deploymentTargets: deploymentTargets,
+    infoPlist: .default,
+    sources: ["Modules/DependencyContainerKit/Sources/**"],
+    dependencies: [
+        .external(name: "Swinject"),
+    ]
+)
+
 let marketsFeature = Target.target(
     name: "MarketsFeature",
     destinations: .iOS,
@@ -42,7 +59,9 @@ let marketsFeature = Target.target(
     dependencies: [
         .external(name: "CryptoCoreKit"),
         .external(name: "ComposableArchitecture"),
+        .external(name: "Swinject"),
         .target(name: "DesignSystemKit"),
+        .target(name: "DependencyContainerKit"),
     ]
 )
 
@@ -57,7 +76,9 @@ let newsFeature = Target.target(
     dependencies: [
         .external(name: "CryptoCoreKit"),
         .external(name: "ComposableArchitecture"),
+        .external(name: "Swinject"),
         .target(name: "DesignSystemKit"),
+        .target(name: "DependencyContainerKit"),
     ]
 )
 
@@ -72,7 +93,9 @@ let watchlistFeature = Target.target(
     dependencies: [
         .external(name: "CryptoCoreKit"),
         .external(name: "ComposableArchitecture"),
+        .external(name: "Swinject"),
         .target(name: "DesignSystemKit"),
+        .target(name: "DependencyContainerKit"),
     ]
 )
 
@@ -154,11 +177,16 @@ let app = Target.target(
         .target(name: "GrpcFeature"),
         .target(name: "NavigationKit"),
         .target(name: "DesignSystemKit"),
+        .target(name: "DependencyContainerKit"),
         .external(name: "ComposableArchitecture"),
+        .external(name: "Swinject"),
     ]
 )
 
 let project = Project(
     name: "CryptoCoreApp",
-    targets: [app, navigationKit, designSystemKit, marketsFeature, newsFeature, watchlistFeature, asyncFeature, grpcFeature, cryptoCoreKitTests, marketsFeatureTests]
+    targets: [
+        app, navigationKit, designSystemKit, dependencyContainerKit, marketsFeature, newsFeature,
+        watchlistFeature, asyncFeature, grpcFeature, cryptoCoreKitTests, marketsFeatureTests,
+    ]
 )
