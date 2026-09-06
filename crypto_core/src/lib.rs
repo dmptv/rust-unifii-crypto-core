@@ -464,6 +464,7 @@ impl PriceTicker {
     #[uniffi::constructor]
     pub fn new(
         symbols: Vec<String>,
+        port: u16,
         listener: std::sync::Arc<dyn TickerListener>,
     ) -> Result<std::sync::Arc<Self>, PriceError> {
         for symbol in &symbols {
@@ -478,8 +479,13 @@ impl PriceTicker {
                 .iter()
                 .map(|s| format!("{}@trade", s.to_lowercase()))
                 .collect();
+            // Port is the caller's choice, not ours - some networks block
+            // 9443 (Binance's documented streaming port) while leaving 443
+            // (the standard HTTPS port, which Binance also serves this same
+            // stream on) open. Swift decides which to try and in what
+            // order; this function just connects to whichever it's given.
             let url = format!(
-                "wss://stream.binance.com:9443/stream?streams={}",
+                "wss://stream.binance.com:{port}/stream?streams={}",
                 streams.join("/")
             );
 

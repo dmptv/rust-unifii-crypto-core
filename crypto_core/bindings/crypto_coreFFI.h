@@ -286,7 +286,7 @@ void uniffi_crypto_core_fn_free_priceticker(void*_Nonnull ptr, RustCallStatus *_
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_CONSTRUCTOR_PRICETICKER_NEW
 #define UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_CONSTRUCTOR_PRICETICKER_NEW
-void*_Nonnull uniffi_crypto_core_fn_constructor_priceticker_new(RustBuffer symbols, void*_Nonnull listener, RustCallStatus *_Nonnull out_status
+void*_Nonnull uniffi_crypto_core_fn_constructor_priceticker_new(RustBuffer symbols, uint16_t port, void*_Nonnull listener, RustCallStatus *_Nonnull out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_CRYPTO_CORE_FN_METHOD_PRICETICKER_STOP

@@ -17,7 +17,7 @@ open class PriceTicker : CryptoCoreKit::PriceTickerProtocol {
   required public init(unsafeFromRawPointer pointer: Swift::UnsafeMutableRawPointer)
   @_documentation(visibility: private) public init(noPointer _: CryptoCoreKit::PriceTicker.CryptoCoreKit::NoPointer)
   @_documentation(visibility: private) public func uniffiClonePointer() -> Swift::UnsafeMutableRawPointer
-  convenience public init(symbols: [Swift::String], listener: any CryptoCoreKit::TickerListener) throws
+  convenience public init(symbols: [Swift::String], port: Swift::UInt16, listener: any CryptoCoreKit::TickerListener) throws
   @objc deinit
   open func stop()
 }

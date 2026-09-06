@@ -22,6 +22,7 @@ let packageSettings = PackageSettings(
         "OrderedCollections": .framework,
         "PerceptionCore": .framework,
         "XCTestDynamicOverlay": .framework,
+        "Swinject": .framework,
     ],
     baseSettings: .settings(base: ["IPHONEOS_DEPLOYMENT_TARGET": "26.0"]),
     targetSettings: [
@@ -224,6 +225,10 @@ let packageSettings = PackageSettings(
             "IPHONEOS_DEPLOYMENT_TARGET": "26.0",
             "MACOSX_DEPLOYMENT_TARGET": "15.0"
         ],
+        "Swinject": [
+            "IPHONEOS_DEPLOYMENT_TARGET": "26.0",
+            "MACOSX_DEPLOYMENT_TARGET": "15.0"
+        ],
     ]
 )
 #endif
@@ -235,5 +240,6 @@ let package = Package(
         .package(path: "../../CryptoCoreKitSDK"),
         .package(path: "../../ElizaProtoKit"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.26.1"),
+        .package(url: "https://github.com/Swinject/Swinject.git", from: "2.9.1"),
     ]
 )

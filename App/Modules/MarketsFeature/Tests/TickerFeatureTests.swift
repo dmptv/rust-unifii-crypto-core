@@ -1,5 +1,5 @@
 import ComposableArchitecture
-import CryptoCoreKit
+@preconcurrency import CryptoCoreKit
 import XCTest
 
 @testable import MarketsFeature
@@ -16,7 +16,7 @@ final class TickerFeatureTests: XCTestCase {
         let store = TestStore(initialState: TickerFeature.State()) {
             TickerFeature()
         } withDependencies: {
-            $0.tickerClient = TickerClient(makeTicker: { _, listener in
+            $0.tickerClient = FakeTickerClient(onMakeTicker: { listener in
                 capturedListener.setValue(listener)
                 return fakeTicker
             })
@@ -28,7 +28,7 @@ final class TickerFeatureTests: XCTestCase {
 
         capturedListener.value?.onUpdate(ticker: PriceInfo(coinId: "BTCUSDT", usdPrice: 65000))
 
-        await store.receive(\.priceUpdate) {
+        await store.receive(\.priceBatchUpdate) {
             $0.prices["BTCUSDT"] = 65000
             $0.baselines["BTCUSDT"] = 65000
             $0.history["BTCUSDT"] = [65000]
@@ -46,4 +46,16 @@ final class TickerFeatureTests: XCTestCase {
 private final class FakeTicker: PriceTickerProtocol, @unchecked Sendable {
     private(set) var stopCalled = false
     func stop() { stopCalled = true }
+}
+
+private final class FakeTickerClient: TickerClientProtocol, @unchecked Sendable {
+    let onMakeTicker: (TickerListener) -> any PriceTickerProtocol
+
+    init(onMakeTicker: @escaping (TickerListener) -> any PriceTickerProtocol) {
+        self.onMakeTicker = onMakeTicker
+    }
+
+    func makeTicker(_ symbols: [String], port: UInt16, _ listener: TickerListener) throws -> any PriceTickerProtocol {
+        onMakeTicker(listener)
+    }
 }
